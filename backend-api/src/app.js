@@ -3,9 +3,10 @@
 const express = require('express');
 const cors = require('cors');
 const { version } = require('../package.json');
-const app = express();
-app.use(cors());
 
+const app = express();
+
+app.use(cors());
 app.use('/', require('./routes'));
 
 // 404 error middleware
