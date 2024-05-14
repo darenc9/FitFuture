@@ -1,0 +1,22 @@
+{
+  "name": "backend-api",
+  "version": "0.1.0",
+  "description": "Project Gym for PRJ666",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest",
+    "start": "node src/index.js"
+  },
+  "author": "Devon Chan, Andrew Sequeira, Mara Perkons",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "stoppable": "^1.1.0"
+  },
+  "devDependencies": {
+    "jest": "^29.7.0",
+    "nodemon": "^3.1.0"
+  }
+}
