@@ -33,5 +33,5 @@ jobs:
 
       - name: Install node dependencies and run Tests
         run: |
-          cd backend-api
+          cd backend-api/
           npm install-ci-test
