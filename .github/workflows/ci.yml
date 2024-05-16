@@ -6,15 +6,15 @@ name: ci
 # Workflow will run whenever a push commit or pull request to the main branch.
 on:
   pull_request:
-    paths:
-    - 'backend-api/**'
     branches:
       - main
+    paths:
+      - 'backend-api/**'
   push:
-    paths:
-    - 'backend-api/**'
     branches:
       - main
+    paths:
+      - 'backend-api/**'
 
 # CI workflow jobs
 jobs:
