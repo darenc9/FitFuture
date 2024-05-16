@@ -4,7 +4,8 @@
   "description": "Project Gym for PRJ666",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "test": "jest -c jest.config.js tests/unit --runInBand",
+    "coverage":"jest -c jest.config.js tests/unit --runInBand --coverage",
     "start": "node src/index.js"
   },
   "author": "Devon Chan, Andrew Sequeira, Mara Perkons",
@@ -17,6 +18,7 @@
   },
   "devDependencies": {
     "jest": "^29.7.0",
-    "nodemon": "^3.1.0"
+    "nodemon": "^3.1.0",
+    "supertest": "^7.0.0"
   }
 }

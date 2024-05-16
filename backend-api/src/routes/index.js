@@ -5,6 +5,8 @@ const { hostname } = require('os');
 const { version, author } = require('../../package.json');
 
 const router = express.Router();
+// Import other route files
+const exerciseRoutes = require('./exerciseRoutes');
 
 // Health Check
 router.get('/', (req, res) => {
@@ -17,5 +19,9 @@ router.get('/', (req, res) => {
     });
   });
 
+
+// Mount the routes
+router.use(exerciseRoutes);
+// TODO: Mount additional routes for other features as needed
 
   module.exports = router;
