@@ -30,6 +30,7 @@ jobs:
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: backend-api/package-lock.json
 
       - name: Install node dependencies and run Tests
         run: |
