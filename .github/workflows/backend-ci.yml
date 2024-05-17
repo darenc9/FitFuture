@@ -1,7 +1,7 @@
 # .github/workflows/ci.yml
 
 # Continuous Integration (CI) Workflow
-name: ci
+name: backend-ci
 
 # Workflow will run whenever a push commit or pull request to the main branch.
 on:
@@ -25,11 +25,12 @@ jobs:
       - name: Check out code
         uses: actions/checkout@v3
 
-      - name: Setup node
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
           cache: 'npm'
+          cache-dependency-path: backend-api/package-lock.json
 
       - name: Install node dependencies and run Tests
         run: |
