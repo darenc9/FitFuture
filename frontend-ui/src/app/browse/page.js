@@ -31,6 +31,10 @@ const BrowsePage = () => {
         fetchData();
     }, [selectedOption]);
 
+    const handlePanelClick = (item) => {
+        console.log(item);
+    };
+    
     return (
         <div className="container mx-auto px-4">
             <h1 className="text-2xl font-bold text-center mt-8">Browse Page</h1>
@@ -52,7 +56,11 @@ const BrowsePage = () => {
                 <h2 className="text-xl font-semibold text-center">{selectedOption === 'workouts' ? 'Workouts' : 'Routines'}</h2>
                 <div className="mt-4 space-y-4">
                     {selectedOption === 'workouts' && workouts.map(workout => (
-                        <div key={workout._id} className="flex items-center p-4 border rounded-lg shadow-md">
+                        <div 
+                            key={workout._id} 
+                            className="flex items-center p-4 border rounded-lg shadow-md"
+                            onClick={()=> handlePanelClick(workout)}
+                        >
                             <div className="flex-shrink-0 w-16 h-16 bg-gray-300">
                                 {/* Placeholder for image */}
                             </div>
