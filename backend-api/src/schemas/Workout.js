@@ -8,7 +8,8 @@ const workoutSchema = new mongoose.Schema({
   },
   userId: mongoose.Schema.Types.ObjectId, //null for preset, set for a users custom workouts
   routineId: mongoose.Schema.Types.ObjectId,
-  name: String
+  name: String,
+  category: String
 });
 
 const Workout = mongoose.model('Workout', workoutSchema);
