@@ -9,6 +9,9 @@ const router = express.Router();
 const exerciseRoutes = require('./exerciseRoutes');
 const testDbRoutes = require('./testDbRoute');
 
+//get the workout functions
+const { getAll} = require('./workoutRoutes');
+
 // Health Check
 router.get('/', (req, res) => {
     res.setHeader('Cache-Control', 'no-cache');
@@ -26,4 +29,7 @@ router.use(exerciseRoutes);
 // TODO: Mount additional routes for other features as needed
 router.use(testDbRoutes);
 
-  module.exports = router;
+// Define first route: GET /v1/fragments
+router.get('/workouts', getAll);
+
+module.exports = router;
