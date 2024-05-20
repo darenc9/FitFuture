@@ -14,10 +14,10 @@ const ensureConnection = async () => {
   };
 
 
-  module.exports.getWorkoutById = async function (workoutId) {
+  module.exports.getWorkoutById = async function (id) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-      WorkoutModel.findById(workoutId).exec()
+      WorkoutModel.find({ workoutId: id }).exec()
         .then((workout) => {
           if (workout) {
             resolve(workout);
@@ -59,10 +59,10 @@ module.exports.createWorkout = async function (workoutData) {
 
 
 //for admin to update or user when creating custom workout
-module.exports.updateWorkout = async function (workoutId, updateData) {
+module.exports.updateWorkout = async function (id, updateData) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-      WorkoutModel.findByIdAndUpdate(workoutId, updateData, { new: true }).exec()
+      WorkoutModel.findOneAndUpdate({ workoutId: id }, updateData, { new: true }).exec()
         .then((workout) => {
           if (workout) {
             resolve(workout);
@@ -75,10 +75,10 @@ module.exports.updateWorkout = async function (workoutId, updateData) {
   };
 
 //may not be needed but added in case admin account needs to delete
-module.exports.deleteWorkout = async function (workoutId) {
+module.exports.deleteWorkout = async function (id) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-      WorkoutModel.findByIdAndDelete(workoutId).exec()
+      WorkoutModel.findOneAndDelete({ workoutId: id }).exec()
         .then((workout) => {
           if (workout) {
             resolve(workout);
