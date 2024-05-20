@@ -8,6 +8,7 @@ const workoutSchema = new mongoose.Schema({
   },
   userId: mongoose.Schema.Types.ObjectId, //null for preset, set for a users custom workouts
   routineId: mongoose.Schema.Types.ObjectId,
+  public: Boolean,
   name: String,
   category: String
 });

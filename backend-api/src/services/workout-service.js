@@ -34,7 +34,7 @@ const ensureConnection = async () => {
 module.exports.getAllWorkouts = async function () {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-      WorkoutModel.find({ userId: null }).exec()
+      WorkoutModel.find({ public: true }).exec()
         .then((workouts) => {
           if (workouts.length > 0) {
             resolve(workouts);

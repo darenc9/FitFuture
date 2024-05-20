@@ -12,6 +12,7 @@ async function testCreateWorkout() {
       workoutId: new mongoose.Types.ObjectId(), // Generate a new ObjectId for workoutId
       userId: null,
       routineId: null,
+      public: false,
       name: 'Test Workout',
       category: 'Test Category'
     };
