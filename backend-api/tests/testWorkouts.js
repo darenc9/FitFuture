@@ -16,7 +16,7 @@ async function testCreateWorkout() {
       category: 'Test Category'
     };
     const newWorkout = await createWorkout(workoutData);
-    createdWorkoutId = newWorkout._id; // Store the ID of the created workout
+    createdWorkoutId = newWorkout.workoutId; // Store the ID of the created workout
     console.log('Created Workout:', newWorkout);
   } catch (err) {
     console.error('Error:', err);
