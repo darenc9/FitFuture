@@ -2,7 +2,6 @@ const mongoose = require('mongoose');
 const Workout = require('../schemas/Workout');
 const { connectToDb } = require('./connectToDB');
 
-let mongoDBConnectionString = "";
 let WorkoutModel;
 
 // Ensure the database connection is established and the model is set up
@@ -46,6 +45,18 @@ module.exports.getAllWorkouts = async function () {
         .catch((err) => reject('Error retrieving workout records: ' + err.message));
     });
   };
+
+  // Create a new workout
+module.exports.createWorkout = async function (workoutData) {
+  await ensureConnection();
+  return new Promise((resolve, reject) => {
+      const workout = new WorkoutModel(workoutData);
+      workout.save()
+          .then((savedWorkout) => resolve(savedWorkout))
+          .catch((err) => reject('Error creating workout record: ' + err.message));
+  });
+};
+
 
 //for admin to update or user when creating custom workout
 module.exports.updateWorkout = async function (workoutId, updateData) {
