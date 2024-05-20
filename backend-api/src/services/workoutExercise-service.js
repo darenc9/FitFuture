@@ -14,10 +14,10 @@ const ensureConnection = async () => {
 };
 
 //get all workout exercises for a specific workout
-module.exports.getByWorkoutId = async function (workoutId) {
+module.exports.getWorkoutExerciseByWorkoutId = async function (id) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-        WorkoutExerciseModel.find({ workoutId: workoutId }).exec()
+        WorkoutExerciseModel.find({ workoutId: id }).exec()
         .then((workoutExercise) => {
           if (workoutExercise.length > 0) {
             resolve(workoutExercise);
