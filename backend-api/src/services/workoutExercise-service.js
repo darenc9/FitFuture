@@ -17,7 +17,7 @@ const ensureConnection = async () => {
 module.exports.getWorkoutExerciseByWorkoutId = async function (id) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-        WorkoutExerciseModel.find({ workoutId: id }).exec()
+        WorkoutExerciseModel.find({ workoutExerciseId: id }).exec()
         .then((workoutExercise) => {
           if (workoutExercise.length > 0) {
             resolve(workoutExercise);
@@ -30,10 +30,10 @@ module.exports.getWorkoutExerciseByWorkoutId = async function (id) {
   };
 
 //get a workout exercise by id (not sure if will be needed)
-  module.exports.getWorkoutExerciseById = async function (workoutExerciseId) {
+  module.exports.getWorkoutExerciseById = async function (id) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-      WorkoutModel.findById(workoutExerciseId).exec()
+      WorkoutExerciseModel.find({ workoutExerciseId: id }).exec()
         .then((workoutExercise) => {
           if (workoutExercise) {
             resolve(workoutExercise);
@@ -57,11 +57,11 @@ module.exports.createWorkoutExercise = async function (data) {
   };
 
   // Update a workout exercise by id
-module.exports.updateWorkoutExercise = async function (workoutExerciseId, data) {
+module.exports.updateWorkoutExercise = async function (id, data) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
         //new: true ensures new (updated document is returned rather than original)
-      WorkoutExerciseModel.findByIdAndUpdate(workoutExerciseId, data, { new: true }).exec()
+      WorkoutExerciseModel.findOneAndUpdate({workoutExerciseId: id}, data, { new: true }).exec()
         .then((workoutExercise) => {
           if (workoutExercise) {
             resolve(workoutExercise);
@@ -74,13 +74,13 @@ module.exports.updateWorkoutExercise = async function (workoutExerciseId, data) 
   };
 
   // Delete a workout exercise by id (may not be needed)
-module.exports.deleteWorkoutExercise = async function (workoutExerciseId) {
+module.exports.deleteWorkoutExercise = async function (id) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-      WorkoutExerciseModel.findByIdAndDelete(workoutExerciseId).exec()
+      WorkoutExerciseModel.findOneAndDelete({ workoutExerciseId: id }).exec()
         .then((workoutExercise) => {
           if (workoutExercise) {
-            resolve('Workout exercise record deleted successfully');
+            resolve(workoutExercise);
           } else {
             reject('workout exercise record not found');
           }
