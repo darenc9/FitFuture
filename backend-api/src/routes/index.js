@@ -10,7 +10,7 @@ const exerciseRoutes = require('./exerciseRoutes');
 const testDbRoutes = require('./testDbRoute');
 
 //get the workout functions
-const { getAll} = require('./workoutRoutes');
+const { getAll, getById} = require('./workoutRoutes');
 
 // Health Check
 router.get('/', (req, res) => {
@@ -32,4 +32,5 @@ router.use(testDbRoutes);
 // Define first route: GET /v1/fragments
 router.get('/workouts', getAll);
 
+router.get('/workouts/:id', getById);
 module.exports = router;
