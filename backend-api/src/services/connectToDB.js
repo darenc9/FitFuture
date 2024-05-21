@@ -11,8 +11,6 @@ const connection = {};    // to store our connection for checking if already con
 // get our connection string
 let mongoDBConnectionString = process.env.MONGO_URL;
 
-console.log(mongoDBConnectionString);
-
 module.exports.connectToDb = function () {
   return new Promise((resolve, reject) => {
     if (connection.isConnected) {
