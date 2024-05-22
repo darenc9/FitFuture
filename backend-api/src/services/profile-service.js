@@ -1,12 +1,16 @@
 // src/services/profile-service.js
 
+const { default: mongoose } = require("mongoose");
 const Profile = require("../schemas/Profile");
 const { connectToDb } = require("./connectToDB");
 
+let ProfileModel;
+
 // Ensure connection to the database exists
 const ensureConnection = async () => {
-  if (!Profile) {
+  if (!ProfileModel) {
     await connectToDb();
+    ProfileModel = mongoose.model('Profile', Profile.schema);
   }
 };
 
@@ -14,7 +18,7 @@ const ensureConnection = async () => {
 module.exports.getAllProfiles = async function () {
   await ensureConnection();
   return new Promise((resolve, reject) => {
-    Profile.find().exec()
+    ProfileModel.find().exec()
       .then((profiles) => {
         if (profiles.length > 0) {
           resolve(profiles);
@@ -31,7 +35,7 @@ module.exports.getAllProfiles = async function () {
 module.exports.getProfileById = async function (id) {
   await ensureConnection();
   return new Promise((resolve, reject) => {
-    Profile.findOne({ userId: id }).exec()
+    ProfileModel.findOne({ userId: id }).exec()
       .then((profile) => {
         if (profile) {
           resolve(profile);
@@ -48,7 +52,7 @@ module.exports.getProfileById = async function (id) {
 module.exports.createProfile = async function (profileData) {
   await ensureConnection();
   return new Promise((resolve, reject) => {
-    const newProfile = new Profile(profileData);
+    const newProfile = new ProfileModel(profileData);
     newProfile.save()
     .then((savedProfile) => {
       resolve(savedProfile);
@@ -62,7 +66,7 @@ module.exports.createProfile = async function (profileData) {
 module.exports.deleteProfile = async function (id) {
   await ensureConnection();
   return new Promise((resolve, reject) => {
-    Profile.findByIdAndDelete(id).exec()
+    ProfileModel.findByIdAndDelete(id).exec()
       .then((deletedProfile) => {
         resolve("Profile deleted: " + deletedProfile);
       }).catch((err) => {
