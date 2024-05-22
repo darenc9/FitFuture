@@ -7,6 +7,7 @@ const { version, author } = require('../../package.json');
 const router = express.Router();
 // Import other route files
 const exerciseRoutes = require('./exerciseRoutes');
+const profileRoutes = require('./profileRoutes');
 const testDbRoutes = require('./testDbRoute');
 
 //get the workout functions
@@ -26,6 +27,7 @@ router.get('/', (req, res) => {
 
 // Mount the routes
 router.use(exerciseRoutes);
+router.use(profileRoutes);
 // TODO: Mount additional routes for other features as needed
 router.use(testDbRoutes);
 
