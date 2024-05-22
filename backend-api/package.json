@@ -4,7 +4,7 @@
   "description": "Project Gym for PRJ666",
   "main": "index.js",
   "scripts": {
-    "test": "jest -c jest.config.js tests/unit --runInBand",
+    "test": "jest -c jest.config.js --runInBand --",
     "coverage": "jest -c jest.config.js tests/unit --runInBand --coverage",
     "start": "node src/index.js"
   },

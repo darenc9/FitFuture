@@ -1,5 +1,10 @@
 // connection to database uses mongoose
+
+//required to get env variables when importing this file into another
+//for some reason env variables werent loaded without it
+require('dotenv').config();
 const mongoose = require('mongoose');
+
 
 const connection = {};    // to store our connection for checking if already connected
 
