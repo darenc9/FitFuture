@@ -22,7 +22,7 @@ module.exports.getAllProfiles = async function () {
           reject("No profile records found");
         }
       }).catch((err) => {
-        reject("Error retrieving profile records: ", err);
+        reject("Error retrieving profile records: " + err );
       });
   });
 };
@@ -39,7 +39,7 @@ module.exports.getProfileById = async function (id) {
           reject("No profile record found with the userId: " + id);
         }
       }).catch((err) => {
-        reject("Error retrieving profile record: ", err);
+        reject("Error retrieving profile record: " + err);
       });
   });
 };
@@ -53,7 +53,7 @@ module.exports.createProfile = async function (profileData) {
     .then((savedProfile) => {
       resolve(savedProfile);
     }).catch((err) => {
-      reject("Error creating profile record: ", err);
+      reject("Error creating profile record: " + err);
     });
   });
 };
@@ -66,7 +66,7 @@ module.exports.deleteProfile = async function (id) {
       .then((deletedProfile) => {
         resolve("Profile deleted: " + deletedProfile);
       }).catch((err) => {
-        reject("Error deleting profile: ", err);
+        reject("Error deleting profile: " + err);
       })
   });
 };
