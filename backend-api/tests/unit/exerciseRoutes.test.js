@@ -38,12 +38,20 @@ describe('Exercise Routes', () => {
         expect(response.body.data.some(exercise => exercise.primaryMuscles.includes(muscle) || exercise.secondaryMuscles.includes(muscle))).toBe(true);
     });
 
+    test('should return a list of exercises filtered by category', async () => {
+        const category = 'cardio'; // Assuming 'cardio' is a category
+        const response = await request(app).get(`/exercises?category=${category}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.data.some(exercise => exercise.category.toLowerCase() === category.toLowerCase())).toBe(true);
+    });
+
     test('should return a specific exercise by name', async () => {
-        const exercisename = encodeURIComponent('3/4 Sit-Up');
+        const exercisename = '3_4_Sit-Up';
         const response = await request(app).get(`/exercise/${exercisename}`);
 
         expect(response.status).toBe(200);
-        expect(response.body.name).toBe(decodeURIComponent(exercisename));
+        expect(response.body.id).toBe(exercisename);
     });
 
     test('should return 404 for non-existent exercise name', async () => {
