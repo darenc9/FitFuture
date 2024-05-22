@@ -2,11 +2,11 @@
 const mongoose = require('mongoose');
 
 const profileSchema = new mongoose.Schema({
-  profileId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    unique: true
-  },
+  // profileId: {
+  //   type: mongoose.Schema.Types.ObjectId,
+  //   required: true,
+  //   unique: true
+  // },
   userId: { // which account this profile belongs to
     type: mongoose.Schema.Types.ObjectId,
     required: true,
