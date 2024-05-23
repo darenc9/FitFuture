@@ -31,8 +31,25 @@ module.exports.getAllProfiles = async function () {
   });
 };
 
-// get profile for a specific user by id
+// get a specific profile by id
 module.exports.getProfileById = async function (id) {
+  await ensureConnection();
+  return new Promise((resolve, reject) => {
+    ProfileModel.findOne({ _id: id }).exec()
+      .then((profile) => {
+        if (profile) {
+          resolve(profile);
+        } else {
+          reject("No profile record found");
+        }
+      }).catch((err) => {
+        reject("Error retrieving profile record: " + err );
+      });
+  });
+};
+
+// get profile for a specific user by id
+module.exports.getProfileByUserId = async function (id) {
   await ensureConnection();
   return new Promise((resolve, reject) => {
     ProfileModel.findOne({ userId: id }).exec()

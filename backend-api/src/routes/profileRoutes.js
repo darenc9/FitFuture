@@ -15,8 +15,8 @@ router.get('/profiles', (req, res) => {
 });
 
 // get a specific profile by a user's id
-router.get('/profile/:userId', (req, res) => {
-  profileService.getProfileById(req.params.userId)
+router.get('/profile/:profileId', (req, res) => {
+  profileService.getProfileById(req.params.profileId)
     .then((data) => {
       res.status(200).json(data);
     }).catch((err) => {
