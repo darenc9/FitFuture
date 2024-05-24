@@ -17,7 +17,7 @@ const ensureConnection = async () => {
   module.exports.getWorkoutById = async function (id) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-      WorkoutModel.find({ workoutId: id }).exec()
+      WorkoutModel.findOne({ workoutId: id }).exec()
         .then((workout) => {
           if (workout) {
             resolve(workout);

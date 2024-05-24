@@ -8,10 +8,13 @@ const mongoose = require('mongoose');
 
 const connection = {};    // to store our connection for checking if already connected
 
-// get our connection string
-let mongoDBConnectionString = process.env.MONGO_URL;
+
 
 module.exports.connectToDb = function () {
+  // get our connection string
+const mongoDBConnectionString = process.env.MONGO_URL;
+console.log("connect to DB: " + mongoDBConnectionString);
+
   return new Promise((resolve, reject) => {
     if (connection.isConnected) {
       console.log("Using existing connection");
