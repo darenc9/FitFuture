@@ -4,7 +4,7 @@ const { default: mongoose } = require("mongoose");
 const Profile = require("../schemas/Profile");
 const { connectToDb } = require("./connectToDB");
 
-let ProfileModel;
+let ProfileModel = mongoose.model('Profile', Profile.schema);
 
 // Ensure connection to the database exists
 const ensureConnection = async () => {
@@ -92,6 +92,21 @@ module.exports.deleteProfile = async function (id) {
   });
 };
 
-// TODO: make an update profile function
+// update profile by id
+module.exports.updateProfileById = async function (id, newData) {
+  await ensureConnection();
+  return new Promise((resolve, reject) => {
+    ProfileModel.findByIdAndUpdate(id, newData, {new: true}).exec()
+      .then((profile) => {
+        if (profile) {
+          resolve(profile);
+        } else {
+          reject("No profile record found");
+        }
+      }).catch((err) => {
+        reject("Error updating profile record: " + err );
+      });
+  })
+};
 
 // TODO: make add / remove favourites functions

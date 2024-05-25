@@ -3,7 +3,7 @@
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const { connectToDb } = require("../../src/services/connectToDB");
 const { default: mongoose } = require("mongoose");
-const { createProfile, getProfileById, getProfileByUserId, getAllProfiles, deleteProfile } = require("../../src/services/profile-service");
+const { createProfile, getProfileById, getProfileByUserId, getAllProfiles, deleteProfile, updateProfileById } = require("../../src/services/profile-service");
 const Profile = require("../../src/schemas/Profile");
 
 // set up in-memory server for running tests:
@@ -115,6 +115,24 @@ describe('Test Profile service functions', () => {
     expect(allTestProfiles.length).toEqual(2);
     expect(allTestProfiles[0].userId).toEqual(testProfileData.userId);  // check that the first one is the first test profile
     expect(allTestProfiles[1].userId).toEqual(testProfileData2.userId);  // check that the second is the second test profile
+  });
+
+  test('updating a profile should contain correct data', async () => {
+    const updatedData = {
+      height: 175,
+      weight: 170,
+    };
+
+    const testProfile = await updateProfileById(id, updatedData);
+    expect(testProfile.userId).toEqual(testProfileData.userId);
+    expect(testProfile.age).toEqual(testProfileData.age);
+    expect(testProfile.height).toEqual(updatedData.height);   // only updated values should change
+    expect(testProfile.weight).toEqual(updatedData.weight);   // only updated values should change
+    expect(testProfile.sex).toEqual(testProfileData.sex);
+    expect(testProfile.fitnessLevel).toEqual(testProfileData.fitnessLevel);
+    expect(Array.isArray(testProfile.favourites.exercises)).toBe(true);
+    expect(Array.isArray(testProfile.favourites.workouts)).toBe(true);
+    expect(Array.isArray(testProfile.favourites.routines)).toBe(true);
   });
 
   test('deleting a profile removes it from db', async () => {
