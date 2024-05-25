@@ -2,14 +2,11 @@
 "use client"
 import ProfileDetails from "@/components/profile/ProfileDetails";
 import Link from "next/link";
-import {  useState } from "react";
+import {  useEffect, useState } from "react";
 
-const fetchProfileData = async () => {
+const fetchProfileData = async (id) => {
   try {
-    // TODO: this is hardcoded with the only profile in 
-    // db for now - update to be flexible after user
-    // register/login is complete
-    const res = await fetch(`http://localhost:8080/profile/664e57bead1a759e11ade2e6`);
+    const res = await fetch(`http://localhost:8080/profile/${id}`);
     if (!res.ok) {
       throw new Error('Failed to fetch profile data');
     }
@@ -24,13 +21,16 @@ const fetchProfileData = async () => {
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [currentId, setCurrentId] = useState('664e57bead1a759e11ade2e6'); // use only profile in db for now by default
 
-  const fetchData = async () => {
-    const profileData = await fetchProfileData();
-    setProfile(profileData);
-    setLoading(false);
-  };
-  fetchData();
+  useEffect(() => {
+    const fetchData = async () => {
+      const profileData = await fetchProfileData(currentId);
+      setProfile(profileData);
+      setLoading(false);
+    };
+    fetchData();
+  }, [currentId]);
 
   return (
     <div className="container mx-auto px-4">
