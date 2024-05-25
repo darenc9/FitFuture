@@ -35,7 +35,7 @@ module.exports.getAllProfiles = async function () {
 module.exports.getProfileById = async function (id) {
   await ensureConnection();
   return new Promise((resolve, reject) => {
-    ProfileModel.findOne({ _id: id }).exec()
+    ProfileModel.findById(id).exec()
       .then((profile) => {
         if (profile) {
           resolve(profile);
