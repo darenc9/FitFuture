@@ -7,7 +7,7 @@ const exercisesData = require('../data/exercises.json');
 
 // Route to get all exercises or filter by name or muscle group with pagination support
 router.get('/exercises', (req, res) => {
-    const { name, muscle, category, page = 1, limit = 10 } = req.query;
+    const { name, muscle, category, force, level, mechanic, equipment, page = 1, limit = 10 } = req.query;
     
     let filteredExercises = exercisesData;
 
@@ -30,6 +30,34 @@ router.get('/exercises', (req, res) => {
     if (category) {
         filteredExercises = filteredExercises.filter(exercise =>
             exercise.category.toLowerCase() === category.toLowerCase()
+        );
+    }
+
+    // Filter by force if provided
+    if (force) {
+        filteredExercises = filteredExercises.filter(exercise =>
+            exercise.force && exercise.force.toLowerCase() === force.toLowerCase()
+        );
+    }
+
+    // Filter by level if provided
+    if (level) {
+        filteredExercises = filteredExercises.filter(exercise =>
+            exercise.level.toLowerCase() === level.toLowerCase()
+        );
+    }
+
+    // Filter by mechanic if provided
+    if (mechanic) {
+        filteredExercises = filteredExercises.filter(exercise =>
+            exercise.mechanic && exercise.mechanic.toLowerCase() === mechanic.toLowerCase()
+        );
+    }
+
+    // Filter by equipment if provided
+    if (equipment) {
+        filteredExercises = filteredExercises.filter(exercise =>
+            exercise.equipment && exercise.equipment.toLowerCase() === equipment.toLowerCase()
         );
     }
     
