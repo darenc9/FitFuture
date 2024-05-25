@@ -1,7 +1,7 @@
 // src/app/profile/page.jsx
 "use client"
 import AddEdit from "@/components/profile/AddEdit";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 // fetch profile
 const fetchProfileData = async (id) => {
@@ -22,12 +22,14 @@ const EditProfilePage = ( { params } ) => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchData = async () => {
-    const profileData = await fetchProfileData(params.profileId);
-    setProfile(profileData);
-    setLoading(false);
-  }
-  fetchData();
+  useEffect(() => {
+    const fetchData = async () => {
+      const profileData = await fetchProfileData(params.profileId);
+      setProfile(profileData);
+      setLoading(false);
+    };
+    fetchData();
+  }, [params.profileId]);
 
   return (
     <div>
