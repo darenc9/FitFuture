@@ -33,7 +33,7 @@ module.exports.getWorkoutExerciseByWorkoutId = async function (id) {
   module.exports.getWorkoutExerciseById = async function (id) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-      WorkoutExerciseModel.find({ workoutExerciseId: id }).exec()
+      WorkoutExerciseModel.findOne({ workoutExerciseId: id }).exec()
         .then((workoutExercise) => {
           if (workoutExercise) {
             resolve(workoutExercise);
