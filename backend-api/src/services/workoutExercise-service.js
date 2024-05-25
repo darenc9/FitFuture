@@ -22,7 +22,8 @@ module.exports.getWorkoutExerciseByWorkoutId = async function (id) {
           if (workoutExercise.length > 0) {
             resolve(workoutExercise);
           } else {
-            reject(`No workoutExercise records found where id is ${id}`);
+            //if no exercises but workout exists return empty array (will be empty when first creating workout)
+            resolve([]);
           }
         })
         .catch((err) => reject('Error retrieving workoutExercise records: ' + err.message));
