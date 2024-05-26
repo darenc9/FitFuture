@@ -1,8 +1,10 @@
 // src/app/profile/page.jsx
 "use client"
 import ProfileDetails from "@/components/profile/ProfileDetails";
+import { useAtom } from "jotai";
 import Link from "next/link";
 import {  useEffect, useState } from "react";
+import { profileIdAtom } from "../../../store";
 
 const fetchProfileData = async (id) => {
   try {
@@ -21,16 +23,16 @@ const fetchProfileData = async (id) => {
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [currentId, setCurrentId] = useState('664e57bead1a759e11ade2e6'); // use only profile in db for now by default
+  const [profileId, setProfileId] = useAtom(profileIdAtom);   // use shared profile id state
 
   useEffect(() => {
     const fetchData = async () => {
-      const profileData = await fetchProfileData(currentId);
+      const profileData = await fetchProfileData(profileId);
       setProfile(profileData);
       setLoading(false);
     };
     fetchData();
-  }, [currentId]);
+  }, [profileId]);
 
   return (
     <div className="container mx-auto px-4">
