@@ -4,7 +4,7 @@ const { default: mongoose } = require("mongoose");
 const Profile = require("../schemas/Profile");
 const { connectToDb } = require("./connectToDB");
 
-let ProfileModel = mongoose.model('Profile', Profile.schema);
+let ProfileModel;
 
 // Ensure connection to the database exists
 const ensureConnection = async () => {
