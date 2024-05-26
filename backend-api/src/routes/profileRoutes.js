@@ -27,8 +27,8 @@ router.get('/profile/:profileId', (req, res) => {
 // make a new profile
 router.post('/profile/create', (req, res) => {
   profileService.createProfile(req.body)
-    .then((data) => {
-      res.status(201).json({"created profile": data});
+    .then((createdProfile) => {
+      res.status(201).json(createdProfile);
     }).catch((err) => {
       res.status(422).json({error: err});
     });
@@ -37,8 +37,8 @@ router.post('/profile/create', (req, res) => {
 // delete a profile
 router.delete('/profile/:profileId', (req, res) => {
   profileService.deleteProfile(req.params.profileId)
-    .then((data) => {
-      res.status(201).json({"deleted profile": data});
+    .then((deletedProfile) => {
+      res.status(201).json(deletedProfile);
     }).catch((err) => {
       res.status(422).json({error: err});
     });
