@@ -7,6 +7,10 @@ const { version } = require('../package.json');
 const app = express();
 
 app.use(cors());
+
+// allow post requests to have the req.body parsed
+app.use(express.json());
+
 app.use('/', require('./routes'));
 
 // 404 error middleware
