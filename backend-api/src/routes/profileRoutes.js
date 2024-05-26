@@ -34,6 +34,16 @@ router.post('/profile/create', (req, res) => {
     });
 });
 
+// update an existing profile
+router.put('/profile/:profileId', (req, res) => {
+  profileService.updateProfileById(req.params.profileId, req.body)
+    .then((updatedProfile) => {
+      res.status(200).json(updatedProfile);
+    }).catch((err) => {
+      res.status(422).json({error: err});
+    });
+});
+
 // delete a profile
 router.delete('/profile/:profileId', (req, res) => {
   profileService.deleteProfile(req.params.profileId)

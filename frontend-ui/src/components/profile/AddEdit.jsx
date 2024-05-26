@@ -52,22 +52,44 @@ const AddEdit = (props) => {
     }
   };
 
-  // TODO: adjust this to call backend-api for update profile once update route is complete
+  const handleEditProfile = async (data) => {
+    try {
+      const res = await fetch(`http://localhost:8080/profile/${data._id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data),
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to update profile with id: ${data._id}`);
+      }
+      const resData = await res.json();
+      return resData;
+    } catch (error) {
+      console.error('Error updating profile: ', error);
+      return null;
+    }
+  };
+
   const onSubmit = async (data) => {
     // parse the form data to correct formats
     data.age = parseInt(data.age);
     data.height = parseInt(data.height);
     data.weight = parseInt(data.weight);
+
     // determine whether to make a new profile, or edit existing one
     if (isAddMode) {
       const result = await handleMakeNewProfile(data);
-      if (result?._id) {  // new profile was successfully made, redirect to the profile page for the newly created profile
-        setProfileId(result._id);
-        router.push('/profile');
+      if (result?._id) {  // new profile was successfully made
+        setProfileId(result._id); // update the shared profile id to use newly created profile
+        router.push('/profile');  // redirect to the profile page for the newly created profile
       }
     } else {
-      // TODO: fix me
-      console.log(`make call to backend api for updating a profile with _id: ${profile._id}...`);
+      const result = await handleEditProfile(data);
+      if (result) {
+        router.push('/profile');  // redirect to the profile page after updated
+      }
     }
   };
 
