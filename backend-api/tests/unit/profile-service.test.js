@@ -1,4 +1,4 @@
-// tests/unit/profileRoutes.test.js
+// tests/unit/profile-service.test.js
 
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const { connectToDb } = require("../../src/services/connectToDB");
