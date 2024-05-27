@@ -85,7 +85,7 @@ module.exports.deleteProfile = async function (id) {
   return new Promise((resolve, reject) => {
     ProfileModel.findByIdAndDelete(id).exec()
       .then((deletedProfile) => {
-        resolve("Profile deleted: " + deletedProfile);
+        resolve(deletedProfile);
       }).catch((err) => {
         reject("Error deleting profile: " + err);
       })
