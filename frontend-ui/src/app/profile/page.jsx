@@ -20,6 +20,25 @@ const fetchProfileData = async (id) => {
   }
 };
 
+// TODO: update this function to create a delete confirmation dialog and handle accordingly
+const handleDeleteProfile = async (id, resetId) => {
+  console.log('Confirm deletion and handle it here...');
+  try {
+    const res = await fetch(`http://localhost:8080/profile/${id}`, {
+      method: "DELETE",
+    });
+    if (!res.ok) {
+      throw new Error(`Failed to delete profile with id: ${id}`);
+    }
+    const resData = await res.json();
+    resetId('664e57bead1a759e11ade2e6');    // TODO: this is hardcoded for example (app functionality would delete the whole user and log you out)
+    return resData;
+  } catch (error) {
+    console.error('Error deleting profile: ', error);
+    return null;
+  }
+};
+
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -41,10 +60,13 @@ const ProfilePage = () => {
       ) : (
         <div className="flex flex-col">
           <ProfileDetails profile={profile}/>
-          <div className="flex justify-end">
+          <div className="flex justify-end gap-2">
             <Link href={`profile/edit/${profile._id}`} className="bg-blue-500 text-white p-2 rounded">
               Edit Profile
             </Link>
+            <button type="button" className="bg-red-500 text-white p-2 rounded" onClick={() => handleDeleteProfile(profile._id, setProfileId)}>
+              Delete Profile
+            </button>
           </div>
         </div>
       )}
