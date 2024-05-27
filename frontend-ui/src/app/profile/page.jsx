@@ -5,6 +5,7 @@ import { useAtom } from "jotai";
 import Link from "next/link";
 import {  useEffect, useState } from "react";
 import { profileIdAtom } from "../../../store";
+import { TrashIcon } from '@heroicons/react/24/solid';
 
 const fetchProfileData = async (id) => {
   try {
@@ -54,18 +55,19 @@ const ProfilePage = () => {
   }, [profileId]);
 
   return (
-    <div className="container mx-auto px-4">
+    // the height is calculated by the responsive viewport height minus the height of the navbar (80px)
+    <div className="container mx-auto px-4 h-[calc(100vh-80px)]"> 
       {loading ? (
         <p>Loading profile...</p>   // wait until we fetch the profile
       ) : (
-        <div className="flex flex-col">
+        <div className="flex flex-col h-full justify-between">
           <ProfileDetails profile={profile}/>
-          <div className="flex justify-end gap-2">
+          <div className="flex justify-between gap-2 mb-2">
             <Link href={`profile/edit/${profile._id}`} className="bg-blue-500 text-white p-2 rounded">
               Edit Profile
             </Link>
             <button type="button" className="bg-red-500 text-white p-2 rounded" onClick={() => handleDeleteProfile(profile._id, setProfileId)}>
-              Delete Profile
+              <TrashIcon className="size-6"/>
             </button>
           </div>
         </div>
