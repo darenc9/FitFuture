@@ -1,9 +1,9 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import ExerciseTable from "@/components/ExerciseTable";
-import SearchFilters from "@/components/SearchFilters";
-import Pagination from "@/components/Pagination";
+import ExerciseTable from "@/components/exercises/ExerciseTable";
+import SearchFilters from "@/components/exercises/SearchFilters";
+import Pagination from "@/components/exercises/Pagination";
 
 const PAGE_SIZE = 10;
 
