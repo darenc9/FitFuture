@@ -46,6 +46,38 @@ describe('Exercise Routes', () => {
         expect(response.body.data.some(exercise => exercise.category.toLowerCase() === category.toLowerCase())).toBe(true);
     });
 
+    test('should return a list of exercises filtered by force', async () => {
+        const force = 'pull'; // Assuming 'pull' is a force type
+        const response = await request(app).get(`/exercises?force=${force}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.data.every(exercise => exercise.force && exercise.force.toLowerCase() === force)).toBe(true);
+    });
+
+    test('should return a list of exercises filtered by level', async () => {
+        const level = 'beginner'; // Assuming 'beginner' is a level
+        const response = await request(app).get(`/exercises?level=${level}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.data.every(exercise => exercise.level.toLowerCase() === level)).toBe(true);
+    });
+
+    test('should return a list of exercises filtered by mechanic', async () => {
+        const mechanic = 'compound'; // Assuming 'compound' is a mechanic
+        const response = await request(app).get(`/exercises?mechanic=${mechanic}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.data.every(exercise => exercise.mechanic && exercise.mechanic.toLowerCase() === mechanic)).toBe(true);
+    });
+
+    test('should return a list of exercises filtered by equipment', async () => {
+        const equipment = 'dumbbell'; // Assuming 'dumbbell' is an equipment type
+        const response = await request(app).get(`/exercises?equipment=${equipment}`);
+
+        expect(response.status).toBe(200);
+        expect(response.body.data.every(exercise => exercise.equipment && exercise.equipment.toLowerCase() === equipment)).toBe(true);
+    });
+
     test('should return a specific exercise by name', async () => {
         const exercisename = '3_4_Sit-Up';
         const response = await request(app).get(`/exercise/${exercisename}`);

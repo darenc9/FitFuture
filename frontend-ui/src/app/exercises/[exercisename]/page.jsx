@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router';
-import ExerciseDetails from '@/components/ExerciseDetails'
+import ExerciseDetails from '@/components/exercises/ExerciseDetails'
 
 export default function Page( { params }) {
     const [exercise, setExercise] = useState(null);
