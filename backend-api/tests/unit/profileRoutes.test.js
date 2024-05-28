@@ -4,15 +4,25 @@ const request = require('supertest');
 const app = require('../../src/app');
 const { connectToDb } = require('../../src/services/connectToDB');
 const { default: mongoose } = require('mongoose');
+const { MongoMemoryServer } = require('mongodb-memory-server');
 
-let connection;
+let mongoServer;
 
 beforeAll(async () => {
-  connection = await connectToDb();
+  mongoServer = await MongoMemoryServer.create();
+  const uri = mongoServer.getUri();
+  process.env.MONGO_URL = uri;
+  await connectToDb();
 });
 
 afterAll(async () => {
-  await connection.close();
+  const collections = mongoose.connection.collections;
+  for (const key in collections) {
+    const col = collections[key];
+    await col.deleteMany({});
+  }
+  await mongoose.disconnect();
+  await mongoServer.stop();
 })
 
 describe('Test Profile Routes', () => {
