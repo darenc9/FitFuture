@@ -1,14 +1,11 @@
 // connection to database uses mongoose
 
 //required to get env variables when importing this file into another
-//for some reason env variables werent loaded without it
+//for some reason env variables weren't loaded without it
 require('dotenv').config();
 const mongoose = require('mongoose');
 
-
-const connection = {};    // to store our connection for checking if already connected
-
-
+let connection = {};    // to store our connection for checking if already connected
 
 module.exports.connectToDb = function () {
   // get our connection string
@@ -18,12 +15,13 @@ console.log("connect to DB: " + mongoDBConnectionString);
   return new Promise((resolve, reject) => {
     if (connection.isConnected) {
       console.log("Using existing connection");
-      resolve();
+      resolve(connection);
     }
     mongoose.connect(mongoDBConnectionString)
       .then(() => {
+        connection = mongoose.connection;
         connection.isConnected = mongoose.connection.readyState;
-        resolve();
+        resolve(connection);
       }).catch(err => {
         console.log("error connecting to database");
         reject(err);
