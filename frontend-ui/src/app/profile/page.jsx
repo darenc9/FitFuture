@@ -32,7 +32,7 @@ const handleDeleteProfile = async (id, resetId) => {
       throw new Error(`Failed to delete profile with id: ${id}`);
     }
     const resData = await res.json();
-    resetId('664e57bead1a759e11ade2e6');    // TODO: this is hardcoded for example (app functionality would delete the whole user and log you out)
+    resetId('66575f452e46d5e14258c321');    // TODO: this is hardcoded for example (app functionality would delete the whole user and log you out)
     return resData;
   } catch (error) {
     console.error('Error deleting profile: ', error);
