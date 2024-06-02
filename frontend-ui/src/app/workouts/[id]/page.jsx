@@ -40,8 +40,9 @@ const WorkoutDetails = () => {
 
     const handlePanelClick = (item) => {
         console.log(item);
-        // TODO: implement once exercise route by id is done (to display more info on exercise)
-        // router.push(`/exercise/${item.exerciseId}`); // Redirect to /exercise/[item.exerciseId]
+        router.push(`/exercises/${item.exerciseId}`); 
+        //TODO: logic may need to change and have other route parameters based on back button
+        //logic in /exercises/[exerciseId]
     };
 
     const handleEditClick = () => {
