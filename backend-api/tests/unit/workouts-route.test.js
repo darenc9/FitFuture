@@ -68,7 +68,7 @@ afterAll(async () => {
 // Stop the in-memory MongoDB server
   await mongoServer.stop();
 });
-// Tests accessing a nonexistent route
+
 describe('workouts route handling', () => {
     it('/workouts should return an array of all workouts', async () => {
       const response = await request(app).get('/workouts');
@@ -77,15 +77,36 @@ describe('workouts route handling', () => {
       expect(response.body[0]).toHaveProperty('workoutId');
     });
 
-    it('/workouts/:id should return array of workout exercises', async () => {
-      const response = await request(app).get(`/workouts/${workout.workoutId}`);
+    //updated to be /workout instead of /workouts
+    it('/workout/:id should return array of workout exercises', async () => {
+      const response = await request(app).get(`/workout/${workout.workoutId}`);
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
     });
 
-    it('/workouts/:id should return empty array if workout has no workout exercises in it yet', async () => {
-      const response = await request(app).get(`/workouts/${workout2.workoutId}`);
+    //updated to be /workout instead of /workouts
+    it('/workout/:id should return empty array if workout has no workout exercises in it yet', async () => {
+      const response = await request(app).get(`/workout/${workout2.workoutId}`);
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
+    });
+
+
+    it('/workouts/:id should return a specific workout', async () => {
+      const response = await request(app).get(`/workouts/${workout2.workoutId}`);
+      expect(response.status).toBe(200);
+      expect(Array.isArray(response.body)).toBe(false);
+      expect(response.body).toHaveProperty('workoutId');
+      expect(response.body).toHaveProperty('userId');
+      expect(response.body).toHaveProperty('routineId');
+      expect(response.body).toHaveProperty('public');
+      expect(response.body).toHaveProperty('name');
+      expect(response.body).toHaveProperty('category');
+      expect(response.body.userId).toBe(null);
+      expect(response.body.public).toBe(true);
+      expect(response.body.workoutId).toEqual(workout2.workoutId.toString());
+      expect(response.body.routineId).toEqual(workout2.routineId.toString());
+      expect(response.body.name).toBe("Morning Run");
+      expect(response.body.category).toBe("Cardio");
     });
   });
