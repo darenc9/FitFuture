@@ -26,4 +26,13 @@ module.exports.getById = async (req, res) => {
   })
 };
 
+module.exports.getWorkoutById = async (req, res) => {
+  const id = req.params.id;
+  workoutService.getWorkoutById(id)
+  .then(data => {
+    res.status(200).json(data);
+  }).catch(msg => {
+    res.status(404).json({error: msg});
+  })
+};
 
