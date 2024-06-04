@@ -40,13 +40,14 @@ const WorkoutDetails = () => {
 
     const handlePanelClick = (item) => {
         console.log(item);
-        router.push(`/exercises/${item.exerciseId}`); 
+        //router.push(`/exercises/${item.exerciseId}`); 
         //TODO: logic may need to change and have other route parameters based on back button
         //logic in /exercises/[exerciseId]
     };
 
     const handleEditClick = () => {
-        router.push(`/workouts/edit/${id}`);
+        //TODO:
+        //router.push(`/workouts/edit/${id}`);
     };
 
     return (
