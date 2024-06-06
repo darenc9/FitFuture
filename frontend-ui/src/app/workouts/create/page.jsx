@@ -1,1 +1,7 @@
-//page for when user creating new workout
+import React from 'react'
+
+export default function page() {
+  return (
+    <div>page</div>
+  )
+}
