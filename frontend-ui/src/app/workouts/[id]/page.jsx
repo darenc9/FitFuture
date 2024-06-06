@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { useAtom } from 'jotai';
-import { profileIdAtom } from '../../../../store'; // Adjust the import path as necessary
-import WorkoutExercise from '../../../components/workouts/WorkoutExercise'; // Adjust the import path as necessary
+import { profileIdAtom } from '../../../../store'; 
+import WorkoutExercise from '../../../components/workouts/WorkoutExercise'; 
 
 const WorkoutDetails = () => {
     const { id } = useParams(); // Access the dynamic route parameter
