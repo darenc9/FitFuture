@@ -52,7 +52,7 @@ const WorkoutDetails = () => {
 
     const handleStartWorkout = () => {
         //TODO:
-        //router.push(``);
+        router.push(`/workouts/start?id=${id.toString()}`);
     }
 
     return (
