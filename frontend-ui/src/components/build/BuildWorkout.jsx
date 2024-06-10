@@ -15,7 +15,7 @@ const WorkoutBuilder = () => {
       ...prevWorkout,
       exerciseIds: [...prevWorkout.exerciseIds, newExerciseId] // Add the new exercise ID to the workout
     }));
-    router.push(`/exercise-details/${newExerciseId}`); // Navigate to the exercise details page
+    router.push(`/build/exercises`); // Navigate to the exercise details page
   };
 
   const handleSaveWorkout = () => {
