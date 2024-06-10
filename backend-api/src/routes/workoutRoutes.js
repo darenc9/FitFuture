@@ -36,3 +36,26 @@ module.exports.getWorkoutById = async (req, res) => {
   })
 };
 
+module.exports.createWorkout = async (req, res) => {
+  
+  //create the workout object
+  const data = req.body;
+  console.log(data);
+
+  // {
+  //   workout: {
+  //     name: 'workout name',
+  //     exerciseIds: [ '3_4_Sit-Up', '90_90_Hamstring' ]
+  //   },
+  //   exercises: [
+  //     { name: '3/4 Sit-Up', sets: 0, reps: 0, notes: '' },
+  //     { name: '90/90 Hamstring', sets: 0, reps: 0, notes: '' }
+  //   ]
+  // }
+  res.status(200).json("ok");
+  //for each object in the recieved json array
+  //create a workout exercise object (ensure same workout id)
+
+  
+};
+
