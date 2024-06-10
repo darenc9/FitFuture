@@ -11,8 +11,12 @@ const WorkoutExercise = ({ workoutExercise, handlePanelClick }) => {
             className="flex items-center p-4 border rounded-lg shadow-md cursor-pointer hover:bg-gray-100"
             onClick={() => handlePanelClick(workoutExercise)}
         >
-            <div className="flex-shrink-0 w-16 h-16 bg-gray-300">
-                {/* Placeholder for image */}
+            <div className="flex-shrink-0 w-16 h-16 relative">
+                <img
+                    src={`/exercises/${workoutExercise.exerciseId}/1.jpg`} // Update the path and extension as needed
+                    alt={workoutExercise.name}
+                    className="w-full h-full object-cover rounded-lg"
+                />
             </div>
             <div className="ml-4 flex-grow">
                 <h3 className="text-lg font-semibold">{formatExerciseId(workoutExercise.exerciseId)}</h3>
