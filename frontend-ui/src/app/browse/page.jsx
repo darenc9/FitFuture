@@ -16,20 +16,24 @@ const BrowsePage = () => {
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await fetch(selectedOption === 'workouts' ? 'http://localhost:8080/workouts' : 'http://localhost:8080/routines');
-                if (!res.ok) {
-                    throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
+            if (selectedOption !== 'exercises') {
+                try {
+                    const res = await fetch(selectedOption === 'workouts' ? 'http://localhost:8080/workouts' : 'http://localhost:8080/routines');
+                    if (!res.ok) {
+                        throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
+                    }
+                    const data = await res.json();
+                    if (selectedOption === 'workouts') {
+                        setWorkouts(data);
+                        setFilteredWorkouts(data); // Initially show all workouts
+                    } else {
+                        setRoutines(data);
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-                const data = await res.json();
-                if (selectedOption === 'workouts') {
-                    setWorkouts(data);
-                    setFilteredWorkouts(data); // Initially show all workouts
-                } else {
-                    setRoutines(data);
-                }
-            } catch (error) {
-                console.error(error);
+            } else {
+                router.push('/exercises'); // Reroute to exercises page
             }
         };
 
@@ -85,6 +89,12 @@ const BrowsePage = () => {
                 >
                     Routines
                 </button>
+                <button
+                    onClick={() => setSelectedOption('exercises')}
+                    className={`px-4 py-2 mx-2 font-semibold rounded ${selectedOption === 'exercises' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'}`}
+                >
+                    Exercises
+                </button>
             </div>
             <div className="mt-8">
                 {selectedOption === 'workouts' && (
@@ -104,6 +114,10 @@ const BrowsePage = () => {
                  {/*if selected button option is routines, handle here*/}
                 {selectedOption === 'routines' && (
                     <p className="text-center text-red-500">This feature is currently unavailable.</p>
+                )}
+                 {/*if selected button option is routines, handle here*/}
+                {selectedOption === 'exercises' && (
+                    <p className="text-center text-red-500">Exercises</p>
                 )}
             </div>
         </div>

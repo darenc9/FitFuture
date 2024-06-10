@@ -50,6 +50,11 @@ const WorkoutDetails = () => {
         //router.push(`/workouts/edit/${id}`);
     };
 
+    const handleStartWorkout = () => {
+        //TODO:
+        router.push(`/workouts/start?id=${id.toString()}`);
+    }
+
     return (
         <div className="container mx-auto px-4">
             <h1 className="text-2xl font-bold text-center mt-8">{name}</h1>
@@ -63,16 +68,23 @@ const WorkoutDetails = () => {
                         />
                     ))}
                 </div>
-                {showEditButton && (
-                    <div className="flex justify-center mt-8">
+                <div className="flex justify-center mt-8 space-x-4">
+                    {showEditButton && (
                         <button
                             onClick={handleEditClick}
                             className="px-4 py-2 text-white bg-blue-500 rounded"
                         >
                             Edit Workout
                         </button>
-                    </div>
-                )}
+                    )}
+                    <button 
+                        className="px-4 py-2 text-white bg-blue-500 rounded" 
+                        onClick={handleStartWorkout}
+                    >
+                        Start Workout
+                    </button>
+                </div>
+
             </div>
         </div>
     );
