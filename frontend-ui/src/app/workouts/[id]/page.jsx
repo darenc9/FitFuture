@@ -55,6 +55,10 @@ const WorkoutDetails = () => {
         router.push(`/workouts/start?id=${id.toString()}`);
     }
 
+    const handleBackClick = () => {
+        router.back(); // Navigate to the previous page
+    };
+
     return (
         <div className="container mx-auto px-4">
             <h1 className="text-2xl font-bold text-center mt-8">{name}</h1>
@@ -83,8 +87,13 @@ const WorkoutDetails = () => {
                     >
                         Start Workout
                     </button>
+                    <button 
+                        className="px-4 py-2 text-white bg-gray-500 rounded" 
+                        onClick={handleBackClick}
+                    >
+                        Back
+                    </button>
                 </div>
-
             </div>
         </div>
     );
