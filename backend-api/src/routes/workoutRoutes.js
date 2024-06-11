@@ -52,7 +52,7 @@ module.exports.createWorkout = async (req, res) => {
       routineId: null, // Assuming no routine association for now, set if needed
       public: workout.public, // Use provided public value
       name: workout.name,
-      category: workout.category || ''
+      category: "Custom"
     };
 
     const createdWorkout = await workoutService.createWorkout(workoutData);
@@ -66,11 +66,11 @@ module.exports.createWorkout = async (req, res) => {
             workoutExerciseId: new mongoose.Types.ObjectId(), // Generate a new ObjectId for workoutExerciseId
             workoutId: createdWorkout.workoutId, // Link to the created workout
             exerciseId: exercise.id,
-            sets: parseInt(exercise.sets, 10), // Convert sets to integer
-            reps: parseInt(exercise.reps, 10), // Convert reps to integer
-            duration: exercise.duration || 0, // Default to 0 if not provided
-            weight: exercise.weight || 0, // Default to 0 if not provided
-            notes: exercise.notes || ''
+            sets: parseInt(exercise.sets, 10) || null, // Convert sets to integer
+            reps: parseInt(exercise.reps, 10) || null, // Convert reps to integer
+            duration: exercise.duration || null, // Default to 0 if not provided
+            weight: null, // Default to 0 if not provided
+            notes: exercise.notes
           };
     
           const createdExercise = await workoutExerciseService.createWorkoutExercise(workoutExerciseData);
@@ -90,31 +90,5 @@ module.exports.createWorkout = async (req, res) => {
       res.status(500).json({ message: 'Error creating workout', error: error.message });
     }
   }
-
-
-//   {
-//     workout: {
-//       name: 'workout name',
-//       exerciseIds: [ '3_4_Sit-Up', '90_90_Hamstring' ],     
-//       public: true,
-//       user: '66575f452e46d5e14258c321'
-//     },
-//     exercises: [
-//       {
-//           name: '3/4 Sit-Up',
-//           sets: '2',
-//           reps: '2',
-//           notes: '',
-//           id: '3_4_Sit-Up'
-//       },
-//       {
-//           name: '90/90 Hamstring',
-//           sets: '2',
-//           reps: '2',
-//           notes: '',
-//           id: '90_90_Hamstring'
-//       }
-//     ]
-// }
 };
 
