@@ -1,6 +1,6 @@
 import React from 'react';
 import { useAtom } from 'jotai';
-import { getExerciseAtom } from '../../../exerciseAtom';
+import { getExerciseAtom } from '../../../utility/exerciseAtom';
 
 const ExercisePanel = ({ id }) => {
   const [exercise] = useAtom(getExerciseAtom(id));

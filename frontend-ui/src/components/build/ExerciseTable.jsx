@@ -2,7 +2,7 @@ import React from "react";
 import { useRouter } from "next/navigation";
 import { useAtom } from "jotai";
 import { PlusIcon } from "@heroicons/react/24/solid";
-import { workoutAtom } from "../../../exerciseAtom";
+import { workoutAtom } from "../../../utility/exerciseAtom";
 
 const ExerciseTable = ({ exercises }) => {
   const router = useRouter();
