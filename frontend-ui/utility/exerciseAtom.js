@@ -4,7 +4,7 @@ import { atom } from 'jotai';
 export const workoutAtom = atom({
   name: '', // workout name
   exerciseIds: [], // generated ids
-  isPublic: false // public/private status
+  public: false // public/private status
 });
 
 // Map to store exercise atoms
