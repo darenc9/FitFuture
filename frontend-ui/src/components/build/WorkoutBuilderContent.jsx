@@ -23,6 +23,11 @@ const WorkoutBuilderContent = ({ setView }) => {
   };
 
   const handleSaveWorkout = async () => {
+    if (!workout.name) {
+      setError('Please enter a workout name.');
+      return;
+    }
+
     if (workout.exerciseIds.length === 0) {
       setError('Please add at least one exercise to the workout.');
       return;
