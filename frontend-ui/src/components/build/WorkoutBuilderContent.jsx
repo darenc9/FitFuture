@@ -6,7 +6,7 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import ExercisePanel from './ExercisePanel';
 import { useAtomValue } from 'jotai';
 import useResetAtoms from '../../../utility/useResetAtoms'; // Import the reset hook
-import { profileIdAtom } from '../../../store'; 
+import { profileIdAtom } from '../../../store';
 
 const WorkoutBuilderContent = ({ setView }) => {
   const [workout, setWorkout] = useAtom(workoutAtom);
@@ -16,11 +16,11 @@ const WorkoutBuilderContent = ({ setView }) => {
   const [currentUser] = useAtom(profileIdAtom);
 
   // Initialize the public state from the workout atom
-  const [isPublic, setIsPublic] = useState(workout.isPublic);
+  const [isPublic, setIsPublic] = useState(workout.public);
 
   const exercisesDetails = workout.exerciseIds.map(id => {
     const exerciseAtom = getExerciseAtom(id);
-    return useAtomValue(exerciseAtom);
+    return { ...useAtomValue(exerciseAtom), id }; // Ensure id is included
   });
 
   const handleAddExercise = () => {
@@ -39,8 +39,8 @@ const WorkoutBuilderContent = ({ setView }) => {
     }
 
     const payload = {
-      workout: { ...workout, isPublic, user: currentUser }, // Include public/private status and user in the payload
-      exercises: exercisesDetails
+      workout: { ...workout, public: isPublic, user: currentUser }, // Include public/private status and user in the payload
+      exercises: exercisesDetails // Each exercise will include its id
     };
 
     // Log the payload
@@ -71,7 +71,7 @@ const WorkoutBuilderContent = ({ setView }) => {
 
   const handleCheckboxChange = (e) => {
     setIsPublic(e.target.checked);
-    setWorkout({ ...workout, isPublic: e.target.checked });
+    setWorkout({ ...workout, public: e.target.checked });
   };
 
   return (
