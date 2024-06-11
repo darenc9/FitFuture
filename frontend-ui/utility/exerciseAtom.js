@@ -1,9 +1,10 @@
 import { atom } from 'jotai';
 
-// Atom to store workout name and list of exercise IDs
+// Atom to store workout name, list of exercise IDs, and public/private status
 export const workoutAtom = atom({
   name: '', // workout name
-  exerciseIds: [] // generated ids
+  exerciseIds: [], // generated ids
+  isPublic: false // public/private status
 });
 
 // Map to store exercise atoms
