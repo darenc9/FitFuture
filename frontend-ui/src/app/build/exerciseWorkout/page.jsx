@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAtom } from 'jotai';
-import { getExerciseAtom, workoutAtom } from '../../../../exerciseAtom';
+import { getExerciseAtom, workoutAtom } from '../../../../utility/exerciseAtom';
 
 export default function WorkoutExercise() {
   const router = useRouter();
@@ -26,7 +26,27 @@ export default function WorkoutExercise() {
     notes: exerciseDetails.notes || ''
   });
 
+  const [error, setError] = useState(null); // State for error message
+
+  useEffect(() => {
+    setLocalDetails({
+      name: exerciseDetails.name || name,
+      sets: exerciseDetails.sets || 0,
+      reps: exerciseDetails.reps || 0,
+      notes: exerciseDetails.notes || ''
+    });
+  }, [exerciseDetails, name]);
+
   const handleSave = () => {
+    if (localDetails.sets <= 0 || isNaN(localDetails.sets)) {
+      setError('Number of sets must be a number greater than 0.');
+      return;
+    }
+    if (localDetails.reps <= 0 || isNaN(localDetails.reps)) {
+      setError('Number of reps must be a number greater than 0.');
+      return;
+    }
+
     setExerciseDetails(localDetails);
 
     if (!workout.exerciseIds.includes(id)) {
@@ -42,11 +62,17 @@ export default function WorkoutExercise() {
   const handleChange = (e) => {
     const { name, value } = e.target;
     setLocalDetails({ ...localDetails, [name]: value });
+    setError(null); // Clear error message on change
   };
 
   return (
     <div className="container mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">Add Exercise Details</h2>
+      {error && (
+        <div className="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+          <span className="font-medium">Error:</span> {error}
+        </div>
+      )}
       <div className="mb-4">
         <label className="block text-sm font-medium text-gray-700 mb-2">Exercise Name:</label>
         <input
