@@ -6,12 +6,17 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import ExercisePanel from './ExercisePanel';
 import { useAtomValue } from 'jotai';
 import useResetAtoms from '../../../utility/useResetAtoms'; // Import the reset hook
+import { profileIdAtom } from '../../../store'; 
 
 const WorkoutBuilderContent = ({ setView }) => {
   const [workout, setWorkout] = useAtom(workoutAtom);
   const router = useRouter();
   const resetAtoms = useResetAtoms(); // Get the reset function
   const [error, setError] = useState(null); // State for error message
+  const [currentUser] = useAtom(profileIdAtom);
+
+  // Initialize the public state from the workout atom
+  const [isPublic, setIsPublic] = useState(workout.isPublic);
 
   const exercisesDetails = workout.exerciseIds.map(id => {
     const exerciseAtom = getExerciseAtom(id);
@@ -34,7 +39,7 @@ const WorkoutBuilderContent = ({ setView }) => {
     }
 
     const payload = {
-      workout,
+      workout: { ...workout, isPublic, user: currentUser }, // Include public/private status and user in the payload
       exercises: exercisesDetails
     };
 
@@ -64,6 +69,11 @@ const WorkoutBuilderContent = ({ setView }) => {
     }
   };
 
+  const handleCheckboxChange = (e) => {
+    setIsPublic(e.target.checked);
+    setWorkout({ ...workout, isPublic: e.target.checked });
+  };
+
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Build Workout</h2>
@@ -79,6 +89,15 @@ const WorkoutBuilderContent = ({ setView }) => {
           value={workout.name}
           onChange={(e) => setWorkout({ ...workout, name: e.target.value })}
           className="block w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
+        />
+      </div>
+      <div className="flex items-center mb-4">
+        <label className="block text-sm font-medium text-gray-700 mr-2">Public:</label>
+        <input
+          type="checkbox"
+          checked={isPublic}
+          onChange={handleCheckboxChange}
+          className="form-checkbox h-5 w-5 text-blue-600"
         />
       </div>
       <div className="flex justify-end mb-4">
