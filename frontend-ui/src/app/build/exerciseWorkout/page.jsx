@@ -21,8 +21,8 @@ export default function WorkoutExercise() {
 
   const [localDetails, setLocalDetails] = useState({
     name: exerciseDetails.name || name,
-    sets: exerciseDetails.sets || 0,
-    reps: exerciseDetails.reps || 0,
+    sets: exerciseDetails.sets || 3, //static defaults values (maybe add some sort of condition to change this)
+    reps: exerciseDetails.reps || 10,
     notes: exerciseDetails.notes || ''
   });
 
