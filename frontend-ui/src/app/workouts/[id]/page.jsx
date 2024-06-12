@@ -47,7 +47,7 @@ const WorkoutDetails = () => {
 
     const handleEditClick = () => {
         //TODO:
-        //router.push(`/workouts/edit/${id}`);
+        router.push(`/workouts/edit/${id}`);
     };
 
     const handleStartWorkout = () => {
