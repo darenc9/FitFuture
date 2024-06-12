@@ -66,13 +66,14 @@ module.exports.createWorkout = async (req, res) => {
             workoutExerciseId: new mongoose.Types.ObjectId(), // Generate a new ObjectId for workoutExerciseId
             workoutId: createdWorkout.workoutId, // Link to the created workout
             exerciseId: exercise.id,
+            name: exercise.name,
             sets: parseInt(exercise.sets, 10) || null, // Convert sets to integer
             reps: parseInt(exercise.reps, 10) || null, // Convert reps to integer
             duration: exercise.duration || null, // Default to 0 if not provided
             weight: null, // Default to 0 if not provided
             notes: exercise.notes
           };
-    
+          
           const createdExercise = await workoutExerciseService.createWorkoutExercise(workoutExerciseData);
           createdExercises.push(createdExercise);
         }
