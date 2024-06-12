@@ -28,3 +28,7 @@ export const getExerciseAtom = (id) => {
 getExerciseAtom.clearExerciseAtoms = () => {
   exerciseAtoms.clear();
 };
+
+export const removeExerciseAtom = (id) => {
+  exerciseAtoms.delete(id);
+};
