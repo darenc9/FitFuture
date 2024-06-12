@@ -1,10 +1,7 @@
 import React from 'react';
 
 const WorkoutExercise = ({ workoutExercise, handlePanelClick }) => {
-    const formatExerciseId = (name) => {
-        return name.replace(/_/g, ' ');
-    };
-
+    console.log(workoutExercise);
     return (
         <div
             key={workoutExercise._id}
@@ -19,7 +16,7 @@ const WorkoutExercise = ({ workoutExercise, handlePanelClick }) => {
                 />
             </div>
             <div className="ml-4 flex-grow">
-                <h3 className="text-lg font-semibold">{formatExerciseId(workoutExercise.exerciseId)}</h3>
+                <h3 className="text-lg font-semibold">{workoutExercise.name}</h3>
                 <p className="text-gray-600">{workoutExercise.sets}x - {workoutExercise.reps} reps</p>
             </div>
             <div className="flex-shrink-0 ml-4">
