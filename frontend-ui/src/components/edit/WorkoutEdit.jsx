@@ -6,6 +6,7 @@ import { profileIdAtom } from '../../../store';
 import ExercisePanel from './ExercisePanel';
 import { editWorkoutAtom, setEditExerciseAtoms } from '../../../utility/editExerciseAtom';
 import { useAtomValue } from 'jotai';
+import { PlusIcon } from '@heroicons/react/24/solid';
 
 const WorkoutEdit = () => {
   const { id } = useParams();
@@ -73,6 +74,10 @@ const WorkoutEdit = () => {
     router.push('/workouts/edit/updateWorkout?workoutId=' + workout.workoutId);
   };
 
+  const handleAddExercise = () => {
+    router.push('/build/exercises?from=edit&workoutId='+ workout.workoutId); // Navigate to the exercises page
+  };
+
   const handleCheckboxChange = (e) => {
     setWorkout({ ...workout, public: e.target.checked });
   };
@@ -90,14 +95,23 @@ const WorkoutEdit = () => {
             className="block w-full px-4 py-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300"
           />
         </div>
-        <div className="flex items-center mb-4">
-          <label className="block text-sm font-medium text-gray-700 mr-2">Public:</label>
-          <input
-            type="checkbox"
-            checked={isPublic}
-            onChange={handleCheckboxChange}
-            className="form-checkbox h-5 w-5 text-blue-600"
-          />
+        <div className="flex items-center justify-between mb-4">
+          <div className="flex items-center">
+            <label className="block text-sm font-medium text-gray-700 mr-2">Public:</label>
+            <input
+              type="checkbox"
+              checked={isPublic}
+              onChange={handleCheckboxChange}
+              className="form-checkbox h-5 w-5 text-blue-600"
+            />
+          </div>
+          <button
+            onClick={handleAddExercise}
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 flex items-center"
+          >
+            <PlusIcon className="w-5 h-5 mr-2" />
+            Add Exercise
+          </button>
         </div>
         <div className="space-y-4">
           {workout.exerciseIds.map((exerciseId) => (
