@@ -27,6 +27,21 @@ export const getEditExerciseAtom = (id) => {
   return editExerciseAtoms.get(id);
 };
 
+export const getAddEditExerciseAtom = (id) => {
+  if (!editExerciseAtoms.has(id)) {
+    editExerciseAtoms.set(
+      id, //exerciseId
+      atom({
+        id,
+        name: '', // exercise name
+        sets: 0,
+        reps: 0
+      })
+    );
+  }
+  return editExerciseAtoms.get(id);
+};
+
 getEditExerciseAtom.clearExerciseAtoms = () => {
   editExerciseAtoms.clear();
 };
