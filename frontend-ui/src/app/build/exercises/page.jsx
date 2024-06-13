@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import ExerciseTable from "@/components/build/ExerciseTable";
 import SearchFilters from "@/components/exercises/SearchFilters";
 import Pagination from "@/components/exercises/Pagination";
+import { useSearchParams } from "next/navigation";
 
 const PAGE_SIZE = 10;
 
@@ -37,6 +38,11 @@ export default function ExercisesPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);
   const [pageInput, setPageInput] = useState(1);
+
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from'); // Access the query parameter
+  const workoutId = searchParams.get('workoutId'); // Access the query parameter
+
   const [filters, setFilters] = useState({
     name: "",
     muscle: "",
@@ -103,7 +109,7 @@ export default function ExercisesPage() {
         <p className="text-center">Loading exercises...</p>
       ) : (
         <>
-          <ExerciseTable exercises={exercises} />
+          <ExerciseTable exercises={exercises} from={from} workoutId={workoutId}/>
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

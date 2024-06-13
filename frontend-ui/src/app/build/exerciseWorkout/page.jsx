@@ -4,38 +4,43 @@ import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAtom } from 'jotai';
 import { getExerciseAtom, workoutAtom } from '../../../../utility/exerciseAtom';
+import { getAddEditExerciseAtom, editWorkoutAtom } from '../../../../utility/editExerciseAtom';
 
 export default function WorkoutExercise() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
   const name = searchParams.get('name');
+  const from = searchParams.get('from');
+  const workoutId = searchParams.get('workoutId');
 
-  if (!id || !name) {
+  if (!id || !name || !from) {
     return <p>Loading...</p>;
   }
 
-  const exerciseAtom = getExerciseAtom(id);
+  const exerciseAtom = from === 'build' ? getExerciseAtom(id) : getAddEditExerciseAtom(id);
   const [exerciseDetails, setExerciseDetails] = useAtom(exerciseAtom);
-  const [workout, setWorkout] = useAtom(workoutAtom);
+  const [workout, setWorkout] = useAtom(from === 'build' ? workoutAtom : editWorkoutAtom);
 
   const [localDetails, setLocalDetails] = useState({
     name: exerciseDetails.name || name,
-    sets: exerciseDetails.sets || 3, //static defaults values (maybe add some sort of condition to change this)
+    sets: exerciseDetails.sets || 3,
     reps: exerciseDetails.reps || 10,
-    notes: exerciseDetails.notes || ''
+    notes: exerciseDetails.notes || '',
+    workoutId: workoutId || ''
   });
 
-  const [error, setError] = useState(null); // State for error message
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     setLocalDetails({
       name: exerciseDetails.name || name,
       sets: exerciseDetails.sets || 0,
       reps: exerciseDetails.reps || 0,
-      notes: exerciseDetails.notes || ''
+      notes: exerciseDetails.notes || '',
+      workoutId: workoutId || ''
     });
-  }, [exerciseDetails, name]);
+  }, [exerciseDetails, name, workoutId]);
 
   const handleSave = () => {
     if (localDetails.sets <= 0 || isNaN(localDetails.sets)) {
@@ -56,7 +61,11 @@ export default function WorkoutExercise() {
       }));
     }
 
-    router.push('/build'); // Navigate back to the build page
+    if (from === 'build') {
+      router.push('/build'); // Navigate back to the build page
+    } else if (from === 'edit') {
+      router.push(`/workouts/edit/${workoutId}`); // Navigate back to the edit page
+    }
   };
 
   const handleChange = (e) => {
