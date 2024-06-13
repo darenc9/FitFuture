@@ -24,7 +24,7 @@ const WorkoutBuilderContent = ({ setView }) => {
   });
 
   const handleAddExercise = () => {
-    router.push('/build/exercises'); // Navigate to the exercises page
+    router.push('/build/exercises?from=build'); // Navigate to the exercises page
   };
 
   const handleSaveWorkout = async () => {
