@@ -1,7 +1,7 @@
 import { useSetAtom } from 'jotai';
 import { workoutAtom, getExerciseAtom } from './exerciseAtom';
 
-const useResetAtoms = () => {
+const useResetExerciseAtoms = () => {
   const setWorkout = useSetAtom(workoutAtom);
 
   const resetAtoms = () => {
@@ -15,4 +15,4 @@ const useResetAtoms = () => {
   return resetAtoms;
 };
 
-export default useResetAtoms;
+export default useResetExerciseAtoms;
