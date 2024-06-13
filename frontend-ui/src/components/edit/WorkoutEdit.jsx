@@ -12,38 +12,45 @@ const WorkoutEdit = () => {
     const [currentUser] = useAtom(profileIdAtom);
     const [workout, setWorkout] = useAtom(editWorkoutAtom);
     const router = useRouter();
+    //useAtomValue is used to read current value of editWorkoutAtom without causing re-renders
+    const currentWorkout = useAtomValue(editWorkoutAtom);
 
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`http://localhost:8080/workout/${id}`);
-                if (!res.ok) {
-                    throw new Error(`Failed to fetch workout with id: ${id}`);
+                //only fetch if currentWorkout isnt already populated
+                if (!currentWorkout.workoutId) {
+                    const res = await fetch(`http://localhost:8080/workout/${id}`);
+                    if (!res.ok) {
+                        throw new Error(`Failed to fetch workout with id: ${id}`);
+                    }
+                    const exerciseData = await res.json();
+
+                    const res2 = await fetch(`http://localhost:8080/workouts/${id}`);
+                    if (!res2.ok) {
+                        throw new Error(`Failed to fetch workout with id: ${id}`);
+                    }
+                    const workoutData = await res2.json();
+
+                    // Populate editWorkoutAtom
+                    setWorkout({
+                        workoutId: workoutData.workoutId,
+                        name: workoutData.name,
+                        exerciseIds: exerciseData.map(ex => ex.exerciseId),
+                        public: workoutData.public,
+                    });
+
+                    // Populate exercise atoms
+                    setEditExerciseAtoms(exerciseData);
                 }
-                const exerciseData = await res.json();
-
-                const res2 = await fetch(`http://localhost:8080/workouts/${id}`);
-                if (!res2.ok) {
-                    throw new Error(`Failed to fetch workout with id: ${id}`);
-                }
-                const workoutData = await res2.json();
-
-                // Populate editWorkoutAtom
-                setWorkout({
-                    name: workoutData.name,
-                    exerciseIds: exerciseData.map(ex => ex.exerciseId),
-                    public: workoutData.public,
-                });
-
-                // Populate exercise atoms
-                setEditExerciseAtoms(exerciseData);
             } catch (error) {
                 console.error(error);
             }
         };
 
         fetchData();
-    }, [id, setWorkout]);
+        
+    }, [id, setWorkout, currentWorkout]);
 
     return (
         <div className="container mx-auto px-4">
@@ -69,7 +76,7 @@ const WorkoutEdit = () => {
                 </div>
                 <div className="space-y-4">
                     {workout.exerciseIds.map((exerciseId) => (
-                        <ExercisePanel key={exerciseId} id={exerciseId} />
+                        <ExercisePanel key={exerciseId} id={exerciseId} workoutId={workout.workoutId} />
                     ))}
                 </div>
             </div>
