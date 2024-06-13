@@ -21,11 +21,7 @@ const DeleteExercisePage = () => {
     }
   }, [id, setWorkout, router]);
 
-  return (
-    <div>
-      <h1>Deleting exercise...</h1>
-    </div>
-  );
+  return; //dont return anything for display
 };
 
 export default DeleteExercisePage;
