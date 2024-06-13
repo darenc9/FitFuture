@@ -1,7 +1,7 @@
 import React from 'react';
 
 const WorkoutExercise = ({ workoutExercise, handlePanelClick }) => {
-    console.log(workoutExercise);
+
     return (
         <div
             key={workoutExercise._id}
