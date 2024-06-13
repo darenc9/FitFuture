@@ -63,7 +63,7 @@ const WorkoutDetails = () => {
 
     return (
         <div className="container mx-auto px-4">
-            <h1 className="text-2xl font-bold text-center mt-8">{name}</h1>
+            <h1 className="text-2xl font-bold text-center mt-5">{name}</h1>
             <div className="mt-8">
                 <div className="space-y-4">
                     {workoutExercises.map(workoutExercise => (

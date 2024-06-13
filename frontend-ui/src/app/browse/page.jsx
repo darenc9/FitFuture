@@ -74,7 +74,7 @@ const BrowsePage = () => {
 
     return (
         <div className="container mx-auto px-4">
-            <h1 className="text-2xl font-bold text-center mt-8">Browse Page</h1>
+            <h1 className="text-2xl font-bold text-center mt-5">Browse Page</h1>
             <div className="flex justify-center mt-4">
                 {/*Buttons for swapping between browsing routines and workouts */}
                 <button
