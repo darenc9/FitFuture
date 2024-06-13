@@ -60,7 +60,7 @@ const BrowsePage = () => {
 
     const handlePanelClick = (item) => {
         console.log(item);
-        router.push(`/workouts/${item.workoutId}?name=${item.name}`); // Redirect to /workouts/[item._id]
+        router.push(`/workouts/${item.workoutId}`); // Redirect to /workouts/[item._id]
     };
 
     const handleFilterChange = (event) => {
