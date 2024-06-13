@@ -5,13 +5,13 @@ import { useRouter } from 'next/navigation';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import ExercisePanel from './ExercisePanel';
 import { useAtomValue } from 'jotai';
-import useResetAtoms from '../../../utility/useResetAtoms'; // Import the reset hook
+import useResetExerciseAtoms from '../../../utility/useResetExerciseAtoms'; // Import the reset hook
 import { profileIdAtom } from '../../../store';
 
 const WorkoutBuilderContent = ({ setView }) => {
   const [workout, setWorkout] = useAtom(workoutAtom);
   const router = useRouter();
-  const resetAtoms = useResetAtoms(); // Get the reset function
+  const resetAtoms = useResetExerciseAtoms(); // Get the reset function
   const [error, setError] = useState(null); // State for error message
   const [currentUser] = useAtom(profileIdAtom);
 
@@ -74,6 +74,9 @@ const WorkoutBuilderContent = ({ setView }) => {
     setWorkout({ ...workout, public: e.target.checked });
   };
 
+  const handlePanelClick = (item) => {
+    console.log(item);
+  };
   return (
     <div>
       <h2 className="text-2xl font-bold mb-4">Build Workout</h2>
@@ -111,7 +114,7 @@ const WorkoutBuilderContent = ({ setView }) => {
       </div>
       <div className="space-y-4">
         {workout.exerciseIds.map((exerciseId) => (
-          <ExercisePanel key={exerciseId} id={exerciseId} />
+          <ExercisePanel key={exerciseId} id={exerciseId} handlePanelClick={handlePanelClick} />
         ))}
       </div>
       <div className="mt-4">
