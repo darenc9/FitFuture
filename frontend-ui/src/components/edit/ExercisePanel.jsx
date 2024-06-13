@@ -8,7 +8,7 @@ const ExercisePanel = ({ id, workoutId }) => {
     const exerciseAtom = getEditExerciseAtom(id);
     const [exercise] = useAtom(exerciseAtom);
     const router = useRouter();
-
+    
     const getImage = (id) => {
         return `/exercises/${id}/0.jpg`;
     };
@@ -20,7 +20,7 @@ const ExercisePanel = ({ id, workoutId }) => {
     return (
         <div className="flex items-center p-4 border rounded-md shadow-md bg-white mb-4">
             <img
-                src={getImage(exercise.id)}
+                src={getImage(id)}
                 alt={exercise.name}
                 className="w-16 h-16 rounded mr-4"
             />
