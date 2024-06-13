@@ -37,6 +37,11 @@ module.exports.getWorkoutById = async (req, res) => {
   })
 };
 
+module.exports.updateWorkout = async (req, res) => {
+  console.log(req.body);
+  res.status(200).json("OK");
+};
+
 module.exports.createWorkout = async (req, res) => {
   try {
     const data = req.body;
