@@ -8,7 +8,7 @@ import WorkoutExercise from '../../../components/workouts/WorkoutExercise';
 const WorkoutDetails = () => {
     const { id } = useParams(); // Access the dynamic route parameter
     const searchParams = useSearchParams();
-    const name = searchParams.get('name'); // Access the query parameter
+    const [name, setName] = useState(''); 
     const [workoutExercises, setWorkoutExercises] = useState([]);
     const [showEditButton, setShowEditButton] = useState(false);
     const [currentUser] = useAtom(profileIdAtom);
@@ -26,7 +26,9 @@ const WorkoutDetails = () => {
 
                 const res2 = await fetch(`http://localhost:8080/workouts/${id}`)
                 const tempData = await res2.json();
-                // Check if the current user is allowed to edit
+                console.log(tempData);    
+                setName(tempData.name);
+                 // Check if the current user is allowed to edit
                 if (tempData.userId === currentUser) {
                     setShowEditButton(true);
                 }
