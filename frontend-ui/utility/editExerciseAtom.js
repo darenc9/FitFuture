@@ -2,6 +2,7 @@ import { atom } from 'jotai';
 
 // Atom to store workout name, list of exercise IDs, and public/private status
 export const editWorkoutAtom = atom({
+  workoutId: '',
   name: '', // workout name
   exerciseIds: [], // generated ids
   public: false // public/private status
@@ -13,9 +14,10 @@ const editExerciseAtoms = new Map();
 export const getEditExerciseAtom = (id) => {
   if (!editExerciseAtoms.has(id)) {
     editExerciseAtoms.set(
-      id,
+      id, //exerciseId
       atom({
         id,
+        workoutExerciseId, //for updating in db
         name: '', // exercise name
         sets: 0,
         reps: 0
@@ -40,6 +42,7 @@ export const setEditExerciseAtoms = (exercises) => {
       exercise.exerciseId,
       atom({
         id: exercise.exerciseId,
+        workoutExerciseId: exercise.workoutExerciseId,
         name: exercise.name,
         sets: exercise.sets,
         reps: exercise.reps,
