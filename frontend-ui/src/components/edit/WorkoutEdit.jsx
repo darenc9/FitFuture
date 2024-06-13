@@ -15,6 +15,7 @@ const WorkoutEdit = () => {
   const router = useRouter();
   const currentWorkout = useAtomValue(editWorkoutAtom);
   const [isPublic, setIsPublic] = useState(false);
+  const [error, setError] = useState(null); // State for error message
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,6 +86,11 @@ const WorkoutEdit = () => {
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-2xl font-bold text-center mt-5">Edit Workout</h1>
+      {error && (
+        <div className="mb-4 p-4 text-sm text-red-700 bg-red-100 rounded-lg" role="alert">
+          <span className="font-medium">Error:</span> {error}
+        </div>
+      )}
       <div className="mt-6 space-y-4">
         <div className="mb-4">
           <label className="block text-sm font-medium text-gray-700 mb-2">Workout Name:</label>
