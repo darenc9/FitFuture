@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter to handle routing 
 import WorkoutList from '../../components/browse/WorkoutList';
 import WorkoutFilter from '../../components/browse/WorkoutFilter';
+import {profileIdAtom} from '../../../store'
+const { useAtom } = require("jotai");
 
 const BrowsePage = () => {
     const router = useRouter(); // Initialize useRouter
@@ -13,16 +15,17 @@ const BrowsePage = () => {
     const [routines, setRoutines] = useState([]);
     const [filter, setFilter] = useState('all'); // Default filter
     const [searchQuery, setSearchQuery] = useState(''); // Default search query
-
+    const [profileId] = useAtom(profileIdAtom);
     useEffect(() => {
         const fetchData = async () => {
             if (selectedOption !== 'exercises') {
                 try {
-                    const res = await fetch(selectedOption === 'workouts' ? 'http://localhost:8080/workouts' : 'http://localhost:8080/routines');
+                    const res = await fetch(selectedOption === 'workouts' ? `http://localhost:8080/workouts?user=${profileId}` : 'http://localhost:8080/routines');
                     if (!res.ok) {
                         throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
                     }
                     const data = await res.json();
+                    
                     if (selectedOption === 'workouts') {
                         setWorkouts(data);
                         setFilteredWorkouts(data); // Initially show all workouts

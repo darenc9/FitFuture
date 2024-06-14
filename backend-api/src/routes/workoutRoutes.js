@@ -8,7 +8,8 @@ const mongoose = require('mongoose');
 
 //Get a list of all preset workouts
 module.exports.getAll = async (req, res) => {
-    workoutService.getAllWorkouts()
+  const user = req.query.user;
+    workoutService.getAllWorkouts(user)
     .then(data => {
       res.status(200).json(data);
     }).catch(msg => {
