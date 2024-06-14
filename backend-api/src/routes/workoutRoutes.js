@@ -39,8 +39,114 @@ module.exports.getWorkoutById = async (req, res) => {
 };
 
 module.exports.updateWorkout = async (req, res) => {
-  console.log(req.body);
-  res.status(200).json("OK");
+  const data = req.body;
+  console.log(data);
+
+  // Destructure workout and exercises from the request body
+  const { workout, exercises } = data;
+  console.log(workout.workoutId);
+  try {
+    // Create the workout object (only data that can get changed is public and name)
+    const workoutData = {
+      public: workout.public, 
+      name: workout.name,
+    };
+
+    const updatedWorkout = await workoutService.updateWorkout(workout.workoutId, workoutData);
+
+    // Initialize an array to hold the updated workout exercises
+    const updatedExercises = [];
+
+    //Note: an exercise that already exits will look like
+    // {
+    //   id: '90_90_Hamstring',
+    //   workoutExerciseId: '666a50ab604f9051ca16d6fa',
+    //   name: '90/90 Hamstring',
+    //   sets: 3,
+    //   reps: 3,
+    //   notes: '',
+    //   weight: null
+    // },
+
+    //a newly added exercise will need a generated id and will be:
+    // {
+    //   name: '3/4 Sit-Up',
+    //   sets: '4',
+    //   reps: '4',
+    //   notes: '',
+    //   workoutId: '666a50ab604f9051ca16d6f7',
+    //   id: '3_4_Sit-Up'
+    // }
+
+    // Create and save each workout exercise
+    for (const exercise of exercises) {
+      console.log("in for loop");
+      var workoutExerciseId;
+      var create = false;
+      //if already has workout exercise id, dont need to gerneate new id
+      if (exercise.workoutExerciseId){
+        workoutExerciseId = exercise.workoutExerciseId
+      } else {
+        workoutExerciseId = new mongoose.Types.ObjectId();
+        create = true;
+      }
+
+      const workoutExerciseData = {
+        workoutExerciseId: workoutExerciseId,
+        workoutId: updatedWorkout.workoutId, // Link to the created workout
+        exerciseId: exercise.id,
+        name: exercise.name,
+        sets: parseInt(exercise.sets, 10) || null, // Convert sets to integer
+        reps: parseInt(exercise.reps, 10) || null, // Convert reps to integer
+        duration: exercise.duration || null, // Default to 0 if not provided
+        weight: null, // Default to 0 if not provided
+        notes: exercise.notes
+      };
+
+      //if need to create the new workout exercise
+      if (create){
+        const createdExercise = await workoutExerciseService.createWorkoutExercise(workoutExerciseData);
+        updatedExercises.push(createdExercise);
+        console.log("created exercise");
+      } else {
+        const updatedExercise = await workoutExerciseService.updateWorkoutExercise(workoutExerciseId, workoutExerciseData);
+        updatedExercises.push(updatedExercise);
+        console.log("updated exercise");
+      }  
+
+    }
+
+    //handle deleting of exercises
+    const existingExercises = await workoutExerciseService.getWorkoutExerciseByWorkoutId(workout.workoutId);
+    const existingExerciseIds = existingExercises.map(ex => ex.workoutExerciseId.toString());
+    console.log('current exercise workout ids: ',existingExerciseIds);
+
+    const requestExerciseIds = exercises.map(ex => ex.workoutExerciseId.toString());
+    console.log('request workout exercises: ',requestExerciseIds);
+
+    // Get the list of workout exercise IDs that are not in the request exercises
+    const idsNotInExercises = existingExerciseIds.filter(id => !requestExerciseIds.includes(id));
+    console.log('IDs not in exercises:', idsNotInExercises);
+
+    // Delete the workout exercises that are not in the request exercises
+    for (const id of idsNotInExercises) {
+      await workoutExerciseService.deleteWorkoutExercise(id);
+      console.log(`Deleted workout exercise with ID: ${id}`);
+    }
+
+
+
+    res.status(200).json({
+      message: "Workout updated successfully",
+      workout: updatedWorkout,
+      exercises: updatedExercises
+    });
+  }  catch (error) {
+    console.error('Error creating workout:', error);
+      res.status(500).json({ message: 'Error Updating workout', error: error.message });
+  }
+
+
 };
 
 module.exports.createWorkout = async (req, res) => {
