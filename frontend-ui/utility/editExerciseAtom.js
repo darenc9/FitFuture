@@ -67,3 +67,20 @@ export const setEditExerciseAtoms = (exercises) => {
     );
   });
 };
+
+// Function to update an existing exercise atom
+export const updateEditExerciseAtom = (id, updatedFields) => {
+  if (editExerciseAtoms.has(id)) {
+    const existingAtom = editExerciseAtoms.get(id);
+    editExerciseAtoms.set(
+      id,
+      atom((get) => {
+        const current = get(existingAtom);
+        return {
+          ...current,
+          ...updatedFields
+        };
+      })
+    );
+  }
+};

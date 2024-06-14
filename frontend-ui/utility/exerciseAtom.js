@@ -32,3 +32,19 @@ getExerciseAtom.clearExerciseAtoms = () => {
 export const removeExerciseAtom = (id) => {
   exerciseAtoms.delete(id);
 };
+
+export const updateExerciseAtom = (id, updatedFields) => {
+  if (exerciseAtoms.has(id)) {
+    const existingAtom = exerciseAtoms.get(id);
+    exerciseAtoms.set(
+      id,
+      atom((get) => {
+        const current = get(existingAtom);
+        return {
+          ...current,
+          ...updatedFields
+        };
+      })
+    );
+  }
+};
