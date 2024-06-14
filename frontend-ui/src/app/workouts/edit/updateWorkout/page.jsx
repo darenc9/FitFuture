@@ -1,5 +1,5 @@
 "use client";
-import { useEffect } from 'react';
+import { useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAtom } from 'jotai';
 import { profileIdAtom } from '../../../../../store';
@@ -12,20 +12,25 @@ const UpdateWorkoutPage = () => {
   const router = useRouter();
   const [currentUser] = useAtom(profileIdAtom);
   const [workout] = useAtom(editWorkoutAtom);
-
+  
   const exerciseDetails = workout.exerciseIds.map(id => {
     const exerciseAtom = getEditExerciseAtom(id);
-    return useAtomValue(exerciseAtom); // Return the value directly without spreading
+    return useAtomValue(exerciseAtom);
   });
 
-  //needed to be in separate page for use effect to work to create payload from atoms
+  // Use a ref to ensure the effect runs only once
+  const hasMounted = useRef(false);
+
   useEffect(() => {
+    if (hasMounted.current) return;
+    hasMounted.current = true;
+
     const saveWorkout = async () => {
       const payload = {
         workout: { ...workout, user: currentUser },
         exercises: exerciseDetails.map((exercise, index) => ({
           ...exercise,
-          id: workout.exerciseIds[index], // Include id
+          id: workout.exerciseIds[index],
         })),
       };
 
@@ -40,21 +45,21 @@ const UpdateWorkoutPage = () => {
 
         if (response.ok) {
           console.log('Workout saved successfully');
-          router.push(`/workouts/edit/updateWorkout/resetAtom?workoutId=${payload.workout.workoutId}`); // Navigate to the reset atoms page
+          router.push(`/workouts/edit/updateWorkout/resetAtom?workoutId=${payload.workout.workoutId}`);
         } else {
           console.error('Failed to save workout:', response.statusText);
-          router.push(`/workouts/edit/${workoutId}`); // Navigate back to the edit page if save fails
+          router.push(`/workouts/edit/${workoutId}`);
         }
       } catch (error) {
         console.error('Error saving workout:', error);
-        router.push(`/workouts/edit/${workoutId}`); // Navigate back to the edit page if save fails
+        router.push(`/workouts/edit/${workoutId}`);
       }
     };
 
     saveWorkout();
   }, [workout, exerciseDetails, router, workoutId, currentUser]);
 
-  return null; // Return null to render nothing
+  return null;
 };
 
 export default UpdateWorkoutPage;
