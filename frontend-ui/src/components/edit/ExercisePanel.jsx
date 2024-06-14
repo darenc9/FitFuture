@@ -4,11 +4,11 @@ import { getEditExerciseAtom } from '../../../utility/editExerciseAtom';
 import { TrashIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 
-const ExercisePanel = ({ id, workoutId }) => {
+const ExercisePanel = ({ id, workoutId, handlePanelClick }) => {
     const exerciseAtom = getEditExerciseAtom(id);
     const [exercise] = useAtom(exerciseAtom);
     const router = useRouter();
-    
+
     const getImage = (id) => {
         return `/exercises/${id}/0.jpg`;
     };
@@ -18,7 +18,8 @@ const ExercisePanel = ({ id, workoutId }) => {
       };
 
     return (
-        <div className="flex items-center p-4 border rounded-md shadow-md bg-white mb-4">
+        <div className="flex items-center p-4 border rounded-md shadow-md bg-white mb-4"
+            onClick={() => handlePanelClick(exercise)}>
             <img
                 src={getImage(id)}
                 alt={exercise.name}

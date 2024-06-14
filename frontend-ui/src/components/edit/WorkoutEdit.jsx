@@ -83,6 +83,10 @@ const WorkoutEdit = () => {
     setWorkout({ ...workout, public: e.target.checked });
   };
 
+  const handlePanelClick = (item) => {
+    console.log(item);
+  };
+
   return (
     <div className="container mx-auto px-4">
       <h1 className="text-2xl font-bold text-center mt-5">Edit Workout</h1>
@@ -121,7 +125,7 @@ const WorkoutEdit = () => {
         </div>
         <div className="space-y-4">
           {workout.exerciseIds.map((exerciseId) => (
-            <ExercisePanel key={exerciseId} id={exerciseId} workoutId={workout.workoutId} />
+            <ExercisePanel key={exerciseId} id={exerciseId} workoutId={workout.workoutId} handlePanelClick={handlePanelClick}/>
           ))}
         </div>
         <div className="mt-8 mb-4">
