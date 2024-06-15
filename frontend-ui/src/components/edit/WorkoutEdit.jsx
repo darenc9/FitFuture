@@ -85,6 +85,7 @@ const WorkoutEdit = () => {
 
   const handlePanelClick = (item) => {
     console.log(item);
+    router.push(`/build/exerciseWorkout?from=edit&id=${item.id}&exists=true&workoutId=${workout.workoutId}`); // Navigate to the exercises page
   };
 
   return (

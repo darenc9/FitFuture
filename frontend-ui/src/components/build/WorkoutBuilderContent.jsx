@@ -76,6 +76,7 @@ const WorkoutBuilderContent = ({ setView }) => {
 
   const handlePanelClick = (item) => {
     console.log(item);
+    router.push(`/build/exerciseWorkout?from=build&id=${item.id}&exists=true`); // Navigate to the exercises page
   };
   return (
     <div>
