@@ -3,8 +3,8 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAtom } from 'jotai';
-import { getExerciseAtom, workoutAtom } from '../../../../utility/exerciseAtom';
-import { getAddEditExerciseAtom, editWorkoutAtom } from '../../../../utility/editExerciseAtom';
+import { getExerciseAtom, workoutAtom, updateExerciseAtom  } from '../../../../utility/exerciseAtom';
+import { getAddEditExerciseAtom, editWorkoutAtom, updateEditExerciseAtom } from '../../../../utility/editExerciseAtom';
 
 export default function WorkoutExercise() {
   const router = useRouter();
@@ -12,17 +12,19 @@ export default function WorkoutExercise() {
   const id = searchParams.get('id');
   const name = searchParams.get('name');
   const from = searchParams.get('from');
+  const exists = searchParams.get('exists');
   const workoutId = searchParams.get('workoutId');
 
-  if (!id || !name || !from) {
-    return <p>Loading...</p>;
-  }
+  // if (!id || !name || !from) {
+  //   return <p>Loading...</p>;
+  // }
 
   const exerciseAtom = from === 'build' ? getExerciseAtom(id) : getAddEditExerciseAtom(id);
   const [exerciseDetails, setExerciseDetails] = useAtom(exerciseAtom);
   const [workout, setWorkout] = useAtom(from === 'build' ? workoutAtom : editWorkoutAtom);
 
   const [localDetails, setLocalDetails] = useState({
+    id: exerciseDetails.id,
     name: exerciseDetails.name || name,
     sets: exerciseDetails.sets || 3,
     reps: exerciseDetails.reps || 10,
@@ -34,6 +36,7 @@ export default function WorkoutExercise() {
 
   useEffect(() => {
     setLocalDetails({
+      id: exerciseDetails.id,
       name: exerciseDetails.name || name,
       sets: exerciseDetails.sets || 0,
       reps: exerciseDetails.reps || 0,
@@ -51,14 +54,29 @@ export default function WorkoutExercise() {
       setError('Number of reps must be a number greater than 0.');
       return;
     }
+    console.log(localDetails);
+    
 
-    setExerciseDetails(localDetails);
-
-    if (!workout.exerciseIds.includes(id)) {
-      setWorkout((prevWorkout) => ({
-        ...prevWorkout,
-        exerciseIds: [...prevWorkout.exerciseIds, id],
-      }));
+    //if from edit existing workoutexercise
+    if (exists){
+      console.log("in already exists");
+      console.log(localDetails);
+      if (from == "build"){
+        updateExerciseAtom(id, {sets: localDetails.sets, reps: localDetails.reps, notes: localDetails.notes});
+      } else {
+        console.log("in exists from edit");
+        updateEditExerciseAtom(id, {sets: localDetails.sets, reps: localDetails.reps, notes: localDetails.notes})
+      }
+     
+    } else {  //else if adding a new one
+      setExerciseDetails(localDetails);
+      //this only needs to be updated if its adding a new exercise
+      if (!workout.exerciseIds.includes(id)) {
+       setWorkout((prevWorkout) => ({
+          ...prevWorkout,
+          exerciseIds: [...prevWorkout.exerciseIds, id],
+        }));
+      }
     }
 
     if (from === 'build') {
