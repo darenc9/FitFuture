@@ -9,6 +9,7 @@ import useResetExerciseAtoms from '../../../utility/useResetExerciseAtoms'; // I
 import { profileIdAtom } from '../../../store';
 
 const WorkoutBuilderContent = ({ setView }) => {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [workout, setWorkout] = useAtom(workoutAtom);
   const router = useRouter();
   const resetAtoms = useResetExerciseAtoms(); // Get the reset function
@@ -48,7 +49,7 @@ const WorkoutBuilderContent = ({ setView }) => {
 
     // Send the payload to the backend
     try {
-      const response = await fetch('http://localhost:8080/workout', {
+      const response = await fetch(`${API_URL}/workout`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

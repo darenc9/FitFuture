@@ -5,7 +5,9 @@ import { useAtom } from 'jotai';
 import { profileIdAtom } from '../../../../store'; 
 import WorkoutExercise from '../../../components/workouts/WorkoutExercise'; 
 
+
 const WorkoutDetails = () => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const { id } = useParams(); // Access the dynamic route parameter
     const searchParams = useSearchParams();
     const [name, setName] = useState(''); 
@@ -17,14 +19,14 @@ const WorkoutDetails = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const res = await fetch(`http://localhost:8080/workout/${id}`);
+                const res = await fetch(`${API_URL}/workout/${id}`);
                 if (!res.ok) {
                     throw new Error(`Failed to fetch for workout id: ${id}`);
                 }
                 const data = await res.json();
                 setWorkoutExercises(data);
 
-                const res2 = await fetch(`http://localhost:8080/workouts/${id}`)
+                const res2 = await fetch(`${API_URL}/workouts/${id}`)
                 const tempData = await res2.json();
                 console.log(tempData);    
                 setName(tempData.name);
@@ -58,7 +60,7 @@ const WorkoutDetails = () => {
     }
 
     const handleBackClick = () => {
-        router.back(); // Navigate to the previous page
+        router.push('/browse'); // Navigate to the previous page
     };
 
     return (

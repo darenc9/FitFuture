@@ -4,7 +4,9 @@ import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router';
 import ExerciseDetails from '@/components/exercises/ExerciseDetails'
 
+
 export default function Page( { params }) {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const [exercise, setExercise] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,7 +14,7 @@ export default function Page( { params }) {
     useEffect(() => {
       const fetchExerciseData = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/exercise/${params.exercisename}`);
+          const response = await fetch(`${API_URL}/exercise/${params.exercisename}`);
           if (!response.ok) {
             throw new Error('Failed to fetch exercise data');
           }

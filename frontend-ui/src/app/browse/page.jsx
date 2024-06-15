@@ -7,7 +7,9 @@ import WorkoutFilter from '../../components/browse/WorkoutFilter';
 import {profileIdAtom} from '../../../store'
 const { useAtom } = require("jotai");
 
+
 const BrowsePage = () => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const router = useRouter(); // Initialize useRouter
     const [selectedOption, setSelectedOption] = useState('workouts'); // Default to workouts
     const [workouts, setWorkouts] = useState([]);
@@ -20,7 +22,7 @@ const BrowsePage = () => {
         const fetchData = async () => {
             if (selectedOption !== 'exercises') {
                 try {
-                    const res = await fetch(selectedOption === 'workouts' ? `http://localhost:8080/workouts?user=${profileId}` : 'http://localhost:8080/routines');
+                    const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${profileId}` : `${API_URL}/routines`);
                     if (!res.ok) {
                         throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
                     }

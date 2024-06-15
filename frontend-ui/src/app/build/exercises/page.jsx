@@ -7,6 +7,7 @@ import Pagination from "@/components/exercises/Pagination";
 import { useSearchParams } from "next/navigation";
 
 const PAGE_SIZE = 10;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 // Generates fetch API url and fetches for exercise data
 const fetchExercises = async ({ page, name, muscle, category, force, level, mechanic, equipment }) => {
@@ -22,7 +23,7 @@ const fetchExercises = async ({ page, name, muscle, category, force, level, mech
     equipment,
   });
 
-  const response = await fetch(`http://localhost:8080/exercises?${params.toString()}`);
+  const response = await fetch(`${API_URL}/exercises?${params.toString()}`);
   if (response.ok) {
     const result = await response.json();
     return result;

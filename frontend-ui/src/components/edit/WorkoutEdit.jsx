@@ -9,6 +9,7 @@ import { useAtomValue } from 'jotai';
 import { PlusIcon } from '@heroicons/react/24/solid';
 
 const WorkoutEdit = () => {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const { id } = useParams();
   const [currentUser] = useAtom(profileIdAtom);
   const [workout, setWorkout] = useAtom(editWorkoutAtom);
@@ -23,13 +24,13 @@ const WorkoutEdit = () => {
         // Only fetch if currentWorkout isn't already populated
         if (!currentWorkout.workoutId) {
           console.log("fetching data");
-          const res = await fetch(`http://localhost:8080/workout/${id}`);
+          const res = await fetch(`${API_URL}/workout/${id}`);
           if (!res.ok) {
             throw new Error(`Failed to fetch workout with id: ${id}`);
           }
           const exerciseData = await res.json();
 
-          const res2 = await fetch(`http://localhost:8080/workouts/${id}`);
+          const res2 = await fetch(`${API_URL}/workouts/${id}`);
           if (!res2.ok) {
             throw new Error(`Failed to fetch workout with id: ${id}`);
           }

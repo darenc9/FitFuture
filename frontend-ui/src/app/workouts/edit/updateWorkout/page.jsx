@@ -7,6 +7,7 @@ import { editWorkoutAtom, getEditExerciseAtom } from '../../../../../utility/edi
 import { useAtomValue } from 'jotai';
 
 const UpdateWorkoutPage = () => {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const searchParams = useSearchParams();
   const workoutId = searchParams.get('workoutId');
   const router = useRouter();
@@ -35,7 +36,7 @@ const UpdateWorkoutPage = () => {
       };
 
       try {
-        const response = await fetch('http://localhost:8080/workout', {
+        const response = await fetch(`${API_URL}/workout`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
