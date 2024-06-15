@@ -14,7 +14,8 @@ const ExercisePanel = ({ id, handlePanelClick }) => {
     return `/exercises/${id}/0.jpg`;
   };
 
-  const handleDelete = () => {
+  const handleDelete = (e) => {
+    e.stopPropagation();
     router.push(`/build/deleteExercise?id=${id}`);
   };
 

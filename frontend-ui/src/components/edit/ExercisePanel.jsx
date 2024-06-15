@@ -13,7 +13,8 @@ const ExercisePanel = ({ id, workoutId, handlePanelClick }) => {
         return `/exercises/${id}/0.jpg`;
     };
 
-    const handleDelete = () => {
+    const handleDelete = (e) => {
+        e.stopPropagation();
         router.push(`/workouts/edit/deleteExercise?id=${id}&wId=${workoutId}`);
       };
 
