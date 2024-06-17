@@ -3,7 +3,7 @@
 const { MongoMemoryServer } = require("mongodb-memory-server");
 const { connectToDb } = require("../../src/services/connectToDB");
 const { default: mongoose } = require("mongoose");
-const History = require("../../src/schemas/history");
+const History = require("../../src/schemas/History");
 const { createHistory, getHistoryById, getHistoryByUserId, updateHistoryById, deleteHistory } = require("../../src/services/history-service");
 
 // set up in-memory server for running tests:

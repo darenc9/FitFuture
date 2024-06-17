@@ -1,6 +1,6 @@
 //history service utilizes history schema and connect to mongo
 const mongoose = require('mongoose');
-const History = require('../schemas/history');
+const History = require('../schemas/History');
 const { connectToDb } = require('./connectToDB');
 
 let HistoryModel;
