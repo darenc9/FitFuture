@@ -2,19 +2,16 @@
 const mongoose = require('mongoose');
 
 const historySchema = new mongoose.Schema({
-  historyId: { 
-    type: mongoose.Schema.Types.ObjectId, 
-    required: true 
-  },
-  userId: mongoose.Schema.Types.ObjectId, 
+  userId: String, 
   workoutExerciseId: mongoose.Schema.Types.ObjectId, 
-  Date: Date, 
-  reps: Number, 
-  duration: Number, 
-  weight: Number, 
+  date: Date, 
+  reps: Number,
+  sets: Number,
+  weight: Number,     // in lbs
+  duration: Number,   // in sec
 });
 
-const History = mongoose.model('history', historySchema);
+const History = mongoose.model('History', historySchema);
 
 module.exports = History;
 
