@@ -5,13 +5,7 @@ const cors = require('cors');
 const { version } = require('../package.json');
 
 const app = express();
-
-// Configure CORS to allow requests from your frontend origin
-const corsOptions = {
-    origin: 'https://fit-future-lsx26v761-devons-projects-9e2ee303.vercel.app',
-    optionsSuccessStatus: 200, // Some legacy browsers choke on 204
-};
-
+  
 app.use(cors());
 
 // allow post requests to have the req.body parsed
