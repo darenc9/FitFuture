@@ -67,12 +67,17 @@ const ProfilePage = () => {
         <div className="flex flex-col h-full justify-between">
           <ProfileDetails profile={profile}/>
           <div className="flex justify-between gap-2 mb-2">
+            <Link href={`history/${profile.userId}`} className="bg-blue-500 text-white p-2 rounded">
+              View History
+            </Link>
+            <div className="flex justify-between gap-1">
             <Link href={`profile/edit/${profile._id}`} className="bg-blue-500 text-white p-2 rounded">
               Edit Profile
             </Link>
             <button type="button" className="bg-red-500 text-white p-2 rounded" onClick={() => setOpen(true)}>
               <TrashIcon className="size-6"/>
             </button>
+            </div>
           </div>
 
           {/* Confirmation dialog follows below: (shown on trash button click) */}
