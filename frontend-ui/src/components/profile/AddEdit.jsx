@@ -45,7 +45,7 @@ const AddEdit = (props) => {
 
   const handleMakeNewProfile = async (data) => {
     try {
-      const res = await fetch(`http://${API_URL}/profile/create`, {
+      const res = await fetch(`${API_URL}/profile/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json"
@@ -65,7 +65,7 @@ const AddEdit = (props) => {
 
   const handleEditProfile = async (data) => {
     try {
-      const res = await fetch(`http://${API_URL}/profile/${data._id}`, {
+      const res = await fetch(`${API_URL}/profile/${data._id}`, {
         method: "PUT",
         headers: {
           "Content-Type": "application/json"

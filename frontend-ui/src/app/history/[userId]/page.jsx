@@ -9,7 +9,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 // fetch all histories for user
 const fetchHistoryData = async (id) => {
   try {
-    const res = await fetch(`http://${API_URL}/histories/${id}`);
+    const res = await fetch(`${API_URL}/histories/${id}`);
     if(!res.ok) {
       throw new Error('Failed to fetch history data');
     }

@@ -16,7 +16,7 @@ const handleMakeNewHistory = async () => {
     duration: 0,   // in sec
   }
   try {
-    const res = await fetch(`http://${API_URL}/history`, {
+    const res = await fetch(`${API_URL}/history`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
