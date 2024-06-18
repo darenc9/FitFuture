@@ -17,7 +17,7 @@ const ensureConnection = async () => {
 module.exports.getHistoryByUserId = async function (userId) {
   await ensureConnection();
   return new Promise(function (resolve, reject) {
-    HistoryModel.find({ userId: userId }).exec()
+    HistoryModel.find({ userId: userId }).sort({date: 'descending'}).exec()
       .then((histories) => {
         if (histories.length > 0) {
           resolve(histories);
