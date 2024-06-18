@@ -2,6 +2,7 @@
 "use client"
 import HistoryFilter from "@/components/history/HistoryFilter";
 import HistoryList from "@/components/history/HistoryList";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -21,12 +22,8 @@ const fetchHistoryData = async (id) => {
   }
 };
 
-// TODO: update this function to do something useful on a panel click
-const handlePanelClick = async (item) => {
-  console.log('clicked a history item...', item);
-};
-
 const ViewHistoryPage = ( { params } ) => {
+  const router = useRouter();
   const [loading, setLoading] = useState(true);
   const [history, setHistory] = useState([]);
   const [filteredHistory, setFilteredHistory] = useState([]);
@@ -85,6 +82,12 @@ const ViewHistoryPage = ( { params } ) => {
   const handleOrderChange = (event) => {
     setOrder(event.target.value); // Update order state
     reorderList();
+  };
+
+  const handlePanelClick = async (item) => {
+    console.log('clicked a history item...', item);
+    // redirect to see details page
+    router.push(`/history/details?id=${item._id}`);
   };
 
   return (
