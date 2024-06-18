@@ -31,10 +31,16 @@ const ensureConnection = async () => {
 
 //get all workouts that are not associated with a user (ie all preset workouts)
 //userId should be null
-module.exports.getAllWorkouts = async function () {
+module.exports.getAllWorkouts = async function (user) {
     await ensureConnection();
     return new Promise((resolve, reject) => {
-      WorkoutModel.find({ public: true }).exec()
+      const query = {
+        $or: [
+          { public: true },
+          { userId: user }
+        ]
+      };
+      WorkoutModel.find(query).exec()
         .then((workouts) => {
           if (workouts.length > 0) {
             resolve(workouts);
