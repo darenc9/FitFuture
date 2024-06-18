@@ -9,6 +9,7 @@ const router = express.Router();
 const exerciseRoutes = require('./exerciseRoutes');
 const profileRoutes = require('./profileRoutes');
 const historyRoutes = require('./historyRoutes');
+const workoutExerciseRoutes = require('./workoutExerciseRoutes');
 const testDbRoutes = require('./testDbRoute');
 
 //get the workout functions
@@ -30,6 +31,7 @@ router.get('/', (req, res) => {
 router.use(exerciseRoutes);
 router.use(profileRoutes);
 router.use(historyRoutes);
+router.use(workoutExerciseRoutes);
 // TODO: Mount additional routes for other features as needed
 router.use(testDbRoutes);
 
