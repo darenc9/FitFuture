@@ -3,10 +3,13 @@
 import AddEdit from "@/components/profile/AddEdit";
 import { useEffect, useState } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 // fetch profile
 const fetchProfileData = async (id) => {
   try {
-    const res = await fetch(`http://localhost:8080/profile/${id}`);
+    console.log(`API_URL is: ${API_URL}`);
+    const res = await fetch(`http://${API_URL}/profile/${id}`);
     if(!res.ok) {
       throw new Error('Failed to fetch profile data');
     }

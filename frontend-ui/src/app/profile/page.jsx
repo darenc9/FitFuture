@@ -10,9 +10,12 @@ import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from "next/navigation";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 const fetchProfileData = async (id) => {
   try {
-    const res = await fetch(`http://localhost:8080/profile/${id}`);
+    console.log(`API_URL is: ${API_URL}`);
+    const res = await fetch(`http://${API_URL}/profile/${id}`);
     if (!res.ok) {
       throw new Error('Failed to fetch profile data');
     }
@@ -26,7 +29,8 @@ const fetchProfileData = async (id) => {
 
 const handleDeleteProfile = async (id, resetId) => {
   try {
-    const res = await fetch(`http://localhost:8080/profile/${id}`, {
+    console.log(`API_URL is: ${API_URL}`);
+    const res = await fetch(`http://${API_URL}/profile/${id}`, {
       method: "DELETE",
     });
     if (!res.ok) {
