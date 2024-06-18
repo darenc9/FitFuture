@@ -24,8 +24,7 @@ const BrowsePage = () => {
             if (selectedOption !== 'exercises') {
                 try {
                     const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${profileId}` : `${API_URL}/routines`, {
-                        method: 'GET',
-                        credentials: 'include' // Include credentials if needed
+                        method: 'GET' 
                     });
                     if (!res.ok) {
                         throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
