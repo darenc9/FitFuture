@@ -1,9 +1,6 @@
 "use client";
-import HealthCheck from "@/components/HealthCheck";
 import React from 'react';
-import Navbar from "@/components/navbar/Navbar";
 import { withAuthenticator } from "@aws-amplify/ui-react";
-import { Amplify } from 'aws-amplify';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 
 function Home() {
