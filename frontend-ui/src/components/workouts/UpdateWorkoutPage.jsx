@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 import { useSearchParams, useRouter } from 'next/navigation';
 import { useAtom } from 'jotai';
-import { profileIdAtom } from '../../../../../store';
+import { profileIdAtom } from '../../../store';
 import { editWorkoutAtom, getEditExerciseAtom } from '../../../utility/editExerciseAtom';
 import { useAtomValue } from 'jotai';
 

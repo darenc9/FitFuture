@@ -1,5 +1,5 @@
 import React, { Suspense } from 'react';
-import ResetAtomsPage from '../../../../../components/workouts/ResetAtomsPage';
+import ResetAtomsPage from '../../../../../components/workouts/ResetAtomPage';
 
 const ResetAtomsPageWrapper = () => {
   return (
