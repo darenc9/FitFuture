@@ -4,10 +4,12 @@ import HistoryFilter from "@/components/history/HistoryFilter";
 import HistoryList from "@/components/history/HistoryList";
 import { useEffect, useState } from "react";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 // fetch all histories for user
 const fetchHistoryData = async (id) => {
   try {
-    const res = await fetch(`http://localhost:8080/histories/${id}`);
+    const res = await fetch(`http://${API_URL}/histories/${id}`);
     if(!res.ok) {
       throw new Error('Failed to fetch history data');
     }

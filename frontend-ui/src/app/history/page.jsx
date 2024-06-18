@@ -1,6 +1,7 @@
 "use client"
 import { PlusIcon } from '@heroicons/react/24/solid';
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
 const handleMakeNewHistory = async () => {
   const data = {
@@ -15,7 +16,7 @@ const handleMakeNewHistory = async () => {
     duration: 0,   // in sec
   }
   try {
-    const res = await fetch(`http://localhost:8080/history`, {
+    const res = await fetch(`http://${API_URL}/history`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
