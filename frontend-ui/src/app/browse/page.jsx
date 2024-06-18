@@ -4,8 +4,13 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter to handle routing 
 import WorkoutList from '../../components/browse/WorkoutList';
 import WorkoutFilter from '../../components/browse/WorkoutFilter';
+import {profileIdAtom} from '../../../store'
+const { useAtom } = require("jotai");
+
 
 const BrowsePage = () => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    console.log("API_URL: " + API_URL);
     const router = useRouter(); // Initialize useRouter
     const [selectedOption, setSelectedOption] = useState('workouts'); // Default to workouts
     const [workouts, setWorkouts] = useState([]);
@@ -13,23 +18,31 @@ const BrowsePage = () => {
     const [routines, setRoutines] = useState([]);
     const [filter, setFilter] = useState('all'); // Default filter
     const [searchQuery, setSearchQuery] = useState(''); // Default search query
-
+    const [profileId] = useAtom(profileIdAtom);
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await fetch(selectedOption === 'workouts' ? 'http://localhost:8080/workouts' : 'http://localhost:8080/routines');
-                if (!res.ok) {
-                    throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
+            if (selectedOption !== 'exercises') {
+                try {
+                    const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${profileId}` : `${API_URL}/routines`, {
+                        method: 'GET',
+                        credentials: 'include' // Include credentials if needed
+                    });
+                    if (!res.ok) {
+                        throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
+                    }
+                    const data = await res.json();
+                    
+                    if (selectedOption === 'workouts') {
+                        setWorkouts(data);
+                        setFilteredWorkouts(data); // Initially show all workouts
+                    } else {
+                        setRoutines(data);
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-                const data = await res.json();
-                if (selectedOption === 'workouts') {
-                    setWorkouts(data);
-                    setFilteredWorkouts(data); // Initially show all workouts
-                } else {
-                    setRoutines(data);
-                }
-            } catch (error) {
-                console.error(error);
+            } else {
+                router.push('/exercises'); // Reroute to exercises page
             }
         };
 
@@ -56,7 +69,7 @@ const BrowsePage = () => {
 
     const handlePanelClick = (item) => {
         console.log(item);
-        router.push(`/workouts/${item.workoutId}?name=${item.name}`); // Redirect to /workouts/[item._id]
+        router.push(`/workouts/${item.workoutId}`); // Redirect to /workouts/[item._id]
     };
 
     const handleFilterChange = (event) => {
@@ -70,7 +83,7 @@ const BrowsePage = () => {
 
     return (
         <div className="container mx-auto px-4">
-            <h1 className="text-2xl font-bold text-center mt-8">Browse Page</h1>
+            <h1 className="text-2xl font-bold text-center mt-5">Browse Page</h1>
             <div className="flex justify-center mt-4">
                 {/*Buttons for swapping between browsing routines and workouts */}
                 <button
@@ -84,6 +97,12 @@ const BrowsePage = () => {
                     className={`px-4 py-2 mx-2 font-semibold rounded ${selectedOption === 'routines' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'}`}
                 >
                     Routines
+                </button>
+                <button
+                    onClick={() => setSelectedOption('exercises')}
+                    className={`px-4 py-2 mx-2 font-semibold rounded ${selectedOption === 'exercises' ? 'bg-blue-500 text-white' : 'bg-gray-300 text-gray-700'}`}
+                >
+                    Exercises
                 </button>
             </div>
             <div className="mt-8">
@@ -104,6 +123,10 @@ const BrowsePage = () => {
                  {/*if selected button option is routines, handle here*/}
                 {selectedOption === 'routines' && (
                     <p className="text-center text-red-500">This feature is currently unavailable.</p>
+                )}
+                 {/*if selected button option is routines, handle here*/}
+                {selectedOption === 'exercises' && (
+                    <p className="text-center text-red-500">Exercises</p>
                 )}
             </div>
         </div>

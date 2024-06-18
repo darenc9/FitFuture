@@ -13,6 +13,7 @@ const workoutExerciseSchema = new mongoose.Schema({
   },
   workoutId: mongoose.Schema.Types.ObjectId, 
   exerciseId: String,
+  name: String,
   sets: Number,
   reps: Number,
   duration: Number, //maybe in seconds?
