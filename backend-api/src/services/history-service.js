@@ -22,7 +22,7 @@ module.exports.getHistoryByUserId = async function (userId) {
         if (histories.length > 0) {
           resolve(histories);
         } else {
-          reject(`No history records found for user ${userId}`);
+          resolve([]); // return an empty array if none found
         }
       })
       .catch((err) => reject('Error retrieving history records: ' + err));
