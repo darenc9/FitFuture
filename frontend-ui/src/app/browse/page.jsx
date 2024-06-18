@@ -4,9 +4,9 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter to handle routing 
 import WorkoutList from '../../components/browse/WorkoutList';
 import WorkoutFilter from '../../components/browse/WorkoutFilter';
-import {profileIdAtom} from '../../../store'
-const { useAtom } = require("jotai");
-
+import { useAuthenticator } from '@aws-amplify/ui-react';
+//import {profileIdAtom} from '../../../store'
+//const { useAtom } = require("jotai");
 
 const BrowsePage = () => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -18,35 +18,43 @@ const BrowsePage = () => {
     const [routines, setRoutines] = useState([]);
     const [filter, setFilter] = useState('all'); // Default filter
     const [searchQuery, setSearchQuery] = useState(''); // Default search query
-    const [profileId] = useAtom(profileIdAtom);
+    //const [profileId] = useAtom(profileIdAtom);
+    const { user } = useAuthenticator((context) => [context.user]);
+
     useEffect(() => {
         const fetchData = async () => {
-            if (selectedOption !== 'exercises') {
-                try {
-                    const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${profileId}` : `${API_URL}/routines`, {
-                        method: 'GET' 
-                    });
-                    if (!res.ok) {
-                        throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
+            if (user && user.username) {
+                console.log('User object:', user);
+                const userId = user.username;
+                if (selectedOption !== 'exercises') {
+                    try {
+                        const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${userId}` : `${API_URL}/routines`, {
+                            method: 'GET' 
+                        });
+                        if (!res.ok) {
+                            throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
+                        }
+                        const data = await res.json();
+                        
+                        if (selectedOption === 'workouts') {
+                            setWorkouts(data);
+                            setFilteredWorkouts(data); // Initially show all workouts
+                        } else {
+                            setRoutines(data);
+                        }
+                    } catch (error) {
+                        console.error(error);
                     }
-                    const data = await res.json();
-                    
-                    if (selectedOption === 'workouts') {
-                        setWorkouts(data);
-                        setFilteredWorkouts(data); // Initially show all workouts
-                    } else {
-                        setRoutines(data);
-                    }
-                } catch (error) {
-                    console.error(error);
+                } else {
+                    router.push('/exercises'); // Reroute to exercises page
                 }
             } else {
-                router.push('/exercises'); // Reroute to exercises page
+                console.log('User is not defined yet.');
             }
         };
 
         fetchData();
-    }, [selectedOption]);
+    }, [selectedOption, user]);
 
     useEffect(() => {
         if (selectedOption === 'workouts') {
@@ -78,7 +86,6 @@ const BrowsePage = () => {
     const handleSearchChange = (event) => {
         setSearchQuery(event.target.value); // Update search query state
     };
-
 
     return (
         <div className="container mx-auto px-4">

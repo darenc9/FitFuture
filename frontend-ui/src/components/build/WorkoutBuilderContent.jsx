@@ -6,7 +6,7 @@ import { PlusIcon } from '@heroicons/react/24/solid';
 import ExercisePanel from './ExercisePanel';
 import { useAtomValue } from 'jotai';
 import useResetExerciseAtoms from '../../../utility/useResetExerciseAtoms'; // Import the reset hook
-import { profileIdAtom } from '../../../store';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const WorkoutBuilderContent = ({ setView }) => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -14,7 +14,7 @@ const WorkoutBuilderContent = ({ setView }) => {
   const router = useRouter();
   const resetAtoms = useResetExerciseAtoms(); // Get the reset function
   const [error, setError] = useState(null); // State for error message
-  const [currentUser] = useAtom(profileIdAtom);
+  const { user } = useAuthenticator((context) => [context.user]);
 
   // Initialize the public state from the workout atom
   const [isPublic, setIsPublic] = useState(workout.public);
@@ -40,7 +40,7 @@ const WorkoutBuilderContent = ({ setView }) => {
     }
 
     const payload = {
-      workout: { ...workout, public: isPublic, user: currentUser }, // Include public/private status and user in the payload
+      workout: { ...workout, public: isPublic, user: user.username }, // Include public/private status and user in the payload
       exercises: exercisesDetails // Each exercise will include its id
     };
 
