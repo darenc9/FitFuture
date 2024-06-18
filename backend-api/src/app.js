@@ -6,7 +6,19 @@ const { version } = require('../package.json');
 
 const app = express();
   
-app.use(cors());
+// Replace with your frontend URL
+const allowedOrigins = ['https://fit-future-emvfzk8cx-devons-projects-9e2ee303.vercel.app/'];
+
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  credentials: true // Allow cookies and other credentials
+};
 
 // allow post requests to have the req.body parsed
 app.use(express.json());
