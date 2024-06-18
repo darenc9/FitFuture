@@ -5,7 +5,7 @@ const cors = require('cors');
 const { version } = require('../package.json');
 
 const app = express();
-
+  
 app.use(cors());
 
 // allow post requests to have the req.body parsed
