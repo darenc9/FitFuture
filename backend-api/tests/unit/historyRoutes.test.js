@@ -29,6 +29,8 @@ describe('Test History Routes', () => {
   const testHistoryData = {
     userId: 'testUser',
     workoutExerciseId: new mongoose.Types.ObjectId(),
+    exerciseName: 'test exercise',
+    category: 'strength',
     date: new Date(),
     reps: 8,
     sets: 3,

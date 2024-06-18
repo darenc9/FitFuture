@@ -33,6 +33,8 @@ describe('Test History service functions', () => {
   const testHistoryData = {
     userId: 'testUser',
     workoutExerciseId: new mongoose.Types.ObjectId(),
+    exerciseName: 'test exercise',
+    category: 'strength',
     date: new Date(),
     reps: 8,
     sets: 3,
@@ -48,6 +50,8 @@ describe('Test History service functions', () => {
     id = testHistory._id;   // update the id with the generated _id attribute of newly created history
     expect(testHistory.userId).toEqual(testHistoryData.userId);
     expect(testHistory.workoutExerciseId).toEqual(testHistoryData.workoutExerciseId);
+    expect(testHistory.exerciseName).toEqual(testHistoryData.exerciseName);
+    expect(testHistory.category).toEqual(testHistoryData.category);
     expect(testHistory.date).toEqual(testHistoryData.date);
     expect(testHistory.reps).toEqual(testHistoryData.reps);
     expect(testHistory.sets).toEqual(testHistoryData.sets);
@@ -64,6 +68,8 @@ describe('Test History service functions', () => {
     const foundTestHistory = await getHistoryById(id);
     expect(foundTestHistory.userId).toEqual(testHistoryData.userId);
     expect(foundTestHistory.workoutExerciseId).toEqual(testHistoryData.workoutExerciseId);
+    expect(foundTestHistory.exerciseName).toEqual(testHistoryData.exerciseName);
+    expect(foundTestHistory.category).toEqual(testHistoryData.category);
     expect(foundTestHistory.date).toEqual(testHistoryData.date);
     expect(foundTestHistory.reps).toEqual(testHistoryData.reps);
     expect(foundTestHistory.sets).toEqual(testHistoryData.sets);
@@ -71,22 +77,13 @@ describe('Test History service functions', () => {
     expect(foundTestHistory.duration).toEqual(testHistoryData.duration);
   });
 
-  // test('getting history by user id should contain correct data', async () => {
-  //   const foundTestHistory = await getHistoryByUserId(testHistoryData.userId);
-  //   expect(foundTestHistory.userId).toEqual(testHistoryData.userId);
-  //   expect(foundTestHistory.workoutExerciseId).toEqual(testHistoryData.workoutExerciseId);
-  //   expect(foundTestHistory.date).toEqual(testHistoryData.date.toISOString());
-  //   expect(foundTestHistory.reps).toEqual(testHistoryData.reps);
-  //   expect(foundTestHistory.sets).toEqual(testHistoryData.sets);
-  //   expect(foundTestHistory.weight).toEqual(testHistoryData.weight);
-  //   expect(foundTestHistory.duration).toEqual(testHistoryData.duration);
-  // });
-
   test('get all history for userId returns correct number of history entries', async () => {
     // add another history so we have more than one to retrieve from db for getAll
     const testHistoryData2 = {
       userId: 'testUser',
       workoutExerciseId: new mongoose.Types.ObjectId(),
+      exerciseName: 'test exercise 2',
+      category: 'cardio',
       date: new Date(),
       reps: 10,
       sets: 4,
@@ -98,17 +95,54 @@ describe('Test History service functions', () => {
     // get all (both) histories to check
     const allTestHistories = await getHistoryByUserId('testUser');
     expect(Array.isArray(allTestHistories)).toBe(true);
-    expect(allTestHistories.length).toEqual(2);
-    expect(allTestHistories[0].userId).toEqual(testHistoryData.userId);  // check that the first one is the first test history
-    expect(allTestHistories[1].userId).toEqual(testHistoryData2.userId);  // check that the second is the second test history
+    expect(allTestHistories).toHaveLength(2);
   });
 
-  test('get all history for non-existent userId rejects', async () => {
-    try {
-      expect(await getHistoryByUserId('doesNotExist')).rejects.toBe(true);
-    } catch (error) {
-      expect(error).toBe('No history records found for user doesNotExist');
-    }
+  test('get all history for userId returns history in order from newest-oldest', async () => {
+    // add another history with old date to see it come last
+    const testHistoryData3 = {
+      userId: 'testUser',
+      workoutExerciseId: new mongoose.Types.ObjectId(),
+      exerciseName: 'oldest entry',
+      category: 'strength',
+      date: new Date('2024-01-01'),
+      reps: 12,
+      sets: 3,
+      weight: 15,
+      duration: 0,
+    };
+    // add another history with newer date
+    const testHistoryData4 = {
+      userId: 'testUser',
+      workoutExerciseId: new mongoose.Types.ObjectId(),
+      exerciseName: 'newer entry',
+      category: 'strength',
+      date: new Date('2024-05-01'),
+      reps: 12,
+      sets: 3,
+      weight: 15,
+      duration: 0,
+    };
+    await createHistory(testHistoryData3);
+    await createHistory(testHistoryData4);
+
+    // get all histories to check
+    const allTestHistories = await getHistoryByUserId('testUser');
+    expect(Array.isArray(allTestHistories)).toBe(true);
+    // expect(allTestHistories.length).toEqual(4);
+    expect(allTestHistories).toHaveLength(4);
+    expect(allTestHistories[3].exerciseName).toEqual(testHistoryData3.exerciseName);  // check that the last one is the oldest entry
+  });
+
+  test('get all history for non-existent userId returns empty array', async () => {
+    // try {
+    //   expect(await getHistoryByUserId('doesNotExist')).rejects.toBe(true);
+    // } catch (error) {
+    //   expect(error).toBe('No history records found for user doesNotExist');
+    // }
+    const histories = await getHistoryByUserId('doesNotExist');
+    expect(Array.isArray(histories)).toBe(true);
+    expect(histories).toHaveLength(0);
   });
 
   test('updating a history entry should contain correct data', async () => {
@@ -120,6 +154,8 @@ describe('Test History service functions', () => {
 
     expect(testHistory.userId).toEqual(testHistoryData.userId);
     expect(testHistory.workoutExerciseId).toEqual(testHistoryData.workoutExerciseId);
+    expect(testHistory.exerciseName).toEqual(testHistoryData.exerciseName);
+    expect(testHistory.category).toEqual(testHistoryData.category);
     expect(testHistory.date).toEqual(testHistoryData.date);
     expect(testHistory.reps).toEqual(updatedData.reps);   // only updated values should change
     expect(testHistory.sets).toEqual(testHistoryData.sets);
