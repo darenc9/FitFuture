@@ -4,8 +4,13 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter to handle routing 
 import WorkoutList from '../../components/browse/WorkoutList';
 import WorkoutFilter from '../../components/browse/WorkoutFilter';
+import {profileIdAtom} from '../../../store'
+const { useAtom } = require("jotai");
+
 
 const BrowsePage = () => {
+    const API_URL = process.env.NEXT_PUBLIC_API_URL;
+    console.log("API_URL: " + API_URL);
     const router = useRouter(); // Initialize useRouter
     const [selectedOption, setSelectedOption] = useState('workouts'); // Default to workouts
     const [workouts, setWorkouts] = useState([]);
@@ -13,16 +18,17 @@ const BrowsePage = () => {
     const [routines, setRoutines] = useState([]);
     const [filter, setFilter] = useState('all'); // Default filter
     const [searchQuery, setSearchQuery] = useState(''); // Default search query
-
+    const [profileId] = useAtom(profileIdAtom);
     useEffect(() => {
         const fetchData = async () => {
             if (selectedOption !== 'exercises') {
                 try {
-                    const res = await fetch(selectedOption === 'workouts' ? 'http://localhost:8080/workouts' : 'http://localhost:8080/routines');
+                    const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${profileId}` : `${API_URL}/routines`);
                     if (!res.ok) {
                         throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
                     }
                     const data = await res.json();
+                    
                     if (selectedOption === 'workouts') {
                         setWorkouts(data);
                         setFilteredWorkouts(data); // Initially show all workouts
@@ -60,7 +66,7 @@ const BrowsePage = () => {
 
     const handlePanelClick = (item) => {
         console.log(item);
-        router.push(`/workouts/${item.workoutId}?name=${item.name}`); // Redirect to /workouts/[item._id]
+        router.push(`/workouts/${item.workoutId}`); // Redirect to /workouts/[item._id]
     };
 
     const handleFilterChange = (event) => {
@@ -74,7 +80,7 @@ const BrowsePage = () => {
 
     return (
         <div className="container mx-auto px-4">
-            <h1 className="text-2xl font-bold text-center mt-8">Browse Page</h1>
+            <h1 className="text-2xl font-bold text-center mt-5">Browse Page</h1>
             <div className="flex justify-center mt-4">
                 {/*Buttons for swapping between browsing routines and workouts */}
                 <button
