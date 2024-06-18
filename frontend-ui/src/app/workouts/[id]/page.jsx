@@ -4,9 +4,11 @@ import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import { useAtom } from 'jotai';
 import { profileIdAtom } from '../../../../store'; 
 import WorkoutExercise from '../../../components/workouts/WorkoutExercise'; 
+import useResetEditExerciseAtoms from '../../../../utility/useResetEditExerciseAtoms';
 
 
 const WorkoutDetails = () => {
+    const resetAtoms = useResetEditExerciseAtoms(); // Get the reset function
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const { id } = useParams(); // Access the dynamic route parameter
     const searchParams = useSearchParams();
@@ -50,7 +52,7 @@ const WorkoutDetails = () => {
     };
 
     const handleEditClick = () => {
-        //TODO:
+        resetAtoms();
         router.push(`/workouts/edit/${id}`);
     };
 
