@@ -23,7 +23,16 @@ const BrowsePage = () => {
         const fetchData = async () => {
             if (selectedOption !== 'exercises') {
                 try {
-                    const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${profileId}` : `${API_URL}/routines`);
+                    const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${profileId}` : `${API_URL}/routines`, {
+                        method: 'GET',
+                        headers: {
+                            'Access-Control-Allow-Credentials': 'true',
+                            'Access-Control-Allow-Origin': 'https://vercel.live/link/fit-future-ui-git-dev-devons-projects-9e2ee303.vercel.app', // Replace with front end url
+                            'Access-Control-Allow-Methods': 'GET,OPTIONS,PATCH,DELETE,POST,PUT',
+                            'Access-Control-Allow-Headers': 'X-CSRF-Token, X-Requested-With, Accept, Accept-Version, Content-Length, Content-MD5, Content-Type, Date, X-Api-Version',
+                        },
+                        credentials: 'include' // Include credentials if needed
+                    });
                     if (!res.ok) {
                         throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
                     }
