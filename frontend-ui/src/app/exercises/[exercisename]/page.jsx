@@ -1,10 +1,11 @@
 "use client"
 
 import React, { useState, useEffect } from 'react'
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import ExerciseDetails from '@/components/exercises/ExerciseDetails'
 
 export default function Page( { params }) {
+    const router = useRouter();
     const [exercise, setExercise] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
@@ -12,7 +13,7 @@ export default function Page( { params }) {
     useEffect(() => {
       const fetchExerciseData = async () => {
         try {
-          const response = await fetch(`http://localhost:8080/exercise/${params.exercisename}`);
+          const response = await fetch(`${process.env.API_URL}/exercise/${params.exercisename}`);
           if (!response.ok) {
             throw new Error('Failed to fetch exercise data');
           }
@@ -27,6 +28,10 @@ export default function Page( { params }) {
       };
       fetchExerciseData();
     }, [params.exercisename]);
+
+    const handleGoBack = () => {
+      router.back(); // Navigate back using Next.js router
+    };
   
     if (loading) return <p>Loading...</p>;
     if (error) return <p>Error: {error}</p>;
@@ -34,6 +39,7 @@ export default function Page( { params }) {
   
     return (
       <section>
+        <button onClick={handleGoBack}>Go Back</button>
         <ExerciseDetails exercise={exercise} />
       </section>
     );
