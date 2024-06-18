@@ -10,7 +10,7 @@ const { useAtom } = require("jotai");
 
 const BrowsePage = () => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
-    console.log("API_URL: " + API_URL); 
+    console.log("API_URL: " + API_URL);
     const router = useRouter(); // Initialize useRouter
     const [selectedOption, setSelectedOption] = useState('workouts'); // Default to workouts
     const [workouts, setWorkouts] = useState([]);
