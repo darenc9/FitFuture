@@ -78,6 +78,29 @@ module.exports.updateWorkout = async (req, res) => {
     //   id: '3_4_Sit-Up'
     // }
 
+    //handle deleting of exercises first
+    const existingExercises = await workoutExerciseService.getWorkoutExerciseByWorkoutId(workout.workoutId);
+    const existingExerciseIds = existingExercises.map(ex => ex.workoutExerciseId.toString());
+    console.log('current exercise workout ids: ',existingExerciseIds);
+
+    const requestExerciseIds = exercises
+    .filter(ex => ex.hasOwnProperty('workoutExerciseId'))
+    .map(ex => ex.workoutExerciseId.toString());
+    console.log('request workout exercises: ',requestExerciseIds);
+
+    // Get the list of workout exercise IDs that are not in the request exercises
+    const idsNotInExercises = existingExerciseIds.filter(id => !requestExerciseIds.includes(id));
+    console.log('IDs not in exercises:', idsNotInExercises);
+
+
+    // Delete the workout exercises that are not in the request exercises
+    if (idsNotInExercises.length > 0) {
+      for (const id of idsNotInExercises) {
+        await workoutExerciseService.deleteWorkoutExercise(id);
+        console.log(`Deleted workout exercise with ID: ${id}`);
+      }
+    }
+
     // Create and save each workout exercise
     for (const exercise of exercises) {
       console.log("in for loop");
@@ -114,24 +137,6 @@ module.exports.updateWorkout = async (req, res) => {
         console.log("updated exercise");
       }  
 
-    }
-
-    //handle deleting of exercises
-    const existingExercises = await workoutExerciseService.getWorkoutExerciseByWorkoutId(workout.workoutId);
-    const existingExerciseIds = existingExercises.map(ex => ex.workoutExerciseId.toString());
-    console.log('current exercise workout ids: ',existingExerciseIds);
-
-    const requestExerciseIds = exercises.map(ex => ex.workoutExerciseId.toString());
-    console.log('request workout exercises: ',requestExerciseIds);
-
-    // Get the list of workout exercise IDs that are not in the request exercises
-    const idsNotInExercises = existingExerciseIds.filter(id => !requestExerciseIds.includes(id));
-    console.log('IDs not in exercises:', idsNotInExercises);
-
-    // Delete the workout exercises that are not in the request exercises
-    for (const id of idsNotInExercises) {
-      await workoutExerciseService.deleteWorkoutExercise(id);
-      console.log(`Deleted workout exercise with ID: ${id}`);
     }
 
 
