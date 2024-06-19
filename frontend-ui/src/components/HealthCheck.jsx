@@ -15,7 +15,8 @@ async function currentSession() {
 
 export default function HealthCheck() {
   const [healthStatus, setHealthStatus] = useState(null);
-
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  
   useEffect(() => {
     const fetchHealthStatus = async () => {
       try {
@@ -23,11 +24,10 @@ export default function HealthCheck() {
         const response = await fetch('http://localhost:8080/',
           {
             method: 'GET',
-            headers: {
-              'Authorization': `Bearer ${token}`
-            }
+            headers: {'Authorization': `Bearer ${token}`}
           }
         );
+        const response = await fetch(`${API_URL}`);
         const data = await response.json();
         setHealthStatus(data.status);
       } catch (error) {

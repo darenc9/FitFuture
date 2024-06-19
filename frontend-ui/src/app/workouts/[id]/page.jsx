@@ -1,46 +1,51 @@
 "use client"
 import { useState, useEffect } from 'react';
 import { useParams, useSearchParams, useRouter } from 'next/navigation';
-import { useAtom } from 'jotai';
-import { profileIdAtom } from '../../../../store'; 
 import WorkoutExercise from '../../../components/workouts/WorkoutExercise'; 
-
+import useResetEditExerciseAtoms from '../../../../utility/useResetEditExerciseAtoms';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const WorkoutDetails = () => {
+    const resetAtoms = useResetEditExerciseAtoms(); // Get the reset function
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     const { id } = useParams(); // Access the dynamic route parameter
     const searchParams = useSearchParams();
     const [name, setName] = useState(''); 
     const [workoutExercises, setWorkoutExercises] = useState([]);
     const [showEditButton, setShowEditButton] = useState(false);
-    const [currentUser] = useAtom(profileIdAtom);
+    const { user } = useAuthenticator((context) => [context.user]);
     const router = useRouter();
 
     useEffect(() => {
         const fetchData = async () => {
-            try {
-                const res = await fetch(`${API_URL}/workout/${id}`);
-                if (!res.ok) {
-                    throw new Error(`Failed to fetch for workout id: ${id}`);
+            if (user && user.username){
+                const currentUser = user.username;
+                try {
+                    const res = await fetch(`${API_URL}/workout/${id}`);
+                    if (!res.ok) {
+                        throw new Error(`Failed to fetch for workout id: ${id}`);
+                    }
+                    const data = await res.json();
+                    setWorkoutExercises(data);
+    
+                    const res2 = await fetch(`${API_URL}/workouts/${id}`)
+                    const tempData = await res2.json();
+                    console.log(tempData);    
+                    setName(tempData.name);
+                     // Check if the current user is allowed to edit
+                    if (tempData.userId === currentUser) {
+                        setShowEditButton(true);
+                    }
+                } catch (error) {
+                    console.error(error);
                 }
-                const data = await res.json();
-                setWorkoutExercises(data);
 
-                const res2 = await fetch(`${API_URL}/workouts/${id}`)
-                const tempData = await res2.json();
-                console.log(tempData);    
-                setName(tempData.name);
-                 // Check if the current user is allowed to edit
-                if (tempData.userId === currentUser) {
-                    setShowEditButton(true);
-                }
-            } catch (error) {
-                console.error(error);
             }
+
         };
 
         fetchData();
-    }, [id, currentUser]);
+    }, [id]);
 
     const handlePanelClick = (item) => {
         console.log(item);
@@ -50,7 +55,7 @@ const WorkoutDetails = () => {
     };
 
     const handleEditClick = () => {
-        //TODO:
+        resetAtoms();
         router.push(`/workouts/edit/${id}`);
     };
 
