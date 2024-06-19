@@ -4,8 +4,10 @@ import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 import { profileIdAtom } from "../../../store";
 import { useRouter } from "next/navigation";
+import { GetToken } from "../AWS/GetToken";
 
 const AddEdit = (props) => {
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [profileId, setProfileId] = useAtom(profileIdAtom);
   const router = useRouter();
   const profile = props?.profile;   // will have a profile obj if we want to edit/update, empty if creating
@@ -44,9 +46,11 @@ const AddEdit = (props) => {
 
   const handleMakeNewProfile = async (data) => {
     try {
-      const res = await fetch(`http://localhost:8080/profile/create`, {
+      const authToken = await GetToken();
+      const res = await fetch(`${API_URL}/profile/create`, {
         method: "POST",
         headers: {
+          'Authorization': `Bearer ${authToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(data),
@@ -64,9 +68,11 @@ const AddEdit = (props) => {
 
   const handleEditProfile = async (data) => {
     try {
-      const res = await fetch(`http://localhost:8080/profile/${data._id}`, {
+      const authToken = await GetToken();
+      const res = await fetch(`${API_URL}/profile/${data._id}`, {
         method: "PUT",
         headers: {
+          'Authorization': `Bearer ${authToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(data),

@@ -4,11 +4,14 @@ import AddEdit from "@/components/profile/AddEdit";
 import { useEffect, useState } from "react";
 import { GetToken } from "@/components/AWS/GetToken";
 
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
+
 // fetch profile
 const fetchProfileData = async (id) => {
   try {
     const authToken = await GetToken();
-    const res = await fetch(`http://localhost:8080/profile/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
+    console.log(`API_URL is: ${API_URL}`);
+    const res = await fetch(`${API_URL}/profile/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
     if(!res.ok) {
       throw new Error('Failed to fetch profile data');
     }

@@ -9,13 +9,16 @@ import { TrashIcon } from '@heroicons/react/24/solid';
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from "next/navigation";
+
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 import { GetToken } from "@/components/AWS/GetToken";
 import { withAuthenticator } from "@aws-amplify/ui-react";
 
 const fetchProfileData = async (id) => {
   try {
-    const authToken = await GetTocket();
-    const res = await fetch(`http://localhost:8080/profile/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
+    const authToken = await GetToken();
+    console.log(`API_URL is: ${API_URL}`);
+    const res = await fetch(`${API_URL}/profile/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
     if (!res.ok) {
       throw new Error('Failed to fetch profile data');
     }
@@ -30,7 +33,8 @@ const fetchProfileData = async (id) => {
 const handleDeleteProfile = async (id, resetId) => {
   try {
     const authToken = await GetToken();
-    const res = await fetch(`http://localhost:8080/profile/${id}`, {
+    console.log(`API_URL is: ${API_URL}`);
+    const res = await fetch(`${API_URL}/profile/${id}`, {
       headers: {'Authorization': `Bearer ${authToken}`},
       method: "DELETE",
     });
@@ -72,12 +76,17 @@ const ProfilePage = () => {
         <div className="flex flex-col h-full justify-between">
           <ProfileDetails profile={profile}/>
           <div className="flex justify-between gap-2 mb-2">
+            <Link href={`history/${profile.userId}`} className="bg-blue-500 text-white p-2 rounded">
+              View History
+            </Link>
+            <div className="flex justify-between gap-1">
             <Link href={`profile/edit/${profile._id}`} className="bg-blue-500 text-white p-2 rounded">
               Edit Profile
             </Link>
             <button type="button" className="bg-red-500 text-white p-2 rounded" onClick={() => setOpen(true)}>
               <TrashIcon className="size-6"/>
             </button>
+            </div>
           </div>
 
           {/* Confirmation dialog follows below: (shown on trash button click) */}
