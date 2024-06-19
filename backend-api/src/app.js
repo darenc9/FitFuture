@@ -3,7 +3,8 @@
 const express = require('express');
 const cors = require('cors');
 const { version } = require('../package.json');
-
+const passport = require('passport');
+const authenticate = require('./auth');
 const app = express();
 
 // Allow all origins
@@ -11,6 +12,10 @@ app.use(cors());
 
 // allow post requests to have the req.body parsed
 app.use(express.json());
+
+// Set up our passport authentication middleware
+passport.use(authenticate.strategy());
+app.use(passport.initialize());
 
 app.use('/', require('./routes'));
 

@@ -5,6 +5,8 @@ import ExerciseTable from "@/components/build/ExerciseTable";
 import SearchFilters from "@/components/exercises/SearchFilters";
 import Pagination from "@/components/exercises/Pagination";
 import { useSearchParams } from "next/navigation";
+import { withAuthenticator } from "@aws-amplify/ui-react";
+import { GetToken } from "../AWS/GetToken";
 
 const PAGE_SIZE = 10;
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -21,8 +23,8 @@ const fetchExercises = async ({ page, name, muscle, category, force, level, mech
     mechanic,
     equipment,
   });
-
-  const response = await fetch(`${API_URL}/exercises?${params.toString()}`);
+  const authToken = await GetToken();
+  const response = await fetch(`${API_URL}/exercises?${params.toString()}`, {headers: {'Authorization': `Bearer ${authToken}`}});
   if (response.ok) {
     const result = await response.json();
     return result;
@@ -122,4 +124,4 @@ const ExercisesPage = () => {
   );
 };
 
-export default ExercisesPage;
+export default withAuthenticator(ExercisesPage);

@@ -9,10 +9,13 @@ import { TrashIcon } from '@heroicons/react/24/solid';
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
 import { useRouter } from "next/navigation";
+import { GetToken } from "@/components/AWS/GetToken";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 
 const fetchProfileData = async (id) => {
   try {
-    const res = await fetch(`http://localhost:8080/profile/${id}`);
+    const authToken = await GetTocket();
+    const res = await fetch(`http://localhost:8080/profile/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
     if (!res.ok) {
       throw new Error('Failed to fetch profile data');
     }
@@ -26,7 +29,9 @@ const fetchProfileData = async (id) => {
 
 const handleDeleteProfile = async (id, resetId) => {
   try {
+    const authToken = await GetToken();
     const res = await fetch(`http://localhost:8080/profile/${id}`, {
+      headers: {'Authorization': `Bearer ${authToken}`},
       method: "DELETE",
     });
     if (!res.ok) {
@@ -154,4 +159,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default withAuthenticator(ProfilePage);

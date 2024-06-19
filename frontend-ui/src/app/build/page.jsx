@@ -4,6 +4,7 @@ import { useAtom } from 'jotai';
 import { viewAtom } from '../../../utility/viewAtom'; // Import the view atom
 import WorkoutBuilderContent from '../../components/build/WorkoutBuilderContent';
 import RoutineBuilderContent from '../../components/build/RoutineBuilderContent';
+import { withAuthenticator } from "@aws-amplify/ui-react";
 
 const WorkoutBuilder = () => {
   const [view, setView] = useAtom(viewAtom); // Use the view atom
@@ -30,4 +31,4 @@ const WorkoutBuilder = () => {
   );
 };
 
-export default WorkoutBuilder;
+export default withAuthenticator(WorkoutBuilder);

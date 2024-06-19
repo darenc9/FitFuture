@@ -5,6 +5,7 @@ import { useAtom } from 'jotai';
 import { profileIdAtom } from '../../../store';
 import { editWorkoutAtom, getEditExerciseAtom } from '../../../utility/editExerciseAtom';
 import { useAtomValue } from 'jotai';
+import { GetToken } from '@/components/AWS/GetToken';
 
 const UpdateWorkoutPage = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -36,10 +37,12 @@ const UpdateWorkoutPage = () => {
       };
 
       try {
+        const authToken = await GetToken();
         const response = await fetch(`${API_URL}/workout`, {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
+            'Authorization': `Bearer ${authToken}`
           },
           body: JSON.stringify(payload),
         });
