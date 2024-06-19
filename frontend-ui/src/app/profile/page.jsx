@@ -16,7 +16,7 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 
 const fetchProfileData = async (id) => {
   try {
-    const authToken = await GetTocket();
+    const authToken = await GetToken();
     console.log(`API_URL is: ${API_URL}`);
     const res = await fetch(`${API_URL}/profile/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
     if (!res.ok) {

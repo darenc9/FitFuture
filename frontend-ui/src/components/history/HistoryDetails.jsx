@@ -3,6 +3,7 @@
 
 import { useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
+import { GetToken } from "../AWS/GetToken";
 
 const HistoryDetails = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -16,8 +17,8 @@ const HistoryDetails = () => {
 
   const fetchHistoryData = async (id) => {
     try {
-      console.log(`API_URL is: ${API_URL}`);
-      const res = await fetch(`${API_URL}/history/${id}`);
+      const authToken = await GetToken();
+      const res = await fetch(`${API_URL}/history/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
       if (!res.ok) {
         throw new Error('Failed to fetch history data');
       }
@@ -31,8 +32,8 @@ const HistoryDetails = () => {
 
   const fetchWorkoutExerciseData = async (id) => {
     try {
-      console.log(`API_URL is: ${API_URL}`);
-      const res = await fetch(`${API_URL}/we/${id}`);
+      const authToken = await GetToken();
+      const res = await fetch(`${API_URL}/we/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
       if (!res.ok) {
         throw new Error('Failed to fetch workoutExercise data');
       }

@@ -1,5 +1,6 @@
 // src/app/history/[userId]/page.jsx
 "use client"
+import { GetToken } from "@/components/AWS/GetToken";
 import HistoryFilter from "@/components/history/HistoryFilter";
 import HistoryList from "@/components/history/HistoryList";
 import { useRouter } from "next/navigation";
@@ -10,7 +11,8 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL;
 // fetch all histories for user
 const fetchHistoryData = async (id) => {
   try {
-    const res = await fetch(`${API_URL}/histories/${id}`);
+    const authToken = await GetToken();
+    const res = await fetch(`${API_URL}/histories/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
     if(!res.ok) {
       throw new Error('Failed to fetch history data');
     }

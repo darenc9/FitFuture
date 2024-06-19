@@ -1,4 +1,5 @@
 "use client"
+import { GetToken } from '@/components/AWS/GetToken';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
@@ -21,9 +22,11 @@ const HistoryPage = () => {
   
   const handleMakeNewHistory = async (data) => {
     try {
+      const authToken = await GetToken();
       const res = await fetch(`${API_URL}/history`, {
         method: "POST",
         headers: {
+          'Authorization': `Bearer ${authToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(data),

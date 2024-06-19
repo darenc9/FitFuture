@@ -4,6 +4,7 @@ import { useAtom } from "jotai";
 import { useForm } from "react-hook-form";
 import { profileIdAtom } from "../../../store";
 import { useRouter } from "next/navigation";
+import { GetToken } from "../AWS/GetToken";
 
 const AddEdit = (props) => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -45,9 +46,11 @@ const AddEdit = (props) => {
 
   const handleMakeNewProfile = async (data) => {
     try {
+      const authToken = await GetToken();
       const res = await fetch(`${API_URL}/profile/create`, {
         method: "POST",
         headers: {
+          'Authorization': `Bearer ${authToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(data),
@@ -65,9 +68,11 @@ const AddEdit = (props) => {
 
   const handleEditProfile = async (data) => {
     try {
+      const authToken = await GetToken();
       const res = await fetch(`${API_URL}/profile/${data._id}`, {
         method: "PUT",
         headers: {
+          'Authorization': `Bearer ${authToken}`,
           "Content-Type": "application/json"
         },
         body: JSON.stringify(data),
