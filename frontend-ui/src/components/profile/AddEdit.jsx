@@ -12,10 +12,10 @@ const AddEdit = (props) => {
   const isAddMode = !profile;       // to track if we are creating a new profile or updating existing
 
   const formOptions = { defaultValues: {
-    userId: '66575f452e46d5e14258c321',   // TODO: change this to use the logged in user's id
-    age: 25,
+    userId: 'newUser',   // TODO: change this to use the logged in user's id
+    dob: new Date("1990/01/01").toISOString().split('T')[0],
     height: 175,
-    weight: 180,
+    weight: 95,
     sex: 'Male',
     fitnessLevel: 'Beginner',
     favourites: {
@@ -26,11 +26,21 @@ const AddEdit = (props) => {
   }};
 
   if (!isAddMode) {
-    formOptions.defaultValues = profile;    // load form's values with values from existing profile
+    // load form's values with values from existing profile
+    formOptions.defaultValues = {
+      _id: profile._id,
+      userId: profile.userId,
+      dob: new Date(profile.dob).toISOString().split('T')[0],
+      height: profile.height,
+      weight: profile.weight,
+      sex: profile.sex,
+      fitnessLevel: profile.fitnessLevel,
+      favourites: profile.favourites,
+    };
   }
 
   // get functions to build a form with useForm() hook
-  const { register, handleSubmit, reset, formState: { errors } } = useForm(formOptions);
+  const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm(formOptions);
 
   const handleMakeNewProfile = async (data) => {
     try {
@@ -74,7 +84,7 @@ const AddEdit = (props) => {
 
   const onSubmit = async (data) => {
     // parse the form data to correct formats
-    data.age = parseInt(data.age);
+    data.dob = new Date(data.dob);
     data.height = parseInt(data.height);
     data.weight = parseInt(data.weight);
 
@@ -98,18 +108,22 @@ const AddEdit = (props) => {
       <h1 className="font-semibold text-xl text-center">Enter your profile information</h1>
       <div className="mt-2 flex justify-center">
         <form onSubmit={handleSubmit(onSubmit)} className="flex flex-col gap-3">
+
           <div className="flex justify-between gap-x-4">
-            <label>Age: </label>
-            <input type="number" {...register("age", {required: true})} className="text-right"/>
+            <label>Date of Birth: </label>
+            <input type="date" {...register("dob", {required: true})} className="text-right"/>
           </div>
+
           <div className="flex justify-between gap-x-4">
             <label>Height (cm): </label>
-            <input type="number" {...register("height", {required: true})} className="text-right"/>
+            <input type="number" name="height" {...register("height", {required: true})} className="text-right"/>
           </div>
+
           <div className="flex justify-between gap-x-4">
-            <label>Weight (lbs): </label>
-            <input type="number" {...register("weight", {required: true})} className="text-right"/>
+            <label>Weight (kgs): </label>
+            <input type="number" name="weight" {...register("weight", {required: true})} className="text-right"/>
           </div>
+
           <div className="flex justify-between gap-x-4">
             <label>Sex: </label>
             <select name="selectedSex" {...register("sex", {required: true})}>
@@ -118,6 +132,7 @@ const AddEdit = (props) => {
               <option value="Undisclosed">Undisclosed</option>
             </select>
           </div>
+
           <div className="flex justify-between gap-x-4">
             <label>Fitness Level: </label>
             <select name="fitnessLvl" {...register("fitnessLevel", {required: true})}>

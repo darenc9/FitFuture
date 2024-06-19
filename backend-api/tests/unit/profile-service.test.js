@@ -31,8 +31,8 @@ afterAll(async () => {
 // the tests:
 describe('Test Profile service functions', () => {
   const testProfileData = {
-    userId: new mongoose.Types.ObjectId(),
-    age: 25,
+    userId: 'testUser',
+    dob: new Date(),
     height: 178,
     weight: 180,
     sex: 'Male',
@@ -50,7 +50,7 @@ describe('Test Profile service functions', () => {
     expect(testProfile).toHaveProperty('_id');
     id = testProfile._id;   // update the id with the generated _id attribute of newly created profile
     expect(testProfile.userId).toEqual(testProfileData.userId);
-    expect(testProfile.age).toEqual(testProfileData.age);
+    expect(testProfile.dob).toEqual(testProfileData.dob);
     expect(testProfile.height).toEqual(testProfileData.height);
     expect(testProfile.weight).toEqual(testProfileData.weight);
     expect(testProfile.sex).toEqual(testProfileData.sex);
@@ -68,7 +68,7 @@ describe('Test Profile service functions', () => {
   test('getting profile by profile id should contain correct data', async () => {
     const foundTestProfile = await getProfileById(id);
     expect(foundTestProfile.userId).toEqual(testProfileData.userId);
-    expect(foundTestProfile.age).toEqual(testProfileData.age);
+    expect(foundTestProfile.dob).toEqual(testProfileData.dob);
     expect(foundTestProfile.height).toEqual(testProfileData.height);
     expect(foundTestProfile.weight).toEqual(testProfileData.weight);
     expect(foundTestProfile.sex).toEqual(testProfileData.sex);
@@ -82,7 +82,7 @@ describe('Test Profile service functions', () => {
     const foundTestProfile = await getProfileByUserId(testProfileData.userId);
     expect(foundTestProfile._id).toEqual(id);
     expect(foundTestProfile.userId).toEqual(testProfileData.userId);
-    expect(foundTestProfile.age).toEqual(testProfileData.age);
+    expect(foundTestProfile.dob).toEqual(testProfileData.dob);
     expect(foundTestProfile.height).toEqual(testProfileData.height);
     expect(foundTestProfile.weight).toEqual(testProfileData.weight);
     expect(foundTestProfile.sex).toEqual(testProfileData.sex);
@@ -95,8 +95,8 @@ describe('Test Profile service functions', () => {
   test('get all profiles returns correct number of profiles', async () => {
     // add another profile so we have more than one to retrieve from db for getAll
     const testProfileData2 = {
-      userId: new mongoose.Types.ObjectId(),
-      age: 31,
+      userId: 'user2',
+      dob: new Date(),
       height: 183,
       weight: 176,
       sex: 'Female',
@@ -125,7 +125,7 @@ describe('Test Profile service functions', () => {
 
     const testProfile = await updateProfileById(id, updatedData);
     expect(testProfile.userId).toEqual(testProfileData.userId);
-    expect(testProfile.age).toEqual(testProfileData.age);
+    expect(testProfile.dob).toEqual(testProfileData.dob);
     expect(testProfile.height).toEqual(updatedData.height);   // only updated values should change
     expect(testProfile.weight).toEqual(updatedData.weight);   // only updated values should change
     expect(testProfile.sex).toEqual(testProfileData.sex);

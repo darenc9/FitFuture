@@ -27,8 +27,8 @@ afterAll(async () => {
 
 describe('Test Profile Routes', () => {
   const testProfileData = {
-    userId: new mongoose.Types.ObjectId(),
-    age: 25,
+    userId: 'testUser',
+    dob: new Date(),
     height: 178,
     weight: 180,
     sex: 'Male',
@@ -61,7 +61,7 @@ describe('Test Profile Routes', () => {
       .then(res => {
         expect(res.body).toHaveProperty('_id');
         expect(res.body._id).toBe(id);
-        expect(res.body.age).toEqual(testProfileData.age);
+        expect(res.body.dob).toEqual(testProfileData.dob.toISOString());
         expect(res.body.height).toEqual(testProfileData.height);
         expect(res.body.weight).toEqual(testProfileData.weight);
         expect(res.body.sex).toEqual(testProfileData.sex);
@@ -71,7 +71,7 @@ describe('Test Profile Routes', () => {
 
   test('PUT /profile/:profileId returns updated profile', async () => {
     const newData = {
-      age: 30,
+      height: 179,
       weight: 185,
     }
     await request(app).put(`/profile/${id}`)
@@ -82,7 +82,7 @@ describe('Test Profile Routes', () => {
       .then(res => {
         expect(res.body).toHaveProperty('_id');
         expect(res.body._id).toBe(id);
-        expect(res.body.age).toEqual(newData.age);
+        expect(res.body.height).toEqual(newData.height);
         expect(res.body.weight).toEqual(newData.weight);
       })
   });

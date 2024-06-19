@@ -2,18 +2,13 @@
 const mongoose = require('mongoose');
 
 const profileSchema = new mongoose.Schema({
-  // profileId: {
-  //   type: mongoose.Schema.Types.ObjectId,
-  //   required: true,
-  //   unique: true
-  // },
-  userId: { // which account this profile belongs to
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
+  userId: {
+    type: String,
+    required: true
   },
-  age: Number,
-  height: Number,   // in centimeters?
-  weight: Number,
+  dob: Date,
+  height: Number,   // in centimeters
+  weight: Number,   // in kgs
   sex: String,
   fitnessLevel: String,
   favourites: {
