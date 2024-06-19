@@ -6,6 +6,7 @@ const { version } = require('../package.json');
 
 const app = express();
 
+// Allow all origins
 app.use(cors());
 
 // allow post requests to have the req.body parsed
