@@ -3,17 +3,22 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/navigation';
 import ExerciseDetails from '@/components/exercises/ExerciseDetails'
+import { GetToken } from '@/components/AWS/GetToken';
 
 export default function Page( { params }) {
     const router = useRouter();
     const [exercise, setExercise] = useState(null);
     const [loading, setLoading] = useState(true);
     const [error, setError] = useState(null);
+    
   
     useEffect(() => {
       const fetchExerciseData = async () => {
         try {
-          const response = await fetch(`${process.env.API_URL}/exercise/${params.exercisename}`);
+          const authToken = await GetToken();
+          const response = await fetch(`${process.env.API_URL}/exercise/${params.exercisename}`
+            , {headers: {'Authorization': `Bearer ${authToken}`}}
+          );
           if (!response.ok) {
             throw new Error('Failed to fetch exercise data');
           }

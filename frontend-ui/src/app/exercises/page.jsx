@@ -15,7 +15,7 @@ import {
   totalExercisesAtom,
   loadingAtom,
   fetchExercisesAtom,
-  selectedExercisesAtom,
+  //selectedExercisesAtom,
 } from "@/atoms/exercisesPageAtoms";
 
 const PAGE_SIZE = 10;
@@ -52,7 +52,7 @@ function ExercisesPage() {
   const [totalExercises, setTotalExercises] = useAtom(totalExercisesAtom);
   const [loading, setLoading] = useAtom(loadingAtom);
   const [fetchExercises] = useAtom(fetchExercisesAtom);
-  const [selectedExercises, setSelectedExercises] = useAtom(selectedExercisesAtom);
+  //const [selectedExercises, setSelectedExercises] = useAtom(selectedExercisesAtom);
 
   // Handles search filter changes
   const handleFilterChange = (e) => {
@@ -72,9 +72,8 @@ function ExercisesPage() {
       setTotalExercises(total);
       setLoading(false);
     };
-    console.log("Updated state: (fetchData useEffect)", currentPage, filters, selectedExercises);
     fetchData();
-  }, [currentPage, filters, selectedExercises]);
+  }, [currentPage, filters]);
 
   // Handles pagination
   const totalPages = Math.ceil(totalExercises / PAGE_SIZE);
@@ -110,7 +109,7 @@ function ExercisesPage() {
         <p className="text-center">Loading exercises...</p>
       ) : (
         <>
-          <ExerciseTable exercises={exercises} selectedExercises={selectedExercises} setSelectedExercises={setSelectedExercises} />
+          <ExerciseTable exercises={exercises} />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}

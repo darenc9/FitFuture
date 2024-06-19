@@ -71,7 +71,7 @@ afterAll(async () => {
 
 describe('workouts route handling', () => {
     it('/workouts should return an array of all workouts', async () => {
-      const response = await request(app).get('/workouts');
+      const response = await request(app).get('/workouts').auth('user1@email.com', 'password1');
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
       expect(response.body[0]).toHaveProperty('workoutId');
@@ -79,21 +79,21 @@ describe('workouts route handling', () => {
 
     //updated to be /workout instead of /workouts
     it('/workout/:id should return array of workout exercises', async () => {
-      const response = await request(app).get(`/workout/${workout.workoutId}`);
+      const response = await request(app).get(`/workout/${workout.workoutId}`).auth('user1@email.com', 'password1');
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
     });
 
     //updated to be /workout instead of /workouts
     it('/workout/:id should return empty array if workout has no workout exercises in it yet', async () => {
-      const response = await request(app).get(`/workout/${workout2.workoutId}`);
+      const response = await request(app).get(`/workout/${workout2.workoutId}`).auth('user1@email.com', 'password1');
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(true);
     });
 
 
     it('/workouts/:id should return a specific workout', async () => {
-      const response = await request(app).get(`/workouts/${workout2.workoutId}`);
+      const response = await request(app).get(`/workouts/${workout2.workoutId}`).auth('user1@email.com', 'password1');
       expect(response.status).toBe(200);
       expect(Array.isArray(response.body)).toBe(false);
       expect(response.body).toHaveProperty('workoutId');

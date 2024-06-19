@@ -43,6 +43,7 @@ describe('Test Profile Routes', () => {
 
   test('POST /profile/create', async () => {
     await request(app).post('/profile/create')
+      .auth('user1@email.com', 'password1')
       .send(testProfileData)
       .set('Accept', 'application/json')
       .expect(201)
@@ -54,6 +55,7 @@ describe('Test Profile Routes', () => {
 
   test('GET /profile/:profileId returns correct profile', async () => {
     await request(app).get(`/profile/${id}`)
+      .auth('user1@email.com', 'password1')
       .set('Accept', 'application/json')
       .expect(200)
       .then(res => {
@@ -73,6 +75,7 @@ describe('Test Profile Routes', () => {
       weight: 185,
     }
     await request(app).put(`/profile/${id}`)
+      .auth('user1@email.com', 'password1')  
       .send(newData)
       .set('Accept', 'application/json')
       .expect(200)
@@ -86,6 +89,7 @@ describe('Test Profile Routes', () => {
 
   test('GET /profiles returns list with at least one profile', async () => {
     await request(app).get(`/profiles`)
+      .auth('user1@email.com', 'password1')
       .set('Accept', 'application/json')
       .expect(200)
       .then(res => {
@@ -96,6 +100,7 @@ describe('Test Profile Routes', () => {
 
   test('DELETE /profile/:profileId returns deleted profile', async () => {
     await request(app).delete(`/profile/${id}`)
+      .auth('user1@email.com', 'password1')
       .set('Accept', 'application/json')
       .expect(201)
       .then(res => {
@@ -106,6 +111,7 @@ describe('Test Profile Routes', () => {
 
   test('GET /profile/:profileId with deleted profile returns error', async () => {
     await request(app).get(`/profile/${id}`)
+      .auth('user1@email.com', 'password1')
       .set('Accept', 'application/json')
       .expect(404)
       .then(res => {

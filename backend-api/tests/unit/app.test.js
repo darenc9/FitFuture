@@ -6,7 +6,7 @@ const app = require('../../src/app');
 // Tests accessing a nonexistent route
 describe('404 Handler', () => {
     test('should return a 404 status and error message', async () => {
-      const response = await request(app).get('/nonexistent-route');
+      const response = await request(app).get('/nonexistent-route').auth('user1@email.com', 'password1');
   
       expect(response.status).toBe(404);
       expect(response.body).toEqual({

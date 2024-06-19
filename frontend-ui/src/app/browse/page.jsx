@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter to handle routing 
 import WorkoutList from '../../components/browse/WorkoutList';
 import WorkoutFilter from '../../components/browse/WorkoutFilter';
+import { GetToken } from '@/components/AWS/GetToken';
+import { withAuthenticator } from "@aws-amplify/ui-react";
 import { useAuthenticator } from '@aws-amplify/ui-react';
 //import {profileIdAtom} from '../../../store'
 //const { useAtom } = require("jotai");
@@ -21,14 +23,16 @@ const BrowsePage = () => {
     //const [profileId] = useAtom(profileIdAtom);
     const { user } = useAuthenticator((context) => [context.user]);
 
-    useEffect(() => {
+useEffect(() => {
         const fetchData = async () => {
             if (user && user.username) {
                 console.log('User object:', user);
                 const userId = user.username;
                 if (selectedOption !== 'exercises') {
                     try {
+                        const authToken = await GetToken();
                         const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${userId}` : `${API_URL}/routines`, {
+                            headers: {'Authorization': `Bearer ${authToken}`},
                             method: 'GET' 
                         });
                         if (!res.ok) {
@@ -55,6 +59,7 @@ const BrowsePage = () => {
 
         fetchData();
     }, [selectedOption, user]);
+
 
     useEffect(() => {
         if (selectedOption === 'workouts') {
@@ -139,4 +144,4 @@ const BrowsePage = () => {
     );
 }
 
-export default BrowsePage;
+export default withAuthenticator(BrowsePage);
