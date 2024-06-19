@@ -42,6 +42,7 @@ describe('Test History Routes', () => {
 
   test('POST /history', async () => {
     await request(app).post('/history')
+      .auth('user1@email.com', 'password1')
       .send(testHistoryData)
       .set('Accept', 'application/json')
       .expect(201)
@@ -54,6 +55,7 @@ describe('Test History Routes', () => {
   test('GET /history/:historyId returns correct history', async () => {
     const expectedWID = decodeURI(testHistoryData.workoutExerciseId);
     await request(app).get(`/history/${id}`)
+      .auth('user1@email.com', 'password1')
       .set('Accept', 'application/json')
       .expect(200)
       .then(res => {
@@ -73,6 +75,7 @@ describe('Test History Routes', () => {
       reps: 5,
     }
     await request(app).put(`/history/${id}`)
+      .auth('user1@email.com', 'password1')
       .send(newData)
       .set('Accept', 'application/json')
       .expect(200)
@@ -85,6 +88,7 @@ describe('Test History Routes', () => {
 
   test('GET /histories/:userId returns list with at least one history', async () => {
     await request(app).get(`/histories/${testHistoryData.userId}`)
+      .auth('user1@email.com', 'password1')
       .set('Accept', 'application/json')
       .expect(200)
       .then(res => {
@@ -95,6 +99,7 @@ describe('Test History Routes', () => {
 
   test('DELETE /history/:historyId returns deleted history', async () => {
     await request(app).delete(`/history/${id}`)
+      .auth('user1@email.com', 'password1')
       .set('Accept', 'application/json')
       .expect(201)
       .then(res => {
@@ -105,6 +110,7 @@ describe('Test History Routes', () => {
 
   test('GET /history/:historyId with deleted history returns error', async () => {
     await request(app).get(`/history/${id}`)
+      .auth('user1@email.com', 'password1')
       .set('Accept', 'application/json')
       .expect(404)
       .then(res => {
