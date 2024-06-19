@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from 'react'
 import { useRouter } from 'next/router';
 import ExerciseDetails from '@/components/exercises/ExerciseDetails'
-
+import { GetToken } from '@/components/AWS/GetToken';
 
 export default function Page( { params }) {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -14,7 +14,10 @@ export default function Page( { params }) {
     useEffect(() => {
       const fetchExerciseData = async () => {
         try {
-          const response = await fetch(`${API_URL}/exercise/${params.exercisename}`);
+          const authToken = await GetToken();
+          const response = await fetch(`${API_URL}/exercise/${params.exercisename}` , {
+            headers: {'Authorization': `Bearer ${authToken}`}
+          });
           if (!response.ok) {
             throw new Error('Failed to fetch exercise data');
           }
