@@ -5,7 +5,7 @@ import React, { useState, useEffect } from 'react';
 export default function HealthCheck() {
   const [healthStatus, setHealthStatus] = useState(null);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
-
+  
   useEffect(() => {
     const fetchHealthStatus = async () => {
       try {

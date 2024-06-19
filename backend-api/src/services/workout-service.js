@@ -32,6 +32,8 @@ const ensureConnection = async () => {
 //get all workouts that are not associated with a user (ie all preset workouts)
 //userId should be null
 module.exports.getAllWorkouts = async function (user) {
+  //const userId = user.toString();
+  console.log("in get all workouts: " + user);
     await ensureConnection();
     return new Promise((resolve, reject) => {
       const query = {
@@ -45,7 +47,7 @@ module.exports.getAllWorkouts = async function (user) {
           if (workouts.length > 0) {
             resolve(workouts);
           } else {
-            reject('No workout records found where userId is null');
+            reject('No workout records found where public or userid is ' + user);
           }
         })
         .catch((err) => reject('Error retrieving workout records: ' + err.message));

@@ -1,9 +1,22 @@
+// src/app/exercises/page.jsx
 "use client";
 
 import React, { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import ExerciseTable from "@/components/exercises/ExerciseTable";
 import SearchFilters from "@/components/exercises/SearchFilters";
 import Pagination from "@/components/exercises/Pagination";
+import { useAtom } from "jotai";
+import { withAuthenticator } from "@aws-amplify/ui-react";
+import {
+  currentPageAtom,
+  filtersAtom,
+  exercisesAtom,
+  totalExercisesAtom,
+  loadingAtom,
+  fetchExercisesAtom,
+  selectedExercisesAtom,
+} from "@/atoms/exercisesPageAtoms";
 
 const PAGE_SIZE = 10;
 
@@ -21,7 +34,7 @@ const fetchExercises = async ({ page, name, muscle, category, force, level, mech
     equipment,
   });
 
-  const response = await fetch(`http://localhost:8080/exercises?${params.toString()}`);
+  const response = await fetch(`${process.env.API_URL}/exercises?${params.toString()}`);
   if (response.ok) {
     const result = await response.json();
     return result;
@@ -31,21 +44,15 @@ const fetchExercises = async ({ page, name, muscle, category, force, level, mech
   }
 };
 
-export default function ExercisesPage() {
-  const [exercises, setExercises] = useState([]);
-  const [totalExercises, setTotalExercises] = useState(0);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [loading, setLoading] = useState(true);
-  const [pageInput, setPageInput] = useState(1);
-  const [filters, setFilters] = useState({
-    name: "",
-    muscle: "",
-    category: "",
-    force: "",
-    level: "",
-    mechanic: "",
-    equipment: "",
-  });
+function ExercisesPage() {
+  const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
+  const [pageInput, setPageInput] = useAtom(currentPageAtom);
+  const [filters, setFilters] = useAtom(filtersAtom);
+  const [exercises, setExercises] = useAtom(exercisesAtom);
+  const [totalExercises, setTotalExercises] = useAtom(totalExercisesAtom);
+  const [loading, setLoading] = useAtom(loadingAtom);
+  const [fetchExercises] = useAtom(fetchExercisesAtom);
+  const [selectedExercises, setSelectedExercises] = useAtom(selectedExercisesAtom);
 
   // Handles search filter changes
   const handleFilterChange = (e) => {
@@ -60,14 +67,14 @@ export default function ExercisesPage() {
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const { data, total } = await fetchExercises({ page: currentPage, ...filters });
+      const { data, total } = await fetchExercises;
       setExercises(data);
       setTotalExercises(total);
       setLoading(false);
     };
-
+    console.log("Updated state: (fetchData useEffect)", currentPage, filters, selectedExercises);
     fetchData();
-  }, [currentPage, filters]);
+  }, [currentPage, filters, selectedExercises]);
 
   // Handles pagination
   const totalPages = Math.ceil(totalExercises / PAGE_SIZE);
@@ -97,13 +104,13 @@ export default function ExercisesPage() {
   }, [currentPage]);
 
   return (
-    <section className="p-4">
+    <section className="p-0.5">
       <SearchFilters filters={filters} handleFilterChange={handleFilterChange} />
       {loading ? (
         <p className="text-center">Loading exercises...</p>
       ) : (
         <>
-          <ExerciseTable exercises={exercises} />
+          <ExerciseTable exercises={exercises} selectedExercises={selectedExercises} setSelectedExercises={setSelectedExercises} />
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -118,3 +125,5 @@ export default function ExercisesPage() {
     </section>
   );
 }
+
+export default withAuthenticator(ExercisesPage);
