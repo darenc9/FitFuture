@@ -7,6 +7,7 @@ import {  useEffect, useState } from "react";
 import { profileIdAtom } from "../../../store";
 import { TrashIcon } from '@heroicons/react/24/solid';
 import { GetToken } from "@/components/AWS/GetToken";
+import { withAuthenticator } from "@aws-amplify/ui-react";
 
 const fetchProfileData = async (id) => {
   try {
@@ -80,4 +81,4 @@ const ProfilePage = () => {
   );
 };
 
-export default ProfilePage;
+export default withAuthenticator(ProfilePage);

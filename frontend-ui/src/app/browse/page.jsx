@@ -6,6 +6,7 @@ import WorkoutList from '../../components/browse/WorkoutList';
 import WorkoutFilter from '../../components/browse/WorkoutFilter';
 import {profileIdAtom} from '../../../store'
 import { GetToken } from '@/components/AWS/GetToken';
+import { withAuthenticator } from "@aws-amplify/ui-react";
 const { useAtom } = require("jotai");
 
 
@@ -135,4 +136,4 @@ const BrowsePage = () => {
     );
 }
 
-export default BrowsePage;
+export default withAuthenticator(BrowsePage);
