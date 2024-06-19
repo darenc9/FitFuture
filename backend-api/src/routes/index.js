@@ -3,6 +3,7 @@
 const express = require('express');
 const { hostname } = require('os');
 const { version, author } = require('../../package.json');
+const { authenticate } = require('../auth');
 
 const router = express.Router();
 // Import other route files
@@ -26,9 +27,8 @@ router.get('/', (req, res) => {
     });
   });
 
-
 // Mount the routes
-router.use(exerciseRoutes);
+router.use('', authenticate(), exerciseRoutes);
 router.use(profileRoutes);
 router.use(historyRoutes);
 router.use(workoutExerciseRoutes);

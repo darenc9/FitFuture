@@ -4,6 +4,7 @@ import { useParams, useSearchParams, useRouter } from 'next/navigation';
 import WorkoutExercise from '../../../components/workouts/WorkoutExercise'; 
 import useResetEditExerciseAtoms from '../../../../utility/useResetEditExerciseAtoms';
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { GetToken } from '@/components/AWS/GetToken';
 
 const WorkoutDetails = () => {
     const resetAtoms = useResetEditExerciseAtoms(); // Get the reset function
@@ -21,14 +22,19 @@ const WorkoutDetails = () => {
             if (user && user.username){
                 const currentUser = user.username;
                 try {
-                    const res = await fetch(`${API_URL}/workout/${id}`);
+                    const authToken = await GetToken();
+                    const res = await fetch(`${API_URL}/workout/${id}`,{
+                        headers: {'Authorization': `Bearer ${authToken}`}
+                    });
                     if (!res.ok) {
                         throw new Error(`Failed to fetch for workout id: ${id}`);
                     }
                     const data = await res.json();
                     setWorkoutExercises(data);
     
-                    const res2 = await fetch(`${API_URL}/workouts/${id}`)
+                    const res2 = await fetch(`${API_URL}/workouts/${id}`,{
+                        headers: {'Authorization': `Bearer ${authToken}`}
+                    })
                     const tempData = await res2.json();
                     console.log(tempData);    
                     setName(tempData.name);
