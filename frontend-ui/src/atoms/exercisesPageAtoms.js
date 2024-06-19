@@ -1,6 +1,6 @@
 // src/atoms/exercisesPageAtoms.js
 import { atom } from 'jotai';
-
+import { GetToken } from '@/components/AWS/GetToken';
 export const currentPageAtom = atom(1);
 
 export const filtersAtom = atom({
@@ -27,7 +27,11 @@ export const fetchExercisesAtom = atom(async (get) => {
     ...filters,
   });
 
-  const response = await fetch(`${process.env.API_URL}/exercises?${params.toString()}`);
+  const authToken = await GetToken();
+
+  const response = await fetch(`${process.env.API_URL}/exercises?${params.toString()}`, {
+    headers: {'Authorization': `Bearer ${authToken}`}
+  });
   if (response.ok) {
     const result = await response.json();
     return { data: result.data, total: result.total };

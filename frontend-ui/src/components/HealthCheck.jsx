@@ -1,6 +1,17 @@
 "use client"
 
 import React, { useState, useEffect } from 'react';
+import { fetchAuthSession, getCurrentUser } from 'aws-amplify/auth';
+async function currentSession() {
+  try {
+    const { tokens: session } = await fetchAuthSession({ forceRefresh: true });
+    const idToken = session.idToken;
+    return idToken;
+  } catch (err) {
+    console.log('Error getting auth token:', err);
+    return null;
+  }
+}
 
 export default function HealthCheck() {
   const [healthStatus, setHealthStatus] = useState(null);
@@ -8,7 +19,15 @@ export default function HealthCheck() {
   useEffect(() => {
     const fetchHealthStatus = async () => {
       try {
-        const response = await fetch('http://localhost:8080/');
+        const token = await currentSession();
+        const response = await fetch('http://localhost:8080/',
+          {
+            method: 'GET',
+            headers: {
+              'Authorization': `Bearer ${token}`
+            }
+          }
+        );
         const data = await response.json();
         setHealthStatus(data.status);
       } catch (error) {

@@ -5,6 +5,7 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 
 function Home() {
   const { user, signOut } = useAuthenticator((context) => [context.user]);
+
   return (
     <main className="flex flex-col items-center justify-center h-screen">
     <h1 className="mb-4 text-2xl font-bold">Hello {user.username}</h1>

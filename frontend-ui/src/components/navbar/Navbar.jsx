@@ -13,7 +13,7 @@ const Navbar = () => {
   return (
     <div className="flex justify-between container mx-auto p-4">
       <div>
-        <Link href={'/home'} key={'/home'} className={`flex flex-col items-center ${pathName == '/home' ? 'text-blue-500' : 'text-auto'}`}>
+        <Link href={'/'} key={'/'} className={`flex flex-col items-center ${pathName == '/home' ? 'text-blue-500' : 'text-auto'}`}>
           <HomeIcon className="size-6 "/>
           <span>Home</span>
         </Link>

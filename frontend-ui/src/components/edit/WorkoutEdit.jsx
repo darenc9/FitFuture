@@ -7,6 +7,7 @@ import ExercisePanel from './ExercisePanel';
 import { editWorkoutAtom, setEditExerciseAtoms } from '../../../utility/editExerciseAtom';
 import { useAtomValue } from 'jotai';
 import { PlusIcon } from '@heroicons/react/24/solid';
+import { GetToken } from '../AWS/GetToken';
 
 const WorkoutEdit = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -22,15 +23,16 @@ const WorkoutEdit = () => {
     const fetchData = async () => {
       try {
         // Only fetch if currentWorkout isn't already populated
+        const authToken = await GetToken();
         if (!currentWorkout.workoutId) {
           console.log("fetching data");
-          const res = await fetch(`${API_URL}/workout/${id}`);
+          const res = await fetch(`${API_URL}/workout/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
           if (!res.ok) {
             throw new Error(`Failed to fetch workout with id: ${id}`);
           }
           const exerciseData = await res.json();
 
-          const res2 = await fetch(`${API_URL}/workouts/${id}`);
+          const res2 = await fetch(`${API_URL}/workouts/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
           if (!res2.ok) {
             throw new Error(`Failed to fetch workout with id: ${id}`);
           }

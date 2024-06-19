@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation'; // Import useRouter to handle routi
 import WorkoutList from '../../components/browse/WorkoutList';
 import WorkoutFilter from '../../components/browse/WorkoutFilter';
 import {profileIdAtom} from '../../../store'
+import { GetToken } from '@/components/AWS/GetToken';
 const { useAtom } = require("jotai");
 
 
@@ -23,8 +24,10 @@ const BrowsePage = () => {
         const fetchData = async () => {
             if (selectedOption !== 'exercises') {
                 try {
+                    const authToken = await GetToken();
                     const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${profileId}` : `${API_URL}/routines`, {
-                        method: 'GET' 
+                        method: 'GET',
+                        headers: {'Authorization': `Bearer ${authToken}`} 
                     });
                     if (!res.ok) {
                         throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);

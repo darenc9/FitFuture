@@ -7,6 +7,7 @@ import ExercisePanel from './ExercisePanel';
 import { useAtomValue } from 'jotai';
 import useResetExerciseAtoms from '../../../utility/useResetExerciseAtoms'; // Import the reset hook
 import { profileIdAtom } from '../../../store';
+import { GetToken } from '../AWS/GetToken';
 
 const WorkoutBuilderContent = ({ setView }) => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -49,9 +50,11 @@ const WorkoutBuilderContent = ({ setView }) => {
 
     // Send the payload to the backend
     try {
+      const authToken = await GetToken();
       const response = await fetch(`${API_URL}/workout`, {
         method: 'POST',
         headers: {
+          headers: {'Authorization': `Bearer ${authToken}`},
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)

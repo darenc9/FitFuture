@@ -2,11 +2,13 @@
 "use client"
 import AddEdit from "@/components/profile/AddEdit";
 import { useEffect, useState } from "react";
+import { GetToken } from "@/components/AWS/GetToken";
 
 // fetch profile
 const fetchProfileData = async (id) => {
   try {
-    const res = await fetch(`http://localhost:8080/profile/${id}`);
+    const authToken = await GetToken();
+    const res = await fetch(`http://localhost:8080/profile/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
     if(!res.ok) {
       throw new Error('Failed to fetch profile data');
     }
