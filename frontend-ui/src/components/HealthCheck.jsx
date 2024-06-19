@@ -9,7 +9,7 @@ export default function HealthCheck() {
   useEffect(() => {
     const fetchHealthStatus = async () => {
       try {
-        const response = await fetch(`${API_URL}/`);
+        const response = await fetch(`${API_URL}`);
         const data = await response.json();
         setHealthStatus(data.status);
       } catch (error) {
