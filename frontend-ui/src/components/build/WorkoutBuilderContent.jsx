@@ -55,7 +55,7 @@ const WorkoutBuilderContent = ({ setView }) => {
       const response = await fetch(`${API_URL}/workout`, {
         method: 'POST',
         headers: {
-          headers: {'Authorization': `Bearer ${authToken}`},
+          'Authorization': `Bearer ${authToken}`,
           'Content-Type': 'application/json'
         },
         body: JSON.stringify(payload)
