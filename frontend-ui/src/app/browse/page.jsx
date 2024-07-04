@@ -65,8 +65,10 @@ useEffect(() => {
         if (selectedOption === 'workouts') {
             let filtered = workouts;
 
-            if (filter !== 'all') {
+            if (filter !== 'all' && filter != 'myWorkouts') {
                 filtered = filtered.filter(workout => workout.category.toLowerCase() === filter.toLowerCase());
+            } else if (filter == 'myWorkouts'){
+                filtered = filtered.filter(workout => workout.userId === user.username);
             }
     
             if (searchQuery) {
