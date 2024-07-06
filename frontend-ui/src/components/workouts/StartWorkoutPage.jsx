@@ -191,6 +191,19 @@ const StartWorkoutPage = () => {
     }
   };
 
+  const addSet = () => {
+    setSets([...sets, { weight: '', reps: '', completed: false }]);
+  };
+
+  const removeLastSet = () => {
+    if (sets.length > 0) {
+      setSets(sets.slice(0, -1));
+      if (currentSetIndex > sets.length - 1) {
+        setCurrentSetIndex(sets.length - 1);
+      }
+    }
+  };
+
   const currentExercise = exercises[currentExerciseIndex];
 
   return (
@@ -247,6 +260,21 @@ const StartWorkoutPage = () => {
                   )}
                 </div>
               ))}
+              <div className="flex space-x-4 mt-4">
+                <button
+                  onClick={addSet}
+                  className="px-4 py-2 bg-blue-500 text-white rounded-lg"
+                >
+                  Add Set
+                </button>
+                <button
+                  onClick={removeLastSet}
+                  className="px-4 py-2 bg-red-500 text-white rounded-lg"
+                  disabled={sets.length === 0}
+                >
+                  Remove Last Set
+                </button>
+              </div>
               {recentHistory.length > 0 && (
                 <div className="mt-4">
                   <h3 className="text-xl font-semibold mb-2">Recent History</h3>
