@@ -112,6 +112,19 @@ const StartWorkoutPage = () => {
   };
 
   const handleCompleteSet = () => {
+    let weightValue = parseFloat(weight);
+    let repsValue = parseInt(reps, 10);
+
+    if (weight === '' || isNaN(weightValue)) {
+      alert('Please enter a valid weight.');
+      return;
+    }
+
+    if (reps === '' || isNaN(repsValue) || repsValue.toString() !== reps) {
+      alert('Please enter a valid number of reps.');
+      return;
+    }
+
     const updatedSets = sets.map((set, i) => (
       i === currentSetIndex ? { ...set, weight, reps, completed: true } : set
     ));
@@ -304,14 +317,14 @@ const StartWorkoutPage = () => {
                   <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-4 flex flex-col items-center">
                     <div className="flex w-full mb-4">
                       <input
-                        type="number"
+                        type="text"
                         placeholder="Weight (Lb)"
                         value={weight}
                         onChange={(e) => handleInputChange('weight', e.target.value)}
                         className="border rounded p-2 w-1/2 mr-2"
                       />
                       <input
-                        type="number"
+                        type="text"
                         placeholder="Repetitions"
                         value={reps}
                         onChange={(e) => handleInputChange('reps', e.target.value)}
