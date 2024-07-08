@@ -288,6 +288,27 @@ const StartWorkoutPage = () => {
                   Remove Last Set
                 </button>
               </div>
+              {isResting && (
+                <div className="mt-4 bg-yellow-100 p-4 rounded-lg shadow-md w-full text-center">
+                  <p className="text-xl mb-4">Rest Time: {formatTime(restTime)}</p>
+                  <button
+                    onClick={skipRest}
+                    className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
+                  >
+                    Skip Rest
+                  </button>
+                </div>
+              )}
+              {showNotes && (
+                <div className="mt-4">
+                  <textarea
+                    placeholder="Notes"
+                    value={notes}
+                    onChange={(e) => setNotes(e.target.value)}
+                    className="w-full border rounded p-2"
+                  />
+                </div>
+              )}
               {recentHistory.length > 0 && (
                 <div className="mt-4">
                   <h3 className="text-xl font-semibold mb-2">Recent History</h3>
@@ -300,64 +321,43 @@ const StartWorkoutPage = () => {
                       <p><strong>Notes:</strong> {entry.notes}</p>
                     </div>
                   ))}
+                  <div className="h-32"></div> {/* Increased Buffer */}
                 </div>
               )}
-              {isResting ? (
-                <div className="flex flex-col items-center mt-4">
-                  <p className="text-xl mb-4">Rest Time: {formatTime(restTime)}</p>
-                  <button
-                    onClick={skipRest}
-                    className="px-4 py-2 bg-yellow-500 text-white rounded-lg"
-                  >
-                    Skip Rest
-                  </button>
-                </div>
-              ) : (
-                currentSetIndex < sets.length && (
-                  <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-4 flex flex-col items-center">
-                    <div className="flex w-full mb-4">
-                      <input
-                        type="text"
-                        placeholder="Weight (Lb)"
-                        value={weight}
-                        onChange={(e) => handleInputChange('weight', e.target.value)}
-                        className="border rounded p-2 w-1/2 mr-2"
-                      />
-                      <input
-                        type="text"
-                        placeholder="Repetitions"
-                        value={reps}
-                        onChange={(e) => handleInputChange('reps', e.target.value)}
-                        className="border rounded p-2 w-1/2"
-                      />
-                    </div>
-                    <div className="flex w-full justify-between">
-                      <button
-                        onClick={handleCompleteSet}
-                        className="px-4 py-2 bg-green-500 text-white rounded-lg w-1/2 mr-2"
-                      >
-                        Complete
-                      </button>
-                      <button
-                        onClick={toggleNotes}
-                        className="px-4 py-2 bg-yellow-500 text-white rounded-lg w-1/2"
-                      >
-                        Notes
-                      </button>
-                    </div>
-                  </div>
-                )
-              )}
-              {showNotes && (
-                <div className="mt-4">
-                  <textarea
-                    placeholder="Notes"
-                    value={notes}
-                    onChange={(e) => setNotes(e.target.value)}
-                    className="w-full border rounded p-2"
-                  />
-                </div>
-              )}
+            </div>
+          )}
+          {currentSetIndex < sets.length && !isResting &&(
+            <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-4 flex flex-col items-center">
+              <div className="flex w-full mb-4">
+                <input
+                  type="text"
+                  placeholder="Weight (Lb)"
+                  value={weight}
+                  onChange={(e) => handleInputChange('weight', e.target.value)}
+                  className="border rounded p-2 w-1/2 mr-2"
+                />
+                <input
+                  type="text"
+                  placeholder="Repetitions"
+                  value={reps}
+                  onChange={(e) => handleInputChange('reps', e.target.value)}
+                  className="border rounded p-2 w-1/2"
+                />
+              </div>
+              <div className="flex w-full justify-between">
+                <button
+                  onClick={handleCompleteSet}
+                  className="px-4 py-2 bg-green-500 text-white rounded-lg w-1/2 mr-2"
+                >
+                  Complete
+                </button>
+                <button
+                  onClick={toggleNotes}
+                  className="px-4 py-2 bg-yellow-500 text-white rounded-lg w-1/2"
+                >
+                  Notes
+                </button>
+              </div>
             </div>
           )}
         </>
