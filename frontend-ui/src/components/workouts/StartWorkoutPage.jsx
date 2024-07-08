@@ -24,6 +24,7 @@ const StartWorkoutPage = () => {
   const [isResting, setIsResting] = useState(false);
   const [restTime, setRestTime] = useState(120);
   const [recentHistory, setRecentHistory] = useState([]);
+  const [currentDate, setCurrentDate] = useState('');
 
   const { user } = useAuthenticator((context) => [context.user]);
 
@@ -96,6 +97,16 @@ const StartWorkoutPage = () => {
     }
     return () => clearInterval(restTimer);
   }, [isResting, restTime]);
+
+  useEffect(() => {
+    const date = new Date();
+    const formattedDate = date.toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+    setCurrentDate(formattedDate);
+  }, []);
 
   const formatTime = (time) => {
     const minutes = Math.floor(time / 60);
@@ -236,6 +247,7 @@ const StartWorkoutPage = () => {
       {workoutComplete ? (
         <div className="bg-white shadow-md rounded-lg p-4 mt-0 w-full max-w-2xl">
           <h2 className="text-2xl font-semibold mb-4">Workout Summary</h2>
+          <p>{currentDate}</p>
           <p>Total Time: {formatTime(time)}</p>
           <ul className="mb-4">
             {completedExercises.map((exercise, index) => (
