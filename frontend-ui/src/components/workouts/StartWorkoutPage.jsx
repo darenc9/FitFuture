@@ -36,7 +36,7 @@ const StartWorkoutPage = () => {
           headers: { 'Authorization': `Bearer ${authToken}` }
         });
         const data = await res.json();
-        console.log(data);
+        console.log('Fetched exercises:', data);
         setExercises(data);
         setCurrentExerciseIndex(0);
         setSets(Array(data[0].sets).fill({ weight: '', reps: '', completed: false }));
@@ -148,21 +148,33 @@ const StartWorkoutPage = () => {
       notes,
     };
 
-    if (currentExerciseIndex + 1 < exercises.length) {
-      setCompletedExercises([...completedExercises, completedExercise]);
-      const nextExerciseIndex = currentExerciseIndex + 1;
-      setCurrentExerciseIndex(nextExerciseIndex);
-      setSets(Array(exercises[nextExerciseIndex].sets).fill({ weight: '', reps: '', completed: false }));
-      setCurrentSetIndex(0);
-      setShowNotes(false);
-      setNotes('');
-    } else {
-      const allCompletedExercises = [...completedExercises, completedExercise];
-      console.log("Completed workout:", allCompletedExercises);
+    if (exercises.length === 1) {
+      // If there's only one exercise, add it to completedExercises and mark workout complete
+      const allCompletedExercises = [completedExercise];
       setCompletedExercises(allCompletedExercises);
-      setWorkoutComplete(true); // Set workout complete to true
-      setIsRunning(false); // Stop the timer
-      // Optionally handle end of workout logic here
+      console.log("Final Completed workout (one exercise):", allCompletedExercises);
+      setWorkoutComplete(true);
+      setIsRunning(false);
+      handleFinishWorkout(allCompletedExercises); // Call handleFinishWorkout
+    } else {
+      // For multiple exercises
+      const allCompletedExercises = [...completedExercises, completedExercise];
+      setCompletedExercises(allCompletedExercises);
+      console.log('Completed Exercises:', allCompletedExercises);
+
+      if (currentExerciseIndex + 1 < exercises.length) {
+        const nextExerciseIndex = currentExerciseIndex + 1;
+        setCurrentExerciseIndex(nextExerciseIndex);
+        setSets(Array(exercises[nextExerciseIndex].sets).fill({ weight: '', reps: '', completed: false }));
+        setCurrentSetIndex(0);
+        setShowNotes(false);
+        setNotes('');
+      } else {
+        console.log("Final Completed workout:", allCompletedExercises);
+        setWorkoutComplete(true);
+        setIsRunning(false);
+        handleFinishWorkout(allCompletedExercises); // Call handleFinishWorkout
+      }
     }
   };
 
@@ -175,7 +187,7 @@ const StartWorkoutPage = () => {
     setShowNotes(!showNotes);
   };
 
-  const handleFinishWorkout = async () => {
+  const handleFinishWorkout = async (completedExercises) => {
     const workoutData = {
       workoutId,
       totalTime: time,
@@ -239,12 +251,6 @@ const StartWorkoutPage = () => {
               </li>
             ))}
           </ul>
-          <button
-            onClick={handleFinishWorkout}
-            className="mt-4 px-4 py-2 bg-blue-500 text-white rounded-lg"
-          >
-            Finish Workout
-          </button>
         </div>
       ) : (
         <>
@@ -326,7 +332,7 @@ const StartWorkoutPage = () => {
               )}
             </div>
           )}
-          {currentSetIndex < sets.length && !isResting &&(
+          {currentSetIndex < sets.length && !isResting && (
             <div className="fixed bottom-0 left-0 right-0 bg-white shadow-md p-4 flex flex-col items-center">
               <div className="flex w-full mb-4">
                 <input
