@@ -109,4 +109,38 @@ describe('workouts route handling', () => {
       expect(response.body.name).toBe("Morning Run");
       expect(response.body.category).toBe("Cardio");
     });
+
+    it('/workout should be able to update workout with PUT', async () => {
+      const updatedWorkout = {
+        workout: {
+          workoutId: workout.workoutId,
+          name: "Updated Morning Run",
+          exerciseIds: ['Jog'],
+          public: true,
+          user: null
+        },
+        exercises : [{
+          id: "Jog",
+          workoutExerciseId: we.workoutExerciseId,
+          name:"Jog",
+          sets: null,
+          reps:null,
+          notes: null,
+          duration: 30,
+          weight: null
+        }]
+      }
+      const response = await request(app)
+      .put(`/workout`)
+      .auth('user1@email.com', 'password1')
+      .send(updatedWorkout);
+      expect(response.status).toBe(200);
+      expect(response.body.workout.name).toBe("Updated Morning Run");
+
+      const response2 = await request(app).get(`/workouts/${workout.workoutId}`).auth('user1@email.com', 'password1');
+      expect(response2.status).toBe(200);
+      expect(response2.body.name).toBe("Updated Morning Run");
+
+    });
   });
+
