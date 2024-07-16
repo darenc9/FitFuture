@@ -1,10 +1,8 @@
 // src/app/profile/page.jsx
 "use client"
 import ProfileDetails from "@/components/profile/ProfileDetails";
-import { useAtom } from "jotai";
 import Link from "next/link";
 import {  useEffect, useState } from "react";
-import { profileIdAtom } from "../../../store";
 import { TrashIcon } from '@heroicons/react/24/solid';
 import { Dialog, DialogPanel, DialogTitle, Transition, TransitionChild } from '@headlessui/react'
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline'
@@ -12,13 +10,14 @@ import { useRouter } from "next/navigation";
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 import { GetToken } from "@/components/AWS/GetToken";
-import { withAuthenticator } from "@aws-amplify/ui-react";
+import { useAuthenticator, withAuthenticator } from "@aws-amplify/ui-react";
+import { signOut } from "aws-amplify/auth";
 
 const fetchProfileData = async (id) => {
   try {
     const authToken = await GetToken();
     console.log(`API_URL is: ${API_URL}`);
-    const res = await fetch(`${API_URL}/profile/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
+    const res = await fetch(`${API_URL}/profile/user/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
     if (!res.ok) {
       throw new Error('Failed to fetch profile data');
     }
@@ -30,7 +29,7 @@ const fetchProfileData = async (id) => {
   }
 };
 
-const handleDeleteProfile = async (id, resetId) => {
+const handleDeleteProfile = async (id) => {
   try {
     const authToken = await GetToken();
     console.log(`API_URL is: ${API_URL}`);
@@ -42,7 +41,7 @@ const handleDeleteProfile = async (id, resetId) => {
       throw new Error(`Failed to delete profile with id: ${id}`);
     }
     const resData = await res.json();
-    resetId('66575f452e46d5e14258c321');    // TODO: this is hardcoded for example (app functionality would delete the whole user and log you out)
+    signOut();
     return resData;
   } catch (error) {
     console.error('Error deleting profile: ', error);
@@ -53,19 +52,28 @@ const handleDeleteProfile = async (id, resetId) => {
 const ProfilePage = () => {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(true);
-  const [profileId, setProfileId] = useAtom(profileIdAtom);   // use shared profile id state
   const [open, setOpen] = useState(false);
   const router = useRouter();
+  const { user } = useAuthenticator((context) => [context.user]);
 
 
   useEffect(() => {
     const fetchData = async () => {
-      const profileData = await fetchProfileData(profileId);
-      setProfile(profileData);
-      setLoading(false);
+      if (user && user.username) {
+        const profileData = await fetchProfileData(user.username);
+        if (!profileData) {
+          // no profile for user, redirect to create profile page
+          router.push('/profile/create');
+        } else {
+          setProfile(profileData);
+          setLoading(false);
+        }
+      } else {
+        console.log('User is not yet defined.');
+      }
     };
     fetchData();
-  }, [profileId]);
+  }, [user]);
 
   return (
     // the height is calculated by the responsive viewport height minus the height of the navbar (80px)
@@ -138,8 +146,8 @@ const ProfilePage = () => {
                           className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                           onClick={() => {
                             console.log('delete the profile and redirect to login/register page');
-                            handleDeleteProfile(profile._id, setProfileId);
-                            router.push('/login');
+                            handleDeleteProfile(profile._id);
+                            router.push('/');
                             setOpen(false);
                           }}
                         >
