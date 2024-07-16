@@ -3,6 +3,7 @@
 const express = require('express');
 const router = express.Router();
 const workoutService = require('../services/workout-service');
+const historyService = require('../services/history-service');
 const workoutExerciseService = require('../services/workoutExercise-service');
 const mongoose = require('mongoose');
 
@@ -169,7 +170,7 @@ module.exports.createWorkout = async (req, res) => {
       routineId: null, // Assuming no routine association for now, set if needed
       public: workout.public, // Use provided public value
       name: workout.name,
-      category: "Custom"
+      category: "Custom" //TODO: maybe use the current user username
     };
 
     const createdWorkout = await workoutService.createWorkout(workoutData);
@@ -210,3 +211,40 @@ module.exports.createWorkout = async (req, res) => {
   }
 };
 
+module.exports.createHistory = async (req, res) => {
+  const data = req.body;
+  const exercises = data.exercises;
+  console.log(data);
+  console.log(data.exercises[0].sets);
+
+  for (var i = 0; i < exercises.length; i++){
+    // Create the History object
+    const historyData = {
+      historyId: new mongoose.Types.ObjectId(), // Generate a new ObjectId for historyId
+      userId: data.userId.username, // Set to userId if provided
+      exerciseName: exercises[i].name,
+      exerciseId: exercises[i].exerciseId,
+      date: new Date(),
+      info: exercises[i].sets,
+      notes: exercises[i].notes
+    };
+    console.log(historyData);
+    await historyService.createHistory(historyData);
+
+    //const result = await historyService.getRecentHistoryByUserAndExercise(data.userId.username, exercises[0].exerciseId);
+    //console.log(result);
+  }
+};
+
+module.exports.getRecentHistory = async (req, res) => {
+    console.log("in recent histories");
+    const userId = req.query.userId;
+    const exerciseId = req.query.exerciseId;
+    console.log({userId: userId, exerciseId: exerciseId});
+    historyService.getRecentHistoryByUserAndExercise(userId,exerciseId)
+      .then((data) => {
+        res.status(200).json(data);
+      }).catch((err) => {
+        res.status(404).json({error: err});
+      });
+};

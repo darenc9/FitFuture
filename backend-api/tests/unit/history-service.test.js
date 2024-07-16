@@ -32,14 +32,15 @@ afterAll(async () => {
 describe('Test History service functions', () => {
   const testHistoryData = {
     userId: 'testUser',
-    workoutExerciseId: new mongoose.Types.ObjectId(),
+    historyId: new mongoose.Types.ObjectId(),
     exerciseName: 'test exercise',
-    category: 'strength',
+    exerciseId: 'test_exercise',
     date: new Date(),
-    reps: 8,
-    sets: 3,
-    weight: 30,
-    duration: 300,
+    info: [
+      {reps: 8, weight: 10},
+      {reps: 10, weight: 10}
+    ],
+    notes: null
   };
 
   let id;   // to store created test's _id attribute
@@ -47,16 +48,11 @@ describe('Test History service functions', () => {
   test('creating a new history should contain correct data', async () => {
     const testHistory = await createHistory(testHistoryData);
     expect(testHistory).toHaveProperty('_id');
-    id = testHistory._id;   // update the id with the generated _id attribute of newly created history
+    id = testHistory._id;   // upd ate the id with the generated _id attribute of newly created history
     expect(testHistory.userId).toEqual(testHistoryData.userId);
-    expect(testHistory.workoutExerciseId).toEqual(testHistoryData.workoutExerciseId);
     expect(testHistory.exerciseName).toEqual(testHistoryData.exerciseName);
-    expect(testHistory.category).toEqual(testHistoryData.category);
     expect(testHistory.date).toEqual(testHistoryData.date);
-    expect(testHistory.reps).toEqual(testHistoryData.reps);
-    expect(testHistory.sets).toEqual(testHistoryData.sets);
-    expect(testHistory.weight).toEqual(testHistoryData.weight);
-    expect(testHistory.duration).toEqual(testHistoryData.duration);
+    expect(Array.isArray(testHistory.info)).toBe(true);
   });
   
   test('newly created history should exist in db', async () => {
@@ -67,28 +63,25 @@ describe('Test History service functions', () => {
   test('getting history by history id should contain correct data', async () => {
     const foundTestHistory = await getHistoryById(id);
     expect(foundTestHistory.userId).toEqual(testHistoryData.userId);
-    expect(foundTestHistory.workoutExerciseId).toEqual(testHistoryData.workoutExerciseId);
+    expect(foundTestHistory.historyId).toEqual(testHistoryData.historyId);
     expect(foundTestHistory.exerciseName).toEqual(testHistoryData.exerciseName);
-    expect(foundTestHistory.category).toEqual(testHistoryData.category);
     expect(foundTestHistory.date).toEqual(testHistoryData.date);
-    expect(foundTestHistory.reps).toEqual(testHistoryData.reps);
-    expect(foundTestHistory.sets).toEqual(testHistoryData.sets);
-    expect(foundTestHistory.weight).toEqual(testHistoryData.weight);
-    expect(foundTestHistory.duration).toEqual(testHistoryData.duration);
+
   });
 
   test('get all history for userId returns correct number of history entries', async () => {
     // add another history so we have more than one to retrieve from db for getAll
     const testHistoryData2 = {
       userId: 'testUser',
-      workoutExerciseId: new mongoose.Types.ObjectId(),
-      exerciseName: 'test exercise 2',
-      category: 'cardio',
+      historyId: new mongoose.Types.ObjectId(),
+      exerciseName: 'test exercise 1',
+      exerciseId: 'test_exercise_1',
       date: new Date(),
-      reps: 10,
-      sets: 4,
-      weight: 15,
-      duration: 600,
+      info: [
+        {reps: 8, weight: 10},
+        {reps: 10, weight: 10}
+      ],
+      notes: null
     };
     await createHistory(testHistoryData2);
 
@@ -102,26 +95,28 @@ describe('Test History service functions', () => {
     // add another history with old date to see it come last
     const testHistoryData3 = {
       userId: 'testUser',
-      workoutExerciseId: new mongoose.Types.ObjectId(),
-      exerciseName: 'oldest entry',
-      category: 'strength',
+      historyId: new mongoose.Types.ObjectId(),
+      exerciseName: 'new exercise',
+      exerciseId: 'new_exercise',
       date: new Date('2024-01-01'),
-      reps: 12,
-      sets: 3,
-      weight: 15,
-      duration: 0,
+      info: [
+        {reps: 8, weight: 10},
+        {reps: 10, weight: 10}
+      ],
+      notes: null
     };
     // add another history with newer date
     const testHistoryData4 = {
       userId: 'testUser',
-      workoutExerciseId: new mongoose.Types.ObjectId(),
-      exerciseName: 'newer entry',
-      category: 'strength',
+      historyId: new mongoose.Types.ObjectId(),
+      exerciseName: 'newer exercise',
+      exerciseId: 'newer_exercise',
       date: new Date('2024-05-01'),
-      reps: 12,
-      sets: 3,
-      weight: 15,
-      duration: 0,
+      info: [
+        {reps: 8, weight: 10},
+        {reps: 10, weight: 10}
+      ],
+      notes: null
     };
     await createHistory(testHistoryData3);
     await createHistory(testHistoryData4);
@@ -147,7 +142,7 @@ describe('Test History service functions', () => {
 
   test('updating a history entry should contain correct data', async () => {
     const updatedData = {
-      reps: 5,
+      notes: "test note",
     };
 
     const testHistory = await updateHistoryById(id, updatedData);

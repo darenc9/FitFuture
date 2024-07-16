@@ -6,17 +6,15 @@ const historySchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  workoutExerciseId: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true
+  historyId: { 
+    type: mongoose.Schema.Types.ObjectId, 
+    required: true 
   },
   exerciseName: String,
-  category: String,
+  exerciseId: String,
   date: Date, 
-  reps: Number,
-  sets: Number,
-  weight: Number,     // in lbs
-  duration: Number,   // in sec
+  info: Array, //array is of objects of {reps, weight, duration}
+  notes: String
 });
 
 const History = mongoose.model('History', historySchema);

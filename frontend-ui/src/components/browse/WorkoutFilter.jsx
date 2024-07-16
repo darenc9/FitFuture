@@ -16,7 +16,7 @@ const WorkoutFilter = ({ filter, searchQuery, handleFilterChange, handleSearchCh
                 <option value="strength">Strength</option>
                 <option value="flexibility">Flexibility</option>
                 <option value="yoga">Yoga</option>
-                <option value="custom">Custom</option>
+                <option value="myWorkouts">My Workouts</option>
                 {/* Add more options as needed */}
             </select>
         </div>

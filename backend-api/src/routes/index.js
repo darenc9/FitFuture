@@ -14,7 +14,7 @@ const workoutExerciseRoutes = require('./workoutExerciseRoutes');
 const testDbRoutes = require('./testDbRoute');
 
 //get the workout functions
-const { getAll, getById, getWorkoutById, createWorkout, updateWorkout} = require('./workoutRoutes');
+const { getAll, getById, getWorkoutById, createWorkout, updateWorkout, createHistory, getRecentHistory } = require('./workoutRoutes');
 
 // Health Check
 router.get('/', (req, res) => {
@@ -47,4 +47,9 @@ router.get('/workout/:id', getById);
 router.post('/workout', createWorkout);
 
 router.put('/workout', updateWorkout);
+
+router.post('/workout/finish', createHistory);
+
+router.get('/workout/history/recent', getRecentHistory);
+
 module.exports = router;

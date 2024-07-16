@@ -28,14 +28,15 @@ afterAll(async () => {
 describe('Test History Routes', () => {
   const testHistoryData = {
     userId: 'testUser',
-    workoutExerciseId: new mongoose.Types.ObjectId(),
+    historyId: new mongoose.Types.ObjectId(),
     exerciseName: 'test exercise',
-    category: 'strength',
+    exerciseId: 'test_exercise',
     date: new Date(),
-    reps: 8,
-    sets: 3,
-    weight: 30,
-    duration: 300,
+    info: [
+      {reps: 8, weight: 10},
+      {reps: 10, weight: 10}
+    ],
+    notes: null
   };
 
   let id;
@@ -61,18 +62,17 @@ describe('Test History Routes', () => {
       .then(res => {
         expect(res.body).toHaveProperty('_id');
         expect(res.body._id).toBe(id);
-        expect(res.body.workoutExerciseId).toEqual(expectedWID);
-        expect(res.body.date).toEqual(testHistoryData.date.toISOString());
-        expect(res.body.reps).toEqual(testHistoryData.reps);
-        expect(res.body.sets).toEqual(testHistoryData.sets);
-        expect(res.body.weight).toEqual(testHistoryData.weight);
-        expect(res.body.duration).toEqual(testHistoryData.duration);
+        expect(res.body.userId).toEqual(testHistoryData.userId);
+        expect(res.body.exerciseName).toEqual(testHistoryData.exerciseName);
+          // Convert both dates to strings before comparing
+        expect(new Date(res.body.date).toISOString()).toEqual(testHistoryData.date.toISOString());
+        expect(Array.isArray(res.body.info)).toBe(true);
       })
   });
 
   test('PUT /history/:historyId returns updated history', async () => {
     const newData = {
-      reps: 5,
+      notes: "test notes",
     }
     await request(app).put(`/history/${id}`)
       .auth('user1@email.com', 'password1')
@@ -82,7 +82,7 @@ describe('Test History Routes', () => {
       .then(res => {
         expect(res.body).toHaveProperty('_id');
         expect(res.body._id).toBe(id);
-        expect(res.body.reps).toEqual(newData.reps);
+        expect(res.body.notes).toEqual(newData.notes);
       })
   });
 

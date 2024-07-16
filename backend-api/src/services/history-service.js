@@ -88,3 +88,20 @@ module.exports.updateHistoryById = async function (id, newData) {
       });
   })
 };
+
+// get the 3 most recent history entries for a specific userId and exerciseId
+module.exports.getRecentHistoryByUserAndExercise = async function (userId, exerciseId) {
+  await ensureConnection();
+  return new Promise((resolve, reject) => {
+    HistoryModel.find({ userId: userId, exerciseId: exerciseId })
+      .sort({ date: 'descending' })
+      .limit(3)
+      .exec()
+      .then((histories) => {
+        resolve(histories);
+      })
+      .catch((err) => {
+        reject('Error retrieving recent history records: ' + err);
+      });
+  });
+};

@@ -12,7 +12,6 @@ import { useAuthenticator } from '@aws-amplify/ui-react';
 
 const BrowsePage = () => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
-    console.log("API_URL: " + API_URL);
     const router = useRouter(); // Initialize useRouter
     const [selectedOption, setSelectedOption] = useState('workouts'); // Default to workouts
     const [workouts, setWorkouts] = useState([]);
@@ -65,8 +64,10 @@ useEffect(() => {
         if (selectedOption === 'workouts') {
             let filtered = workouts;
 
-            if (filter !== 'all') {
+            if (filter !== 'all' && filter != 'myWorkouts') {
                 filtered = filtered.filter(workout => workout.category.toLowerCase() === filter.toLowerCase());
+            } else if (filter == 'myWorkouts'){
+                filtered = filtered.filter(workout => workout.userId === user.username);
             }
     
             if (searchQuery) {
