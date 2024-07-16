@@ -5,6 +5,7 @@ import { useForm } from "react-hook-form";
 import { profileIdAtom } from "../../../store";
 import { useRouter } from "next/navigation";
 import { GetToken } from "../AWS/GetToken";
+import { useAuthenticator } from "@aws-amplify/ui-react";
 
 const AddEdit = (props) => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -12,9 +13,10 @@ const AddEdit = (props) => {
   const router = useRouter();
   const profile = props?.profile;   // will have a profile obj if we want to edit/update, empty if creating
   const isAddMode = !profile;       // to track if we are creating a new profile or updating existing
+  const { user } = useAuthenticator((context) => [context.user]);
 
   const formOptions = { defaultValues: {
-    userId: 'newUser',   // TODO: change this to use the logged in user's id
+    userId: 'placeHolder',   // this will be changed to use the logged in user's id
     dob: new Date("1990/01/01").toISOString().split('T')[0],
     height: 175,
     weight: 95,
@@ -45,24 +47,27 @@ const AddEdit = (props) => {
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm(formOptions);
 
   const handleMakeNewProfile = async (data) => {
-    try {
-      const authToken = await GetToken();
-      const res = await fetch(`${API_URL}/profile/create`, {
-        method: "POST",
-        headers: {
-          'Authorization': `Bearer ${authToken}`,
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        throw new Error('Failed to create new profile with given data');
+    if (user && user.username) {
+      data.userId = user.username;
+      try {
+        const authToken = await GetToken();
+        const res = await fetch(`${API_URL}/profile/create`, {
+          method: "POST",
+          headers: {
+            'Authorization': `Bearer ${authToken}`,
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify(data),
+        });
+        if (!res.ok) {
+          throw new Error('Failed to create new profile with given data');
+        }
+        const resData = await res.json();
+        return resData;
+      } catch (error) {
+        console.error('Error creating new profile: ', error);
+        return null;
       }
-      const resData = await res.json();
-      return resData;
-    } catch (error) {
-      console.error('Error creating new profile: ', error);
-      return null;
     }
   };
 
