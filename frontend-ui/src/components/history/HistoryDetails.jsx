@@ -8,9 +8,7 @@ import { GetToken } from "../AWS/GetToken";
 const HistoryDetails = () => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [historyDetails, setHistoryDetails] = useState(null);
-  const [intendedEx, setIntendedEx] = useState(null);
   const [loading, setLoading] = useState(true);
-
 
   const searchParams = useSearchParams();
   const id = searchParams.get('id');
@@ -30,29 +28,11 @@ const HistoryDetails = () => {
     }
   };
 
-  const fetchWorkoutExerciseData = async (id) => {
-    try {
-      const authToken = await GetToken();
-      const res = await fetch(`${API_URL}/we/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
-      if (!res.ok) {
-        throw new Error('Failed to fetch workoutExercise data');
-      }
-      const data = await res.json();
-      return data;
-    } catch (error) {
-      console.error('Error fetching workoutExercise data: ', error);
-      return null;
-    }
-  };
-
   useEffect(() => {
     const fetchData = async () => {
       const historyData = await fetchHistoryData(searchParams.get('id'));
       console.log(`fetched history data is: `, historyData);
       setHistoryDetails(historyData);
-      console.log(`current history details is: `, historyDetails);
-      const intendedExerciseData = await fetchWorkoutExerciseData(historyData.workoutExerciseId);
-      setIntendedEx(intendedExerciseData);
       setLoading(false);
     };
     fetchData();
@@ -63,46 +43,24 @@ const HistoryDetails = () => {
       {loading ? (
         <p>Loading history details...</p>
       ) : (
-      <div>
-        <h1 className="font-bold text-center text-xl">{historyDetails.exerciseName}</h1>
-        <table className="min-w-full shadow-md rounded-lg mt-3">
-          <thead className="bg-gray-800 text-white">
-            <tr className="py-2">
-              <th className="py-2">Completed</th>
-              <th className="py-2">Suggested</th>
-            </tr>
-          </thead>
-          <tbody>
-            {intendedEx.reps ? 
-            <tr>
-              <td className="p-3 text-center">{historyDetails.reps} reps</td>
-              <td className="p-3 text-center">{intendedEx.reps} reps</td>
-            </tr>
-            : null
-            }
-            {intendedEx.sets ? 
-            <tr>
-              <td className="p-3 text-center">{historyDetails.sets} sets</td>
-              <td className="p-3 text-center">{intendedEx.sets} sets</td>
-            </tr>
-            : null
-            }
-            {intendedEx.weight ? 
-            <tr>
-              <td className="p-3 text-center">{historyDetails.weight} weight</td>
-              <td className="p-3 text-center">{intendedEx.weight} weight</td>
-            </tr>
-            : null
-            }
-            {intendedEx.duration ?
-            <tr>
-              <td className="p-3 text-center">{Math.floor(historyDetails.duration / 60)} min {Math.floor(historyDetails.duration % 60)} sec</td>
-              <td className="p-3 text-center">{Math.floor(intendedEx.duration / 60)} min {Math.floor(intendedEx.duration % 60)} sec</td>
-            </tr>
-            : null
-            }
-          </tbody>
-        </table>
+      <div className="mx-auto p-4">
+        <h1 className="text-xl font-bold text-center">{historyDetails.exerciseName}</h1>
+        <h3 className="text-gray-600 text-center font-semibold m-2">{new Date(historyDetails.date).toISOString().split('T')[0]}</h3>
+        <div className="flex flex-col gap-2 my-4">
+          {historyDetails.info.map((entry, index) => (
+            <div key={index} className={`flex items-center p-4 border rounded-lg shadow-md ${entry.completed ? 'bg-green-200' : 'bg-yellow-200'}`}>
+              <div className="ml-4">
+                {entry.weight && <p><b>Weight:</b> {entry.weight}</p>}
+                {entry.reps && <p><b>Reps:</b> {entry.reps}</p>}
+                {entry.duration && <p><b>Duration:</b> {Math.floor(entry.duration / 60)} min {Math.floor(entry.duration % 60)} sec</p>}
+              </div>
+              <div className="ml-auto">
+                <h3>{entry.completed ? 'Complete' : 'Incomplete'}</h3>
+              </div>
+            </div>
+          ))}
+        </div>
+        {historyDetails.notes && <p><b>Notes:</b> {historyDetails.notes}</p>}
       </div>
       )}
     </div>

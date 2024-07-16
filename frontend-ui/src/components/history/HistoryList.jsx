@@ -19,9 +19,10 @@ const HistoryList = ({ histories, handlePanelClick }) => {
             <p className="text-gray-600">{new Date(history.date).toISOString().split('T')[0]}</p>
           </div>
           <div className="ml-auto">
-            {history.duration && <p className="text-sm font-semibold">{Math.floor(history.duration / 60)} min {Math.floor(history.duration % 60)} sec</p> || null }
+            {/* {history.duration && <p className="text-sm font-semibold">{Math.floor(history.duration / 60)} min {Math.floor(history.duration % 60)} sec</p> || null }
             {history.reps && <p className="text-sm font-semibold">{history.reps} x {history.sets} sets</p> || null }
-            {history.weight && <p className="text-sm font-semibold">{history.weight} lbs</p> || null }
+            {history.weight && <p className="text-sm font-semibold">{history.weight} lbs</p> || null } */}
+            {history.info && <p className='text-sm font-semibold'>{history.info.length} sets</p>}
           </div>
         </div>
       ))}
