@@ -12,7 +12,7 @@ const profileRoutes = require('./profileRoutes');
 const historyRoutes = require('./historyRoutes');
 const workoutExerciseRoutes = require('./workoutExerciseRoutes');
 const testDbRoutes = require('./testDbRoute');
-
+const routineRoutes = require('./routineRoutes');
 //get the workout functions
 const { getAll, getById, getWorkoutById, createWorkout, updateWorkout, createHistory, getRecentHistory } = require('./workoutRoutes');
 
@@ -30,6 +30,7 @@ router.get('/', (req, res) => {
 // Mount the routes
 router.use('', authenticate(), exerciseRoutes);
 router.use(profileRoutes);
+router.use(routineRoutes);
 router.use(historyRoutes);
 router.use(workoutExerciseRoutes);
 // TODO: Mount additional routes for other features as needed
