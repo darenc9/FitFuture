@@ -2,7 +2,6 @@ import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { StarIcon as StarIconOutline } from '@heroicons/react/24/outline';
 import { useAtom } from "jotai";
 import { profileAtom } from "../../../store";
-import { GetToken } from '../AWS/GetToken';
 
 // component to display Favourite Workout card
 export default function FavWorkoutCard( {workout, handleFavWorkoutClicked, handleWorkoutPanelClicked} ) {

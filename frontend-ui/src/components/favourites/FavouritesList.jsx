@@ -14,16 +14,13 @@ export default function FavouritesList( {favWorkouts, favRoutines} ) {
     var favs = profile?.favourites;
 
     // either add or remove from the profile atom first
-    // if (profile?.favourites.workouts.includes(workout._id)) {
     if (profile?.favourites.workouts.findIndex((wo) => wo._id == workout._id) !== -1) {
       // remove the workout from favs
       console.debug('remove workout from favs');
-      // favs.workouts = favs.workouts.filter(id => id !== workout._id);
       favs.workouts = favs.workouts.filter(wo => wo._id !== workout._id);
     } else {
       // add workout to favs
       console.debug('add workout to favs');
-      // favs.workouts.push(workout._id);
       favs.workouts.push(workout);
     }
 
