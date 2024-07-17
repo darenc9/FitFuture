@@ -104,7 +104,7 @@ const AddEdit = (props) => {
       const result = await handleMakeNewProfile(data);
       if (result?._id) {  // new profile was successfully made
         setProfileId(result._id); // update the shared profile id to use newly created profile
-        router.push('/profile');  // redirect to the profile page for the newly created profile
+        router.push('/');  // redirect to the home page after profile creation
       }
     } else {
       const result = await handleEditProfile(data);

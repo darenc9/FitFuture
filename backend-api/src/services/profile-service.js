@@ -57,7 +57,8 @@ module.exports.getProfileByUserId = async function (id) {
         if (profile) {
           resolve(profile);
         } else {
-          reject("No profile record found with the userId: " + id);
+          // reject("No profile record found with the userId: " + id);
+          resolve(null);
         }
       }).catch((err) => {
         reject("Error retrieving profile record: " + err);
@@ -109,4 +110,19 @@ module.exports.updateProfileById = async function (id, newData) {
   })
 };
 
-// TODO: make add / remove favourites functions
+// update favourites
+module.exports.updateFavourites = async function (profileId, favourites) {
+  await ensureConnection();
+  return new Promise((resolve, reject) => {
+    ProfileModel.findByIdAndUpdate(profileId, { favourites: favourites }, {new: true}).exec()
+      .then((profile) => {
+        if (profile) {
+          resolve(profile);
+        } else {
+          reject("No profile record found");
+        }
+      }).catch((err) => {
+        reject("Error updating profile record's favourites: " + err );
+      });
+  });
+};
