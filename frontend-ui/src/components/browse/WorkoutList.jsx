@@ -1,13 +1,60 @@
 import React from 'react';
 import { useRouter } from 'next/navigation';
+import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
+import { StarIcon as StarIconOutline } from '@heroicons/react/24/outline';
+import { useAtom } from 'jotai';
+import { profileAtom } from '../../../store';
+import { GetToken } from '../AWS/GetToken';
+
 
 const WorkoutList = ({ workouts, handlePanelClick }) => {
-    const router = useRouter(); // Initialize useRouter
-    return (
+  const router = useRouter(); // Initialize useRouter
+  const API_URL = process.env.NEXT_PUBLIC_API_URL;
+  const [profile, setProfile] = useAtom(profileAtom);
+
+  const handleFavClick = async (workout) => {
+    var favs = profile?.favourites;
+
+    // either add or remove from the profile atom first
+    if (profile?.favourites.workouts.findIndex((wo) => wo._id == workout._id) !== -1) {
+      // remove the workout from favs
+      console.debug('remove workout from favs');
+      favs.workouts = favs.workouts.filter(wo => wo._id !== workout._id);
+    } else {
+      // add workout to favs
+      console.debug('add workout to favs');
+      // favs.workouts.push(workout._id);
+      favs.workouts.push(workout);
+    }
+
+    // then save it to the database
+    try {
+      const authToken = await GetToken();
+      const res = await fetch(`${API_URL}/profile/favourites/${profile._id}`, {
+        method: "PUT",
+        headers: {
+          'Authorization': `Bearer ${authToken}`,
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify(favs),
+      });
+      if (!res.ok) {
+        throw new Error(`Failed to update profile favourites for id: ${profile._id}`);
+      }
+      const resData = await res.json();
+      return resData;
+    } catch (error) {
+      console.error('Error updating profile favourites: ', error);
+      return null;
+    }
+  }
+
+  return (
         <div className="mt-4 space-y-4">
             {workouts.map(workout => (
+              <div key={workout._id}>
                 <div
-                    key={workout._id}
+                    // key={workout._id}
                     className="flex items-center p-4 border rounded-lg shadow-md cursor-pointer hover:bg-gray-100"
                     onClick={() => handlePanelClick(workout)}
                 >
@@ -22,10 +69,18 @@ const WorkoutList = ({ workouts, handlePanelClick }) => {
                         <h3 className="text-lg font-semibold">{workout.name}</h3>
                         <p className="text-gray-600">{workout.category}</p>
                     </div>
-                    <div className="ml-auto">
+                    {/* <div className="ml-auto">
                         <p className="text-sm font-semibold">Time: {workout.time}</p>
-                    </div>
+                    </div> */}
+                <button type='button' 
+                className='ml-auto rounded text-yellow-500'
+                onClick={() => handleFavClick(workout)}
+                >
+                  {profile?.favourites.workouts.findIndex((wo) => wo._id == workout._id) !== -1 ? <StarIconSolid className='size-6'/> : <StarIconOutline className='size-6'/>}
+                </button>
                 </div>
+
+              </div>
             ))}
         </div>
     );
