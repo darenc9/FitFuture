@@ -65,12 +65,16 @@ const RoutineList = ({ routines, handlePanelClick }) => {
             <h3 className="text-lg font-semibold">{routine.routineName}</h3>
             <p className="text-gray-600">{routine.category}</p>
           </div>
-          <button type='button'
+          { profile ?
+          (<button type='button'
           className='ml-auto rounded text-yellow-500'
           onClick={() => handleFavClick(routine)}
           >
             {profile?.favourites.routines.findIndex((rt) => rt._id == routine._id) !== -1 ? <StarIconSolid className='size-6' /> : <StarIconOutline className='size-6' />}
-          </button>
+          </button>)
+          :
+          (null)
+          }
         </div>
       ))}
     </div>

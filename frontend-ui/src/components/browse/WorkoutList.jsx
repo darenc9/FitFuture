@@ -54,7 +54,6 @@ const WorkoutList = ({ workouts, handlePanelClick }) => {
             {workouts.map(workout => (
               <div key={workout._id}>
                 <div
-                    // key={workout._id}
                     className="flex items-center p-4 border rounded-lg shadow-md cursor-pointer hover:bg-gray-100"
                     onClick={() => handlePanelClick(workout)}
                 >
@@ -72,12 +71,16 @@ const WorkoutList = ({ workouts, handlePanelClick }) => {
                     {/* <div className="ml-auto">
                         <p className="text-sm font-semibold">Time: {workout.time}</p>
                     </div> */}
-                <button type='button' 
-                className='ml-auto rounded text-yellow-500'
-                onClick={() => handleFavClick(workout)}
-                >
-                  {profile?.favourites.workouts.findIndex((wo) => wo._id == workout._id) !== -1 ? <StarIconSolid className='size-6'/> : <StarIconOutline className='size-6'/>}
-                </button>
+                    { profile ? 
+                    (<button type='button' 
+                    className='ml-auto rounded text-yellow-500'
+                    onClick={() => handleFavClick(workout)}
+                    >
+                      {profile?.favourites.workouts.findIndex((wo) => wo._id == workout._id) !== -1 ? <StarIconSolid className='size-6'/> : <StarIconOutline className='size-6'/>}
+                    </button>)
+                    :
+                    (null)
+                    }
                 </div>
 
               </div>

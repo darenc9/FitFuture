@@ -5,6 +5,7 @@ import { GetToken } from '@/components/AWS/GetToken';
 import { useAtom } from 'jotai';
 import { profileAtom } from '../../store';
 import FavouritesList from '@/components/favourites/FavouritesList';
+import { useRouter } from 'next/navigation';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
@@ -28,14 +29,20 @@ function Home() {
   const { user } = useAuthenticator((context) => [context.user]);
   const [profile, setProfile] = useAtom(profileAtom);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     if (user && user.username) {
       const fetchData = async () => {
         const profileData = await fetchProfileData(user.username);
         // console.debug(`fetched profile data is:`, profileData);
-        setProfile(profileData);
-        setLoading(false);
+        if (!profileData) {
+          // no profile, redirect to profile creation page
+          router.push('/profile');
+        } else {
+          setProfile(profileData);
+          setLoading(false);
+        }
       };
       fetchData();
     }
