@@ -6,7 +6,7 @@ import { useRouter } from "next/navigation";
 import FavRoutineCard from "./FavRoutineCard";
 
 // component to display list of user's favourites
-export default function FavouritesList( {favWorkouts, favRoutines} ) {
+export default function FavouritesList( {favWorkouts, favRoutines, showWorkouts, showRoutines} ) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [profile, setProfile] = useAtom(profileAtom);
   const router = useRouter();
@@ -93,14 +93,14 @@ export default function FavouritesList( {favWorkouts, favRoutines} ) {
 
   return (
     <div className="w-screen mx-auto p-4 flex flex-col gap-2">
-      {favRoutines.map(routine =>
+      {showRoutines && favRoutines.map(routine =>
         <FavRoutineCard key={routine._id}
         routine={routine}
         handleFavRoutineClicked={handleFavRoutineClicked}
         handleRoutinePanelClicked={handleRoutinePanelClicked}
         />
       )}
-      {favWorkouts.map(workout => 
+      {showWorkouts && favWorkouts.map(workout => 
         <FavWorkoutCard key={workout._id}
         workout={workout}
         handleFavWorkoutClicked={handleFavWorkoutClicked} 
