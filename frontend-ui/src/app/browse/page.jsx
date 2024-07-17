@@ -4,6 +4,8 @@ import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation'; // Import useRouter to handle routing 
 import WorkoutList from '../../components/browse/WorkoutList';
 import WorkoutFilter from '../../components/browse/WorkoutFilter';
+import RoutineList from '@/components/browse/RoutineList'
+import RoutineFilter from '@/components/browse/RoutineFilter'
 import { GetToken } from '@/components/AWS/GetToken';
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { useAuthenticator } from '@aws-amplify/ui-react';
@@ -14,12 +16,14 @@ const BrowsePage = () => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
     console.log("API_URL: " + API_URL);
     const router = useRouter(); // Initialize useRouter
-    const [selectedOption, setSelectedOption] = useState('workouts'); // Default to workouts
+    const [selectedOption, setSelectedOption] = useState(); // Default to workouts
     const [workouts, setWorkouts] = useState([]);
     const [filteredWorkouts, setFilteredWorkouts] = useState([]);
     const [routines, setRoutines] = useState([]);
+    const [filteredRoutines, setFilteredRoutines] = useState([]);
     const [filter, setFilter] = useState('all'); // Default filter
     const [searchQuery, setSearchQuery] = useState(''); // Default search query
+    const tab = router.query;
     //const [profileId] = useAtom(profileIdAtom);
     const { user } = useAuthenticator((context) => [context.user]);
 
@@ -28,10 +32,18 @@ useEffect(() => {
             if (user && user.username) {
                 console.log('User object:', user);
                 const userId = user.username;
+                console.log("tab: ", tab);
+                if (tab) {
+                    console.log("if (tab): ", tab);
+                    setSelectedOption(tab);
+                }
+                else if (!selectedOption) {
+                    setSelectedOption('workouts');
+                } 
                 if (selectedOption !== 'exercises') {
                     try {
                         const authToken = await GetToken();
-                        const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${userId}` : `${API_URL}/routines`, {
+                        const res = await fetch(selectedOption === 'workouts' ? `${API_URL}/workouts?user=${userId}` : `${API_URL}/routines?user=${userId}`, {
                             headers: {'Authorization': `Bearer ${authToken}`},
                             method: 'GET' 
                         });
@@ -39,12 +51,13 @@ useEffect(() => {
                             throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
                         }
                         const data = await res.json();
-                        
+                        console.log("fetched data: ", data);
                         if (selectedOption === 'workouts') {
                             setWorkouts(data);
                             setFilteredWorkouts(data); // Initially show all workouts
                         } else {
                             setRoutines(data);
+                            setFilteredRoutines(data);
                         }
                     } catch (error) {
                         console.error(error);
@@ -60,6 +73,12 @@ useEffect(() => {
         fetchData();
     }, [selectedOption, user]);
 
+    useEffect(() => {
+        if (tab) {
+            setSelectedOption(tab);
+        }
+    }, [tab]);
+
 
     useEffect(() => {
         if (selectedOption === 'workouts') {
@@ -73,15 +92,27 @@ useEffect(() => {
                 filtered = filtered.filter(workout => workout.name.toLowerCase().includes(searchQuery.toLowerCase()));
             }
             setFilteredWorkouts(filtered);
-        } else {
-            //TODO: handle the routine filtering
+        } else if (selectedOption === 'routines') {
+            let filtered = routines;
+
+            if (filter !== 'all') {
+                filtered = filtered.filter(routine => routine.category.toLowerCase() === filter.toLowerCase());
+            }
+
+            if (searchQuery) {
+                filtered = filtered.filter(routine => routine.routineName.toLowerCase().includes(searchQuery.toLowerCase()));
+            }
+            setFilteredRoutines(filtered);
         }
-         //this use effect hook will run any time any value in dependency array changes
-    }, [filter, workouts, selectedOption, searchQuery]);
+    }, [filter, workouts, routines, selectedOption, searchQuery]);
 
     const handlePanelClick = (item) => {
         console.log(item);
-        router.push(`/workouts/${item.workoutId}`); // Redirect to /workouts/[item._id]
+        if (selectedOption === 'workouts') {
+            router.push(`/workouts/${item.workoutId}`); // Redirect to /workouts/[item.workoutId]
+        } else if (selectedOption === 'routines') {
+            router.push(`/routines/${item.routineId}`); // Redirect to /routines/[item.routineId]
+        }
     };
 
     const handleFilterChange = (event) => {
@@ -131,9 +162,23 @@ useEffect(() => {
                         />
                     </>
                 )}
+                {selectedOption === 'routines' && (
+                    <>
+                        <RoutineFilter
+                            filter={filter}
+                            searchQuery={searchQuery}
+                            handleFilterChange={handleFilterChange}
+                            handleSearchChange={handleSearchChange}
+                        />
+                        <RoutineList
+                            routines={filteredRoutines}
+                            handlePanelClick={handlePanelClick}
+                        />
+                    </>
+                )}
                  {/*if selected button option is routines, handle here*/}
                 {selectedOption === 'routines' && (
-                    <p className="text-center text-red-500">This feature is currently unavailable.</p>
+                    <p className="text-center text-red-500">Routines</p>
                 )}
                  {/*if selected button option is routines, handle here*/}
                 {selectedOption === 'exercises' && (
