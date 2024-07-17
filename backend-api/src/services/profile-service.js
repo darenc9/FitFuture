@@ -57,7 +57,8 @@ module.exports.getProfileByUserId = async function (id) {
         if (profile) {
           resolve(profile);
         } else {
-          reject("No profile record found with the userId: " + id);
+          // reject("No profile record found with the userId: " + id);
+          resolve(null);
         }
       }).catch((err) => {
         reject("Error retrieving profile record: " + err);
