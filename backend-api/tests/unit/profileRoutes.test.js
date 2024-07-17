@@ -87,6 +87,24 @@ describe('Test Profile Routes', () => {
       })
   });
 
+  test('PUT /profile/favourites/:profileId returns updated profile', async () => {
+    const updatedFavs = {
+      exercises: [],
+      workouts: ['1234'],
+      routines: []
+    };
+    await request(app).put(`/profile/favourites/${id}`)
+      .auth('user1@email.com', 'password1')  
+      .send(updatedFavs)
+      .set('Accept', 'application/json')
+      .expect(200)
+      .then(res => {
+        expect(res.body).toHaveProperty('_id');
+        expect(res.body._id).toBe(id);
+        expect(res.body.favourites).toEqual(updatedFavs);
+      })
+  });
+
   test('GET /profiles returns list with at least one profile', async () => {
     await request(app).get(`/profiles`)
       .auth('user1@email.com', 'password1')
