@@ -163,6 +163,7 @@ useEffect(() => {
                         />
                     </>
                 )}
+                {/*if selected button option is routines, handle here*/}
                 {selectedOption === 'routines' && (
                     <>
                         <RoutineFilter
@@ -176,10 +177,6 @@ useEffect(() => {
                             handlePanelClick={handlePanelClick}
                         />
                     </>
-                )}
-                 {/*if selected button option is routines, handle here*/}
-                {selectedOption === 'routines' && (
-                    <p className="text-center text-red-500">Routines</p>
                 )}
                  {/*if selected button option is routines, handle here*/}
                 {selectedOption === 'exercises' && (
