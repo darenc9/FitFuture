@@ -83,17 +83,21 @@ const RoutineDetails = () => {
     useEffect(() => {
         const updateRoutineHistory = async () => {
             try {
-                const authToken = await GetToken();
-                const res = await fetch(`${API_URL}/routine/start/${routineHistoryId}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Authorization': `Bearer ${authToken}`,
-                        'Content-Type': 'application/json'
-                    },
-                    body: JSON.stringify(completedWorkouts)
-                });
-                if (!res.ok) {
-                    throw new Error(`Failed to update routine history for id: ${routineHistoryId}`);
+                //ensure not being called before history id is ready
+                if (routineHistoryId){
+                    const authToken = await GetToken();
+                    const res = await fetch(`${API_URL}/routine/start/${routineHistoryId}`, {
+                        method: 'PUT',
+                        headers: {
+                            'Authorization': `Bearer ${authToken}`,
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify(completedWorkouts)
+                    });
+                    if (!res.ok) {
+                        throw new Error(`Failed to update routine history for id: ${routineHistoryId}`);
+                    }
+
                 }
             } catch (error) {
                 console.error(error);
@@ -128,6 +132,8 @@ const RoutineDetails = () => {
         setCurrentWorkoutIndex(newIndex);
     
         //TODO: reroute to start workout page and pass id
+        console.log(currentWorkout);
+        router.push(`/workouts/start?id=${currentWorkout.workoutId.toString()}`);
     };
     
 
