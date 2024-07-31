@@ -194,6 +194,22 @@ const StartWorkoutPage = () => {
     setRestTime(120); // Reset rest time for the next rest period
   };
 
+  const skipCurrentExercise = () => {
+    if (currentSetIndex === 0) {
+      if (currentExerciseIndex + 1 < exercises.length) {
+        setCurrentExerciseIndex(currentExerciseIndex + 1);
+        setSets(Array(exercises[currentExerciseIndex + 1].sets).fill({ weight: '', reps: '', completed: false }));
+        setCurrentSetIndex(0);
+        setShowNotes(false);
+        setNotes('');
+      } else {
+        setWorkoutComplete(true);
+        setIsRunning(false);
+        handleFinishWorkout(completedExercises);
+      }
+    }
+  };
+
   const toggleNotes = () => {
     setShowNotes(!showNotes);
   };
@@ -232,10 +248,48 @@ const StartWorkoutPage = () => {
   };
 
   const removeLastSet = () => {
-    if (sets.length > 0) {
-      setSets(sets.slice(0, -1));
-      if (currentSetIndex > sets.length - 1) {
-        setCurrentSetIndex(sets.length - 1);
+    const incompleteSets = sets.filter(set => !set.completed);
+  
+    if (incompleteSets.length > 0) {
+      const lastIncompleteSetIndex = sets.lastIndexOf(incompleteSets[incompleteSets.length - 1]);
+      const updatedSets = sets.slice(0, lastIncompleteSetIndex);
+      setSets(updatedSets);
+  
+      if (updatedSets.length === 0 || incompleteSets.length === 1) {
+        const currentExercise = exercises[currentExerciseIndex];
+        const completedExercise = {
+          ...currentExercise,
+          sets: sets.filter(set => set.completed), // Filter to include only completed sets
+          notes,
+        };
+  
+        const allCompletedExercises = [...completedExercises];
+        const existingExerciseIndex = allCompletedExercises.findIndex(ex => ex.exerciseId === currentExercise.exerciseId);
+  
+        if (existingExerciseIndex >= 0) {
+          allCompletedExercises[existingExerciseIndex] = completedExercise;
+        } else {
+          allCompletedExercises.push(completedExercise);
+        }
+        setCompletedExercises(allCompletedExercises);
+  
+        if (currentExerciseIndex + 1 < exercises.length) {
+          console.log("in if of remove set");
+          setCurrentExerciseIndex(currentExerciseIndex + 1);
+          setSets(Array(exercises[currentExerciseIndex + 1].sets).fill({ weight: '', reps: '', completed: false }));
+          setCurrentSetIndex(0);
+          setShowNotes(false);
+          setNotes('');
+        } else {
+          console.log("handling finish workout");
+          setWorkoutComplete(true);
+          setIsRunning(false);
+          handleFinishWorkout(allCompletedExercises);
+        }
+      } else {
+        if (currentSetIndex > updatedSets.length - 1) {
+          setCurrentSetIndex(updatedSets.length - 1);
+        }
       }
     }
   };
@@ -273,8 +327,8 @@ const StartWorkoutPage = () => {
           </div>
           {currentExercise && (
             <div className="bg-white shadow-md rounded-lg p-4 w-full max-w-2xl">
-              <h2 className="text-2xl font-semibold mb-4">{currentExercise.name}</h2>
-              <p className="text-gray-600 mb-4">{currentExercise.sets} sets</p>
+              <h2 className="text-2xl font-semibold mb-4 text-center">{currentExercise.name}</h2>
+              {/* <p className="text-gray-600 mb-4">{currentExercise.sets} sets</p> */}
               {sets.map((set, index) => (
                 <div key={index} className="mb-4 flex items-center">
                   <div className="flex-1">
@@ -303,7 +357,14 @@ const StartWorkoutPage = () => {
                   className="px-4 py-2 bg-red-500 text-white rounded-lg"
                   disabled={sets.length === 0}
                 >
-                  Remove Last Set
+                  Remove Set
+                </button>
+                <button
+                  onClick={skipCurrentExercise}
+                  className="px-4 py-2 bg-gray-500 text-white rounded-lg"
+                  disabled={currentSetIndex > 0}
+                >
+                  Skip Exercise
                 </button>
               </div>
               {isResting && (
