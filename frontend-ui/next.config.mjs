@@ -7,6 +7,7 @@ const nextConfig = {
       AWS_COGNITO_CLIENT_ID:process.env.AWS_COGNITO_CLIENT_ID,
       OAUTH_SIGN_IN_REDIRECT_URL: process.env.OAUTH_SIGN_IN_REDIRECT_URL,
       OAUTH_SIGN_OUT_REDIRECT_URL: process.env.OAUTH_SIGN_OUT_REDIRECT_URL,
+      HUMANLOOP_API_KEY: process.env.HUMANLOOP_API_KEY,
     },
   };
   

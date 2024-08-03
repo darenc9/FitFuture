@@ -9,7 +9,6 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "@headlessui/react": "^2.0.4",
     "@aws-amplify/adapter-nextjs": "^1.2.4",
     "@aws-amplify/ui-react": "^6.1.12",
     "@headlessui/react": "^2.0.4",
@@ -17,6 +16,7 @@
     "aws-amplify": "^6.3.6",
     "dotenv": "^16.4.5",
     "framer-motion": "^11.1.9",
+    "humanloop": "^0.6.0-alpha.31",
     "jotai": "^2.8.3",
     "next": "14.2.3",
     "react": "^18",
