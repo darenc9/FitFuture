@@ -105,3 +105,33 @@ module.exports.getRecentHistoryByUserAndExercise = async function (userId, exerc
       });
   });
 };
+
+// get the top 3 most occurring exercises for a given userId
+module.exports.getMostCommonExercises = async function (userId) {
+  await ensureConnection();
+  return new Promise((resolve, reject) => {
+    HistoryModel.aggregate([
+      {$match: {userId: userId}},
+      {$sortByCount: "$exerciseId"}
+    ])
+    .limit(3)
+    .then(async (aggRes) => {
+      console.debug(`Result from aggregate pipeline:`, aggRes);
+      var relevantHistories = [];
+      for (const ex of aggRes) {
+        console.debug(`exercise id is: ${ex._id}`);
+        var histories = await HistoryModel.aggregate([
+          {$match: {userId: userId, exerciseId: ex._id}},
+          {$project: { exerciseName: 1, date: 1, avgWeight: {$avg: ["$info.weight"]}}}
+        ]);
+        relevantHistories.push(...histories);
+      }
+      console.debug('Relevant histories are:', relevantHistories);
+      resolve(relevantHistories);
+    })
+    .catch((err) => {
+      console.error('Error retrieving top exercises from history records', err);
+      reject('Error retrieving top exercises from history records: ', err);
+    });
+  });
+};
