@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { GetToken } from '@/components/AWS/GetToken';
-import WorkoutList from '@/components/routine/WorkoutList'; 
+import WorkoutList from '@/components/routine/workoutList'; 
 
 const RoutineDetails = () => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
