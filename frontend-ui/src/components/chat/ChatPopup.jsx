@@ -32,7 +32,7 @@ function ChatPopup() {
   };
 
   return (
-    <div className="fixed left-5 right-5 bottom-5 top-20 p-4 bg-white border border-gray-300 rounded shadow-lg flex flex-col max-w-[95vw] max-h-[90vh]">
+    <div className="fixed left-5 right-5 bottom-5 top-20 p-4 bg-white border border-gray-300 rounded shadow-lg flex flex-col max-w-[95vw] max-h-[90vh] z-50">
       <div className="chat-header text-xl font-bold mb-2">FitBot Chat</div>
       <div className="chat-content overflow-y-auto flex-grow mb-2">
       {messages.map((msg, index) => (
@@ -54,7 +54,7 @@ function ChatPopup() {
           type="text"
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Type your message here..."
+          placeholder="Message FitBot"
           onKeyDown={(e) => {
             if (e.key === "Enter") onSend();
           }}
