@@ -124,9 +124,9 @@ module.exports.getMostCommonExercises = async function (userId) {
           {$match: {userId: userId, exerciseId: ex._id}},
           {$project: { exerciseName: 1, date: 1, avgWeight: {$avg: ["$info.weight"]}}}
         ]);
-        relevantHistories.push(...histories);
+        relevantHistories.push(histories);
       }
-      console.debug('Relevant histories are:', relevantHistories);
+      console.debug('Progress histories are:', relevantHistories);
       resolve(relevantHistories);
     })
     .catch((err) => {

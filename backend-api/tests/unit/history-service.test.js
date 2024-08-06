@@ -243,11 +243,14 @@ describe('Test History service functions', () => {
       // get top exercises to check
       const topExercises = await getMostCommonExercises('progTester');
       expect(Array.isArray(topExercises)).toBe(true);
-      expect(topExercises).toHaveLength(6);
-      expect(topExercises[0]).toHaveProperty('exerciseName');
-      expect(topExercises[0]).toHaveProperty('date');
-      expect(topExercises[0]).toHaveProperty('avgWeight');
-      expect(topExercises[0].exerciseName).toBe('exercise 2');
+      expect(topExercises).toHaveLength(3);
+      expect(Array.isArray(topExercises[0])).toBe(true);
+      expect(Array.isArray(topExercises[1])).toBe(true);
+      expect(Array.isArray(topExercises[2])).toBe(true);
+      expect(topExercises[0][0]).toHaveProperty('exerciseName');
+      expect(topExercises[0][0]).toHaveProperty('date');
+      expect(topExercises[0][0]).toHaveProperty('avgWeight');
+      expect(topExercises[0][0].exerciseName).toBe('exercise 2');
     });
   });
 
