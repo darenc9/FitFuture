@@ -220,6 +220,11 @@ module.exports.createHistory = async (req, res) => {
     for (var i = 0; i < exercises.length; i++){
       if (data.exercises[i].sets.length != 0){ // if not empty
         console.log("set not empty");
+        // convert the set's weight and reps values from string to number
+        for (const set of data.exercises[i].sets) {
+          set.weight = parseFloat(set.weight);
+          set.reps = parseInt(set.reps);
+        }
         // Create the History object
         const historyData = {
           historyId: new mongoose.Types.ObjectId(), // Generate a new ObjectId for historyId
