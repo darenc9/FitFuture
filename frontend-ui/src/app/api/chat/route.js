@@ -11,10 +11,13 @@ const humanloop = new Humanloop({
 
 export async function POST(req) {
   const messages = await req.json();
+  
   const response = await humanloop.chatDeployed({
     project: 'Fitness',
     messages,
   });
 
-  return new Response(JSON.stringify(response.data.data[0].output));
+  return new Response(JSON.stringify(response.data.data[0].output), {
+    headers: { 'Content-Type': 'application/json' },
+  });
 }

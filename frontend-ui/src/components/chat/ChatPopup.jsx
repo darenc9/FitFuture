@@ -9,15 +9,17 @@ function ChatPopup() {
     const [input, setInput] = useState("");
     
     const onSend = async () => {
+        const newMessage = { role: "user", content: input };
         const newMessages = [...messages, { role: "user", content: input }];
         setMessages(newMessages);
         setInput("");
         
         try {
+          console.log("newMessages: ", newMessages);
             const response = await fetch("/api/chat", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(newMessages),
+                body: JSON.stringify([newMessage]),
             });
 
         if (!response.ok) {
