@@ -42,6 +42,7 @@ function Home() {
           // no profile, redirect to profile creation page
           router.push('/profile');
         } else {
+          profileData.weight.sort((a, b) => a.timeStamp - b.timeStamp);
           setProfile(profileData);
           setLoading(false);
         }
