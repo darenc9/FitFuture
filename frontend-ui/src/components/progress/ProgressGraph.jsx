@@ -20,7 +20,12 @@ export default function ProgressGraph( {data} ) {
           <Label value={"Average Weight"} angle={-90}/>
         </YAxis>
         <Legend height={60} layout="vertical" verticalAlign="top"/>
-        <Tooltip labelFormatter={value => {return `${new Date(value).toDateString().slice(4)}`}}/>
+        <Tooltip labelFormatter={(lbl, lines) => {
+          for (const ln of lines) {
+            ln.value = Math.round(ln.value);  // round averages for better display
+          }
+          return `${new Date(lbl).toDateString().slice(4)}` // show timestamp as human readable date
+        }}/>
         {data.map((lineData, i) => (
           <Line
             name={lineData[0].exerciseName}
