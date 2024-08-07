@@ -215,25 +215,38 @@ module.exports.createHistory = async (req, res) => {
   const data = req.body;
   const exercises = data.exercises;
   console.log(data);
-  console.log(data.exercises[0].sets);
 
-  for (var i = 0; i < exercises.length; i++){
-    // Create the History object
-    const historyData = {
-      historyId: new mongoose.Types.ObjectId(), // Generate a new ObjectId for historyId
-      userId: data.userId.username, // Set to userId if provided
-      exerciseName: exercises[i].name,
-      exerciseId: exercises[i].exerciseId,
-      date: new Date(),
-      info: exercises[i].sets,
-      notes: exercises[i].notes
-    };
-    console.log(historyData);
-    await historyService.createHistory(historyData);
-
-    //const result = await historyService.getRecentHistoryByUserAndExercise(data.userId.username, exercises[0].exerciseId);
-    //console.log(result);
+  if (data.exercises.length != 0) {
+    for (var i = 0; i < exercises.length; i++){
+      if (data.exercises[i].sets.length != 0){ // if not empty
+        console.log("set not empty");
+        // Create the History object
+        const historyData = {
+          historyId: new mongoose.Types.ObjectId(), // Generate a new ObjectId for historyId
+          userId: data.userId.username, // Set to userId if provided
+          exerciseName: exercises[i].name,
+          exerciseId: exercises[i].exerciseId,
+          date: new Date(),
+          info: exercises[i].sets,
+          notes: exercises[i].notes
+        };
+        console.log(historyData);
+        historyService.createHistory(historyData)
+        .then((data) => {
+          res.status(200).json(data);
+        }).catch((err) => {
+          res.status(500).json({error: err});
+        });    
+      } else {
+        console.log("empty set");
+        res.status(200);
+      }
+    }
+  } else {
+    console.log("exercises empty");
+    res.status(200);
   }
+  
 };
 
 module.exports.getRecentHistory = async (req, res) => {
