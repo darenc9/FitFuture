@@ -17,7 +17,7 @@ export default function ProgressGraph( {data} ) {
           <Label value={"Date Completed"} offset={0} position="bottom" />
         </XAxis>
         <YAxis dataKey="avgWeight">
-          <Label value={"Average Weight"} angle={-90} position="left"/>
+          <Label value={"Average Weight"} angle={-90}/>
         </YAxis>
         <Legend height={60} layout="vertical" verticalAlign="top"/>
         {data.map((lineData, i) => (
@@ -27,6 +27,7 @@ export default function ProgressGraph( {data} ) {
             dataKey="avgWeight"
             stroke={lineColours[i]}
             type="monotone"
+            key={i}
           />
         ))}
       </LineChart>
