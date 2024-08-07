@@ -22,7 +22,7 @@ export default function ProfileDetails( {profile} ) {
       <div className="flex flex-col space-y-2 mt-5">
         <p><span className="font-semibold">Age: </span>{calculateAge(profile.dob)}</p>
         <p><span className="font-semibold">Height: </span>{profile.height} cm</p>
-        <p><span className="font-semibold">Weight: </span>{profile.weight} kgs</p>
+        <p><span className="font-semibold">Weight: </span>{profile.weight[profile.weight.length - 1].weight} kgs</p>
         <p><span className="font-semibold">Sex: </span>{profile.sex}</p>
         <p><span className="font-semibold">Fitness Level: </span>{profile.fitnessLevel}</p>
       </div>

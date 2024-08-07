@@ -36,7 +36,7 @@ const AddEdit = (props) => {
       userId: profile.userId,
       dob: new Date(profile.dob).toISOString().split('T')[0],
       height: profile.height,
-      weight: profile.weight,
+      weight: profile.weight[profile.weight.length -1].weight,
       sex: profile.sex,
       fitnessLevel: profile.fitnessLevel,
       favourites: profile.favourites,
@@ -49,6 +49,8 @@ const AddEdit = (props) => {
   const handleMakeNewProfile = async (data) => {
     if (user && user.username) {
       data.userId = user.username;
+      const weightEntry = {timeStamp: new Date().getTime(), weight: data.weight};
+      data.weight = [weightEntry];
       try {
         const authToken = await GetToken();
         const res = await fetch(`${API_URL}/profile/create`, {
@@ -72,6 +74,9 @@ const AddEdit = (props) => {
   };
 
   const handleEditProfile = async (data) => {
+    const weightEntry = {timeStamp: new Date().getTime(), weight: data.weight};
+    data.weight = profile.weight;
+    data.weight.push(weightEntry);
     try {
       const authToken = await GetToken();
       const res = await fetch(`${API_URL}/profile/${data._id}`, {
