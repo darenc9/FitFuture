@@ -14,6 +14,16 @@ router.get('/histories/:userId', (req, res) => {
     });
 });
 
+// get all history for a specific user by userId for progress
+router.get('/history/:userId/progress', (req, res) => {
+  historyService.getMostCommonExercises(req.params.userId)
+    .then((data) => {
+      res.status(200).json(data);
+    }).catch((err) => {
+      res.status(404).json({error: err});
+    });
+});
+
 // get a specific history entry by id
 router.get('/history/:historyId', (req, res) => {
   historyService.getHistoryById(req.params.historyId)

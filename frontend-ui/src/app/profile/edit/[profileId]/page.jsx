@@ -30,6 +30,7 @@ const EditProfilePage = ( { params } ) => {
   useEffect(() => {
     const fetchData = async () => {
       const profileData = await fetchProfileData(params.profileId);
+      profileData.weight.sort((a, b) => a.timeStamp - b.timeStamp);
       setProfile(profileData);
       setLoading(false);
     };

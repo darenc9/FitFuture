@@ -65,6 +65,7 @@ const ProfilePage = () => {
           // no profile for user, redirect to create profile page
           router.push('/profile/create');
         } else {
+          profileData.weight.sort((a, b) => a.timeStamp - b.timeStamp);
           setProfile(profileData);
           setLoading(false);
         }

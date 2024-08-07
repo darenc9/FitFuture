@@ -8,7 +8,8 @@ const profileSchema = new mongoose.Schema({
   },
   dob: Date,
   height: Number,   // in centimeters
-  weight: Number,   // in kgs
+  // weight: Number,   // in kgs
+  weight: [],   // in kgs
   sex: String,
   fitnessLevel: String,
   favourites: {

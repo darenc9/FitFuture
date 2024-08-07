@@ -34,7 +34,7 @@ describe('Test Profile service functions', () => {
     userId: 'testUser',
     dob: new Date(),
     height: 178,
-    weight: 180,
+    weight: [180],
     sex: 'Male',
     fitnessLevel: 'Intermediate',
     favourites: {
@@ -120,7 +120,7 @@ describe('Test Profile service functions', () => {
   test('updating a profile should contain correct data', async () => {
     const updatedData = {
       height: 175,
-      weight: 170,
+      weight: [180, 170],
     };
 
     const testProfile = await updateProfileById(id, updatedData);
@@ -146,7 +146,7 @@ describe('Test Profile service functions', () => {
     expect(testProfile.userId).toEqual(testProfileData.userId);
     expect(testProfile.dob).toEqual(testProfileData.dob);
     expect(testProfile.height).toEqual(175);
-    expect(testProfile.weight).toEqual(170);
+    expect(testProfile.weight).toEqual([180, 170]);
     expect(testProfile.sex).toEqual(testProfileData.sex);
     expect(testProfile.fitnessLevel).toEqual(testProfileData.fitnessLevel);
     expect(Array.isArray(testProfile.favourites.exercises)).toBe(true);
