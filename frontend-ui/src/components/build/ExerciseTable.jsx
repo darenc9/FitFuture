@@ -9,7 +9,6 @@ const ExerciseTable = ({ exercises, from, workoutId }) => {
   const router = useRouter();
   const [workout] = useAtom(workoutAtom);
   const [editWorkout] = useAtom(editWorkoutAtom);
-  const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
   console.log(from);
   const handleAddExercise = (exercise) => {
@@ -34,6 +33,10 @@ const ExerciseTable = ({ exercises, from, workoutId }) => {
     }
 
   };
+
+  const handleExerciseClick = (exerciseId) => {
+    router.push(`/exercises/${encodeURIComponent(exerciseId)}`);
+  };
   
 
   return (
@@ -53,7 +56,10 @@ const ExerciseTable = ({ exercises, from, workoutId }) => {
         {exercises.map((exercise) => (
           <tr key={exercise.id} className="border-t">
             <td className="w-1/5 text-left py-3 px-4">
-              <a href={`${API_URL}/exercises/${encodeURIComponent(exercise.id)}`} className="text-blue-500 hover:text-blue-700">
+            <a
+                onClick={() => handleExerciseClick(exercise.id)}
+                className="text-blue-500 hover:text-blue-700 cursor-pointer"
+              >
                 {exercise.name}
               </a>
             </td>
