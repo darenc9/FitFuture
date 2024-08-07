@@ -30,7 +30,7 @@ describe('Test Profile Routes', () => {
     userId: 'testUser',
     dob: new Date(),
     height: 178,
-    weight: 180,
+    weight: [180],
     sex: 'Male',
     fitnessLevel: 'Intermediate',
     favourites: {
@@ -72,7 +72,7 @@ describe('Test Profile Routes', () => {
   test('PUT /profile/:profileId returns updated profile', async () => {
     const newData = {
       height: 179,
-      weight: 185,
+      weight: [180, 185],
     }
     await request(app).put(`/profile/${id}`)
       .auth('user1@email.com', 'password1')  
