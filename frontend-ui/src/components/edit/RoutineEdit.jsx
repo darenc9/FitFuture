@@ -25,7 +25,7 @@ const RoutineEdit = ({ routine }) => {
       if (user && user.username) {
         try {
           const authToken = await GetToken();
-          const res = await fetch(`${API_URL}/workouts`, {
+          const res = await fetch(`${API_URL}/workouts?user=${user.username}`, {
             headers: { 'Authorization': `Bearer ${authToken}` }
           });
           const data = await res.json();
