@@ -5,6 +5,7 @@ import { GetToken } from '@/components/AWS/GetToken';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import WorkoutExercise from '../../components/workouts/WorkoutExercise';
 import WorkoutFilter from '@/components/browse/WorkoutFilter';
+import { useRouter } from 'next/navigation';
 
 const RoutineEdit = ({ routine }) => {
   const { user } = useAuthenticator((context) => [context.user]);
@@ -19,6 +20,7 @@ const RoutineEdit = ({ routine }) => {
   const [workoutExercises, setWorkoutExercises] = useState([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [filter, setFilter] = useState('all'); // Add filter state
+  const router = useRouter();
 
   useEffect(() => {
     const fetchWorkouts = async () => {
@@ -82,6 +84,7 @@ const RoutineEdit = ({ routine }) => {
 
       // Handle success, e.g., show a message, redirect, etc.
       console.log('Routine updated successfully');
+      router.push('/browse');
     } catch (error) {
       console.error('Failed to update routine:', error);
     }
