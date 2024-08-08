@@ -4,26 +4,28 @@ import { profileAtom } from "../../../store";
 import { GetToken } from "../AWS/GetToken";
 import { useRouter } from "next/navigation";
 import FavRoutineCard from "./FavRoutineCard";
+import { useState } from "react";
 
 // component to display list of user's favourites
 export default function FavouritesList( {favWorkouts, favRoutines, showWorkouts, showRoutines} ) {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [profile, setProfile] = useAtom(profileAtom);
   const router = useRouter();
+  const [changed, setChanged] = useState(false);
 
-  const handleFavWorkoutClicked = async (workout) => {
+  const handleFavWorkoutClicked = async (workout, e) => {
+    e.stopPropagation();
     var favs = profile?.favourites;
 
     // either add or remove from the profile atom first
     if (profile?.favourites.workouts.findIndex((wo) => wo._id == workout._id) !== -1) {
       // remove the workout from favs
-      console.debug('remove workout from favs');
       favs.workouts = favs.workouts.filter(wo => wo._id !== workout._id);
     } else {
       // add workout to favs
-      console.debug('add workout to favs');
       favs.workouts.push(workout);
     }
+    setChanged(!changed);
 
     // then save it to the database
     try {
@@ -47,7 +49,8 @@ export default function FavouritesList( {favWorkouts, favRoutines, showWorkouts,
     }
   };
 
-  const handleFavRoutineClicked = async (routine) => {
+  const handleFavRoutineClicked = async (routine, e) => {
+    e.stopPropagation();
     var favs = profile?.favourites;
 
     // either add or remove from the profile atom first
@@ -60,6 +63,7 @@ export default function FavouritesList( {favWorkouts, favRoutines, showWorkouts,
       console.debug('add routine to favs');
       favs.routines.push(routine);
     }
+    setChanged(!changed);
 
     // then save it to the database
     try {
