@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { StarIcon as StarIconOutline } from '@heroicons/react/24/outline';
@@ -11,21 +11,21 @@ const WorkoutList = ({ workouts, handlePanelClick }) => {
   const router = useRouter(); // Initialize useRouter
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [profile, setProfile] = useAtom(profileAtom);
+  const [changed, setChanged] = useState(false);
 
-  const handleFavClick = async (workout) => {
+  const handleFavClick = async (workout, e) => {
+    e.stopPropagation();
     var favs = profile?.favourites;
 
     // either add or remove from the profile atom first
     if (profile?.favourites.workouts.findIndex((wo) => wo._id == workout._id) !== -1) {
       // remove the workout from favs
-      console.debug('remove workout from favs');
       favs.workouts = favs.workouts.filter(wo => wo._id !== workout._id);
     } else {
       // add workout to favs
-      console.debug('add workout to favs');
-      // favs.workouts.push(workout._id);
       favs.workouts.push(workout);
     }
+    setChanged(!changed);
 
     // then save it to the database
     try {
@@ -74,7 +74,7 @@ const WorkoutList = ({ workouts, handlePanelClick }) => {
                     { profile ? 
                     (<button type='button' 
                     className='ml-auto rounded text-yellow-500'
-                    onClick={() => handleFavClick(workout)}
+                    onClick={(e) => handleFavClick(workout, e)}
                     >
                       {profile?.favourites.workouts.findIndex((wo) => wo._id == workout._id) !== -1 ? <StarIconSolid className='size-6'/> : <StarIconOutline className='size-6'/>}
                     </button>)

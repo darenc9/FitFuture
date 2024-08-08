@@ -2,27 +2,28 @@
 import { StarIcon as StarIconSolid } from '@heroicons/react/24/solid';
 import { StarIcon as StarIconOutline } from '@heroicons/react/24/outline';
 import { useAtom } from 'jotai';
-import React from 'react';
+import React, { useState } from 'react';
 import { profileAtom } from '../../../store';
 import { GetToken } from '../AWS/GetToken';
 
 const RoutineList = ({ routines, handlePanelClick }) => {
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [profile, setProfile] = useAtom(profileAtom);
+  const [changed, setChanged] = useState(false);
 
-  const handleFavClick = async (routine) => {
+  const handleFavClick = async (routine, e) => {
+    e.stopPropagation();
     var favs = profile?.favourites;
 
     // either add or remove from the profile atom first
     if (profile?.favourites.routines.findIndex((rt) => rt._id == routine._id) !== -1) {
       // remove the routine from favs
-      console.debug('remove routine from favs');
       favs.routines = favs.routines.filter(rt => rt._id !== routine._id);
     } else {
       // add routine to favs
-      console.debug('add routine to favs');
       favs.routines.push(routine);
     }
+    setChanged(!changed);
 
     // then save it to the database
     try {
@@ -68,7 +69,7 @@ const RoutineList = ({ routines, handlePanelClick }) => {
           { profile ?
           (<button type='button'
           className='ml-auto rounded text-yellow-500'
-          onClick={() => handleFavClick(routine)}
+          onClick={(e) => handleFavClick(routine, e)}
           >
             {profile?.favourites.routines.findIndex((rt) => rt._id == routine._id) !== -1 ? <StarIconSolid className='size-6' /> : <StarIconOutline className='size-6' />}
           </button>)

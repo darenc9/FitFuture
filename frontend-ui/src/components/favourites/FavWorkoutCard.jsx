@@ -18,7 +18,7 @@ export default function FavWorkoutCard( {workout, handleFavWorkoutClicked, handl
       <div className="ml-auto">
         <button type='button'
         className='text-yellow-500 rounded'
-        onClick={() => handleFavWorkoutClicked(workout)}
+        onClick={(e) => handleFavWorkoutClicked(workout, e)}
         >
           {profile?.favourites.workouts.findIndex((wo) => wo._id == workout._id) !== -1 ? <StarIconSolid className='size-6'/> : <StarIconOutline className='size-6'/>}
         </button>
