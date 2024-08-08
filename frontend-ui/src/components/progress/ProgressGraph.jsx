@@ -1,4 +1,4 @@
-import { Label, Legend, Line, LineChart, ResponsiveContainer, XAxis, YAxis } from "recharts";
+import { Label, Legend, Line, LineChart, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
 
 // component to display Progress graph
 export default function ProgressGraph( {data} ) {
@@ -12,7 +12,7 @@ export default function ProgressGraph( {data} ) {
         dataKey="date"
         domain={['auto', 'auto']}
         tickFormatter={(unixTime) => {
-          return new Date(unixTime).toISOString().split('T')[0];
+          return new Date(unixTime).toDateString().slice(4);
         }}>
           <Label value={"Date Completed"} offset={0} position="bottom" />
         </XAxis>
@@ -20,6 +20,12 @@ export default function ProgressGraph( {data} ) {
           <Label value={"Average Weight"} angle={-90}/>
         </YAxis>
         <Legend height={60} layout="vertical" verticalAlign="top"/>
+        <Tooltip labelFormatter={(lbl, lines) => {
+          for (const ln of lines) {
+            ln.value = Math.round(ln.value);  // round averages for better display
+          }
+          return `${new Date(lbl).toDateString().slice(4)}` // show timestamp as human readable date
+        }}/>
         {data.map((lineData, i) => (
           <Line
             name={lineData[0].exerciseName}

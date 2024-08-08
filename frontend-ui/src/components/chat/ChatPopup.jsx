@@ -1,3 +1,4 @@
+// src/components/chat/ChatPopup.jsx
 "use client";
 
 import { useState } from "react";
@@ -46,7 +47,7 @@ function ChatPopup() {
         >
             <strong>
             {msg.role === "user" ? user.username : msg.role}
-            </strong>: {msg.content}
+            </strong>: <div style={{ whiteSpace: 'pre-wrap' }}>{msg.content}</div>
         </div>
         ))}
       </div>
