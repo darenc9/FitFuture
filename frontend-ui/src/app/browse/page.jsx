@@ -9,6 +9,8 @@ import RoutineFilter from '@/components/browse/RoutineFilter'
 import { GetToken } from '@/components/AWS/GetToken';
 import { withAuthenticator } from "@aws-amplify/ui-react";
 import { useAuthenticator } from '@aws-amplify/ui-react';
+import { useAtom } from 'jotai';
+import { profileAtom } from '../../../store';
 //import {profileIdAtom} from '../../../store'
 //const { useAtom } = require("jotai");
 
@@ -24,9 +26,42 @@ const BrowsePage = () => {
     const [searchQuery, setSearchQuery] = useState(''); // Default search query
     const tab = router.query;
     //const [profileId] = useAtom(profileIdAtom);
+    const [profile, setProfile] = useAtom(profileAtom);
     const { user } = useAuthenticator((context) => [context.user]);
 
-useEffect(() => {
+    const fetchProfileData = async (id) => {
+      try {
+        const authToken = await GetToken();
+        console.log(`API_URL is: ${API_URL}`);
+        const res = await fetch(`${API_URL}/profile/user/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
+        if (!res.ok) {
+          throw new Error('Failed to fetch profile data');
+        }
+        const data = await res.json();
+        return data;
+      } catch (error) {
+        console.error('Error fetching profile data: ', error);
+        return null;
+      }
+    };
+
+    useEffect(() => {
+      if (user && user.username) {
+        const fetchData = async () => {
+          const profileData = await fetchProfileData(user.username);
+          if (!profileData) {
+            // no profile, redirect to profile creation page
+            router.push('/profile');
+          } else {
+            profileData.weight.sort((a, b) => a.timeStamp - b.timeStamp);
+            setProfile(profileData);
+          }
+        };
+        fetchData();
+      }
+    }, [user]);
+
+    useEffect(() => {
         const fetchData = async () => {
             if (user && user.username) {
                 console.log('User object:', user);
