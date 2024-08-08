@@ -1,26 +1,16 @@
-// src/app/exercises/page.jsx
-"use client";
+'use client';
 
 import React, { useState, useEffect } from "react";
-import { useRouter } from "next/router";
 import ExerciseTable from "@/components/exercises/ExerciseTable";
 import SearchFilters from "@/components/exercises/SearchFilters";
 import Pagination from "@/components/exercises/Pagination";
-import { useAtom } from "jotai";
+import { useSearchParams } from "next/navigation";
 import { withAuthenticator } from "@aws-amplify/ui-react";
-import {
-  currentPageAtom,
-  filtersAtom,
-  exercisesAtom,
-  totalExercisesAtom,
-  loadingAtom,
-  fetchExercisesAtom,
-  //selectedExercisesAtom,
-} from "@/atoms/exercisesPageAtoms";
+import { GetToken } from "@/components/AWS/GetToken";
 
 const PAGE_SIZE = 10;
+const API_URL = process.env.NEXT_PUBLIC_API_URL;
 
-// Generates fetch API url and fetches for exercise data
 const fetchExercises = async ({ page, name, muscle, category, force, level, mechanic, equipment }) => {
   const params = new URLSearchParams({
     page,
@@ -33,8 +23,8 @@ const fetchExercises = async ({ page, name, muscle, category, force, level, mech
     mechanic,
     equipment,
   });
-
-  const response = await fetch(`${process.env.API_URL}/exercises?${params.toString()}`);
+  const authToken = await GetToken();
+  const response = await fetch(`${API_URL}/exercises?${params.toString()}`, {headers: {'Authorization': `Bearer ${authToken}`}});
   if (response.ok) {
     const result = await response.json();
     return result;
@@ -44,17 +34,27 @@ const fetchExercises = async ({ page, name, muscle, category, force, level, mech
   }
 };
 
-function ExercisesPage() {
-  const [currentPage, setCurrentPage] = useAtom(currentPageAtom);
-  const [pageInput, setPageInput] = useAtom(currentPageAtom);
-  const [filters, setFilters] = useAtom(filtersAtom);
-  const [exercises, setExercises] = useAtom(exercisesAtom);
-  const [totalExercises, setTotalExercises] = useAtom(totalExercisesAtom);
-  const [loading, setLoading] = useAtom(loadingAtom);
-  const [fetchExercises] = useAtom(fetchExercisesAtom);
-  //const [selectedExercises, setSelectedExercises] = useAtom(selectedExercisesAtom);
+const ExercisesPage = () => {
+  const [exercises, setExercises] = useState([]);
+  const [totalExercises, setTotalExercises] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [loading, setLoading] = useState(true);
+  const [pageInput, setPageInput] = useState(1);
 
-  // Handles search filter changes
+  const searchParams = useSearchParams();
+  const from = searchParams.get('from'); 
+  const workoutId = searchParams.get('workoutId'); 
+
+  const [filters, setFilters] = useState({
+    name: "",
+    muscle: "",
+    category: "",
+    force: "",
+    level: "",
+    mechanic: "",
+    equipment: "",
+  });
+
   const handleFilterChange = (e) => {
     const { name, value } = e.target;
     setFilters((prevFilters) => ({
@@ -63,19 +63,18 @@ function ExercisesPage() {
     }));
   };
 
-  // When component state changes, attempt to re-fetch exercises
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
-      const { data, total } = await fetchExercises;
+      const { data, total } = await fetchExercises({ page: currentPage, ...filters });
       setExercises(data);
       setTotalExercises(total);
       setLoading(false);
     };
+
     fetchData();
   }, [currentPage, filters]);
 
-  // Handles pagination
   const totalPages = Math.ceil(totalExercises / PAGE_SIZE);
 
   const handlePageChange = (e) => {
@@ -103,13 +102,13 @@ function ExercisesPage() {
   }, [currentPage]);
 
   return (
-    <section className="p-0.5">
+    <section className="p-4">
       <SearchFilters filters={filters} handleFilterChange={handleFilterChange} />
       {loading ? (
         <p className="text-center">Loading exercises...</p>
       ) : (
         <>
-          <ExerciseTable exercises={exercises} />
+          <ExerciseTable exercises={exercises} from={from} workoutId={workoutId}/>
           <Pagination
             currentPage={currentPage}
             totalPages={totalPages}
@@ -123,6 +122,6 @@ function ExercisesPage() {
       )}
     </section>
   );
-}
+};
 
 export default withAuthenticator(ExercisesPage);
