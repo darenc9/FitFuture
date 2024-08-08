@@ -26,7 +26,7 @@ const WorkoutBuilder = () => {
         </button>
       </div>
       {view === 'workout' && <WorkoutBuilderContent setView={setView} />}
-      {view === 'routine' && <RoutineBuilderContent />}
+      {view === 'routine' && <RoutineBuilderContent setView={setView}/>}
     </div>
   );
 };
