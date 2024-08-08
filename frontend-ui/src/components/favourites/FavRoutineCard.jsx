@@ -18,7 +18,7 @@ export default function FavRoutineCard( {routine, handleFavRoutineClicked, handl
       <div className="ml-auto">
         <button type='button'
         className='text-yellow-500 rounded'
-        onClick={() => handleFavRoutineClicked(routine)}
+        onClick={(e) => handleFavRoutineClicked(routine, e)}
         >
           {profile?.favourites.routines.findIndex((rt) => rt._id == routine._id) !== -1 ? 
           <StarIconSolid className='size-6'/> 
