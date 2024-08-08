@@ -5,7 +5,7 @@ import { GetToken } from '@/components/AWS/GetToken';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import WorkoutExercise from '../../components/workouts/WorkoutExercise';
 import WorkoutFilter from '@/components/browse/WorkoutFilter';
-const RoutineBuilderContent = () => {
+const RoutineBuilderContent = ({ setView }) => {
   const { user } = useAuthenticator((context) => [context.user]);
   const API_URL = process.env.NEXT_PUBLIC_API_URL;
   const [routineName, setRoutineName] = useState('');
@@ -24,7 +24,7 @@ const RoutineBuilderContent = () => {
       if (user && user.username) {
         try {
           const authToken = await GetToken();
-          const res = await fetch(`${API_URL}/workouts`, {
+          const res = await fetch(`${API_URL}/workouts?user=${user.username}`, {
             headers: { 'Authorization': `Bearer ${authToken}` }
           });
           const data = await res.json();
@@ -73,6 +73,7 @@ const RoutineBuilderContent = () => {
 
       // Handle success, e.g., show a message, redirect, etc.
       console.log('Routine saved successfully');
+      setView(''); // Unset the view atom
     } catch (error) {
       console.error('Failed to save routine:', error);
     }
@@ -114,11 +115,14 @@ const RoutineBuilderContent = () => {
 
 // Filter workouts based on search query and filter
 const filteredWorkouts = allWorkouts.filter(workout => {
-  console.log("filter: ", filter);
-  
+
   const matchesSearch = workout.name.toLowerCase().includes(searchQuery.toLowerCase());
-  const matchesFilter = filter === 'all' || workout.category.toLowerCase() === filter;
-  console.log('matchesFilter:', matchesFilter);
+  let matchesFilter;
+  if (filter == 'myWorkouts'){
+    matchesFilter =  workout.userId === user.username;
+  }  else {
+    matchesFilter = filter === 'all' || workout.category.toLowerCase() === filter.toLowerCase();
+  }
   return matchesSearch && matchesFilter;
 });
 
