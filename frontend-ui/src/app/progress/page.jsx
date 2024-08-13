@@ -26,7 +26,6 @@ const fetchProgressData = async (id) => {
 const fetchProfileData = async (id) => {
   try {
     const authToken = await GetToken();
-    console.log(`API_URL is: ${API_URL}`);
     const res = await fetch(`${API_URL}/profile/user/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
     if(!res.ok) {
       throw new Error('Failed to fetch profile data');
@@ -55,7 +54,6 @@ const ProgressPage = () => {
             hist.date = new Date(hist.date).getTime();
           }
         }
-        console.log('progressData is:', progressData);
         // get profile
         const profileData = await fetchProfileData(user.username);
         profileData.weight.sort((a, b) => a.timeStamp - b.timeStamp);
@@ -64,7 +62,7 @@ const ProgressPage = () => {
         setProgress(progressData);
         setLoading(false);
       } else {
-        console.log('User is not yet defined.');
+        console.debug('User is not yet defined.');
       }
     };
     fetchData();

@@ -10,11 +10,9 @@ const ExerciseTable = ({ exercises, from, workoutId }) => {
   const [workout] = useAtom(workoutAtom);
   const [editWorkout] = useAtom(editWorkoutAtom);
 
-  console.log(from);
   const handleAddExercise = (exercise) => {
     const newExerciseId = exercise.id;
     if (from == 'build'){
-      console.log("handle add from build");
       if (workout.exerciseIds.includes(newExerciseId)) {
         alert('Exercise is already added to the workout.');
         return;
@@ -23,7 +21,6 @@ const ExerciseTable = ({ exercises, from, workoutId }) => {
       router.push(`/build/exerciseWorkout?id=${newExerciseId}&name=${exerciseName}&from=${from}`);
 
     } else if (from == 'edit'){
-      console.log("handle add from edit");
       if (editWorkout.exerciseIds.includes(newExerciseId)) {
         alert('Exercise is already in the workout.');
         return;

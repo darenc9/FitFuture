@@ -13,7 +13,6 @@ const DeleteExercisePage = () => {
 
   useEffect(() => {
     if (id) {
-      console.log(id);
       setWorkout((prevWorkout) => ({
         ...prevWorkout,
         exerciseIds: prevWorkout.exerciseIds.filter(exerciseId => exerciseId !== id),

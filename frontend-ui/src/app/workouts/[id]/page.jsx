@@ -36,7 +36,6 @@ const WorkoutDetails = () => {
                         headers: {'Authorization': `Bearer ${authToken}`}
                     })
                     const tempData = await res2.json();
-                    console.log(tempData);    
                     setName(tempData.name);
                      // Check if the current user is allowed to edit
                     if (tempData.userId === currentUser) {
@@ -45,19 +44,13 @@ const WorkoutDetails = () => {
                 } catch (error) {
                     console.error(error);
                 }
-
             }
-
         };
-
         fetchData();
     }, [id]);
 
     const handlePanelClick = (item) => {
-        console.log(item);
         router.push(`/exercises/${item.exerciseId}`); 
-        //TODO: logic may need to change and have other route parameters based on back button
-        //logic in /exercises/[exerciseId]
     };
 
     const handleEditClick = () => {
@@ -66,7 +59,6 @@ const WorkoutDetails = () => {
     };
 
     const handleStartWorkout = () => {
-        //TODO:
         router.push(`/workouts/start?id=${id.toString()}`);
     }
 

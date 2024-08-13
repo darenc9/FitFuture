@@ -71,8 +71,6 @@ const RoutineBuilderContent = ({ setView }) => {
         throw new Error('Failed to save routine');
       }
 
-      // Handle success, e.g., show a message, redirect, etc.
-      console.log('Routine saved successfully');
       setView(''); // Unset the view atom
     } catch (error) {
       console.error('Failed to save routine:', error);

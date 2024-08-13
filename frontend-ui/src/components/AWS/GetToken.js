@@ -6,7 +6,7 @@ export async function GetToken() {
     const idToken = session.idToken;
     return idToken;
   } catch (err) {
-    console.log('Error getting auth token:', err);
+    console.error('Error getting auth token:', err);
     return null;
   }
 }

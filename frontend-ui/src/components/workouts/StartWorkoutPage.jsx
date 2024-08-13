@@ -37,7 +37,6 @@ const StartWorkoutPage = () => {
           headers: { 'Authorization': `Bearer ${authToken}` }
         });
         const data = await res.json();
-        console.log('Fetched exercises:', data);
         setExercises(data);
         setCurrentExerciseIndex(0);
         setSets(Array(data[0].sets).fill({ weight: '', reps: '', completed: false }));
@@ -163,7 +162,6 @@ const StartWorkoutPage = () => {
       // If there's only one exercise, add it to completedExercises and mark workout complete
       const allCompletedExercises = [completedExercise];
       setCompletedExercises(allCompletedExercises);
-      console.log("Final Completed workout (one exercise):", allCompletedExercises);
       setWorkoutComplete(true);
       setIsRunning(false);
       handleFinishWorkout(allCompletedExercises); // Call handleFinishWorkout
@@ -171,7 +169,6 @@ const StartWorkoutPage = () => {
       // For multiple exercises
       const allCompletedExercises = [...completedExercises, completedExercise];
       setCompletedExercises(allCompletedExercises);
-      console.log('Completed Exercises:', allCompletedExercises);
 
       if (currentExerciseIndex + 1 < exercises.length) {
         const nextExerciseIndex = currentExerciseIndex + 1;
@@ -181,7 +178,6 @@ const StartWorkoutPage = () => {
         setShowNotes(false);
         setNotes('');
       } else {
-        console.log("Final Completed workout:", allCompletedExercises);
         setWorkoutComplete(true);
         setIsRunning(false);
         handleFinishWorkout(allCompletedExercises); // Call handleFinishWorkout
@@ -221,7 +217,6 @@ const StartWorkoutPage = () => {
       exercises: completedExercises,
       userId: user
     };
-    console.log("Workout data prepared for POST request:", JSON.stringify(workoutData, null, 2));
     try {
       const authToken = await GetToken();
       const response = await fetch(`${API_URL}/workout/finish`, {
@@ -274,14 +269,12 @@ const StartWorkoutPage = () => {
         setCompletedExercises(allCompletedExercises);
   
         if (currentExerciseIndex + 1 < exercises.length) {
-          console.log("in if of remove set");
           setCurrentExerciseIndex(currentExerciseIndex + 1);
           setSets(Array(exercises[currentExerciseIndex + 1].sets).fill({ weight: '', reps: '', completed: false }));
           setCurrentSetIndex(0);
           setShowNotes(false);
           setNotes('');
         } else {
-          console.log("handling finish workout");
           setWorkoutComplete(true);
           setIsRunning(false);
           handleFinishWorkout(allCompletedExercises);
@@ -328,7 +321,6 @@ const StartWorkoutPage = () => {
           {currentExercise && (
             <div className="bg-white shadow-md rounded-lg p-4 w-full max-w-2xl">
               <h2 className="text-2xl font-semibold mb-4 text-center">{currentExercise.name}</h2>
-              {/* <p className="text-gray-600 mb-4">{currentExercise.sets} sets</p> */}
               {sets.map((set, index) => (
                 <div key={index} className="mb-4 flex items-center">
                   <div className="flex-1">

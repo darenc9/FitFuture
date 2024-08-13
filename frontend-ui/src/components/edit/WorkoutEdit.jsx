@@ -25,7 +25,6 @@ const WorkoutEdit = () => {
         // Only fetch if currentWorkout isn't already populated
         const authToken = await GetToken();
         if (!currentWorkout.workoutId) {
-          console.log("fetching data");
           const res = await fetch(`${API_URL}/workout/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
           if (!res.ok) {
             throw new Error(`Failed to fetch workout with id: ${id}`);
@@ -87,7 +86,6 @@ const WorkoutEdit = () => {
   };
 
   const handlePanelClick = (item) => {
-    console.log(item);
     router.push(`/build/exerciseWorkout?from=edit&id=${item.id}&exists=true&workoutId=${workout.workoutId}`); // Navigate to the exercises page
   };
 

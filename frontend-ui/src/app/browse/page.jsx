@@ -11,8 +11,6 @@ import { withAuthenticator } from "@aws-amplify/ui-react";
 import { useAuthenticator } from '@aws-amplify/ui-react';
 import { useAtom } from 'jotai';
 import { profileAtom } from '../../../store';
-//import {profileIdAtom} from '../../../store'
-//const { useAtom } = require("jotai");
 
 const BrowsePage = () => {
     const API_URL = process.env.NEXT_PUBLIC_API_URL;
@@ -25,14 +23,12 @@ const BrowsePage = () => {
     const [filter, setFilter] = useState('all'); // Default filter
     const [searchQuery, setSearchQuery] = useState(''); // Default search query
     const tab = router.query;
-    //const [profileId] = useAtom(profileIdAtom);
     const [profile, setProfile] = useAtom(profileAtom);
     const { user } = useAuthenticator((context) => [context.user]);
 
     const fetchProfileData = async (id) => {
       try {
         const authToken = await GetToken();
-        console.log(`API_URL is: ${API_URL}`);
         const res = await fetch(`${API_URL}/profile/user/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
         if (!res.ok) {
           throw new Error('Failed to fetch profile data');
@@ -64,11 +60,8 @@ const BrowsePage = () => {
     useEffect(() => {
         const fetchData = async () => {
             if (user && user.username) {
-                console.log('User object:', user);
                 const userId = user.username;
-                console.log("tab: ", tab);
                 if (tab) {
-                    console.log("if (tab): ", tab);
                     setSelectedOption(tab);
                 }
                 else if (!selectedOption) {
@@ -85,7 +78,6 @@ const BrowsePage = () => {
                             throw new Error(`Failed to fetch ${selectedOption === 'workouts' ? 'workouts' : 'routines'} data`);
                         }
                         const data = await res.json();
-                        console.log("fetched data: ", data);
                         if (selectedOption === 'workouts') {
                             setWorkouts(data);
                             setFilteredWorkouts(data); // Initially show all workouts
@@ -100,7 +92,7 @@ const BrowsePage = () => {
                     router.push('/exercises'); // Reroute to exercises page
                 }
             } else {
-                console.log('User is not defined yet.');
+                console.debug('User is not defined yet.');
             }
         };
 
@@ -143,7 +135,6 @@ const BrowsePage = () => {
     }, [filter, workouts, routines, selectedOption, searchQuery]);
 
     const handlePanelClick = (item) => {
-        console.log(item);
         if (selectedOption === 'workouts') {
             router.push(`/workouts/${item.workoutId}`); // Redirect to /workouts/[item.workoutId]
         } else if (selectedOption === 'routines') {

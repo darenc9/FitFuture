@@ -13,7 +13,6 @@ const inter = Inter({ subsets: ["latin"] });
 
 export default function RootLayout({ children }) {
   const currentConfig = Amplify.getConfig();
-  console.log("current Config: ", currentConfig);
   return (
     <html lang="en">
       <head>

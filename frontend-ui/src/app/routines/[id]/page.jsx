@@ -45,9 +45,8 @@ const RoutineDetails = () => {
                     
                     const detailedWorkouts = await Promise.all(workoutDetailsPromises);
                     setWorkoutDetails(detailedWorkouts);
-                    console.log(detailedWorkouts);
     
-                    // TODO: Fetch routine history to get completed workouts
+                    // Fetch routine history to get completed workouts
                     const historyRes = await fetch(`${API_URL}/routine/start/${currentUser}/${data.routineId}`, {
                          headers: { 'Authorization': `Bearer ${authToken}` }
                     });
@@ -55,7 +54,6 @@ const RoutineDetails = () => {
                         throw new Error(`Failed to fetch routine history for id: ${id} and user: ${currentUser}`);
                     }
                     const historyData = await historyRes.json();
-                    console.log(historyData);
                     
                     const completedWorkouts = historyData.completed || [];
                     setCompletedWorkouts(completedWorkouts);
@@ -63,7 +61,6 @@ const RoutineDetails = () => {
     
                     // Determine the current workout index
                     const nextWorkoutIndex = data.workoutIds.findIndex(workoutId => !completedWorkouts.includes(workoutId));
-                    console.log(nextWorkoutIndex);
                     setCurrentWorkoutIndex(nextWorkoutIndex !== -1 ? nextWorkoutIndex : 0);
     
                     // Check if the current user is allowed to edit
@@ -118,21 +115,18 @@ const RoutineDetails = () => {
         // Update the completed workouts state
         const newCompletedWorkouts = [...completedWorkouts, currentWorkout.workoutId];
         setCompletedWorkouts(newCompletedWorkouts);
-        console.log(newCompletedWorkouts);
     
         // Determine the new current workout index
         let newIndex = currentWorkoutIndex + 1;
         if (newIndex >= workoutDetails.length) {
             newIndex = 0;
-            console.log("All workouts completed");
             setCompletedWorkouts([]); // Reset completed workouts
         }
     
         // Update the current workout index state
         setCurrentWorkoutIndex(newIndex);
     
-        //TODO: reroute to start workout page and pass id
-        console.log(currentWorkout);
+        // reroute to start workout page and pass id
         router.push(`/workouts/start?id=${currentWorkout.workoutId.toString()}`);
     };
     
@@ -147,7 +141,6 @@ const RoutineDetails = () => {
     };
 
     const handlePanelClick = (workout) => {
-        console.log("workout: ", workout);
         router.push(`/workouts/${workout.workoutId}`); // Navigate to workout detail page
     };
 

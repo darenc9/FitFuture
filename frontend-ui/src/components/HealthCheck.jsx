@@ -8,7 +8,7 @@ async function currentSession() {
     const idToken = session.idToken;
     return idToken;
   } catch (err) {
-    console.log('Error getting auth token:', err);
+    console.error('Error getting auth token:', err);
     return null;
   }
 }
@@ -27,8 +27,8 @@ export default function HealthCheck() {
             headers: {'Authorization': `Bearer ${token}`}
           }
         );
-        const response = await fetch(`${API_URL}`);
-        const data = await response.json();
+        const res = await fetch(`${API_URL}`);
+        const data = await res.json();
         setHealthStatus(data.status);
       } catch (error) {
         console.error('Error fetching health status:', error);

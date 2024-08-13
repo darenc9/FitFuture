@@ -97,7 +97,6 @@ const HistoryPage = () => {
         </div>
       </div>
       <button type="button" className="bg-blue-500 text-white p-2 rounded" onClick={() => {
-        console.log(`history data on add click is: `, historyData);
         handleMakeNewHistory(historyData);
         router.push(`/profile`);
         }}>

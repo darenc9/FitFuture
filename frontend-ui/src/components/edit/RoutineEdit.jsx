@@ -83,7 +83,6 @@ const RoutineEdit = ({ routine }) => {
       }
 
       // Handle success, e.g., show a message, redirect, etc.
-      console.log('Routine updated successfully');
       router.push('/browse');
     } catch (error) {
       console.error('Failed to update routine:', error);

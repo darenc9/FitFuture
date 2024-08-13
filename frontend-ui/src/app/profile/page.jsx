@@ -16,7 +16,6 @@ import { signOut } from "aws-amplify/auth";
 const fetchProfileData = async (id) => {
   try {
     const authToken = await GetToken();
-    console.log(`API_URL is: ${API_URL}`);
     const res = await fetch(`${API_URL}/profile/user/${id}`, {headers: {'Authorization': `Bearer ${authToken}`}});
     if (!res.ok) {
       throw new Error('Failed to fetch profile data');
@@ -32,7 +31,6 @@ const fetchProfileData = async (id) => {
 const handleDeleteProfile = async (id) => {
   try {
     const authToken = await GetToken();
-    console.log(`API_URL is: ${API_URL}`);
     const res = await fetch(`${API_URL}/profile/${id}`, {
       headers: {'Authorization': `Bearer ${authToken}`},
       method: "DELETE",
@@ -70,7 +68,7 @@ const ProfilePage = () => {
           setLoading(false);
         }
       } else {
-        console.log('User is not yet defined.');
+        console.debug('User is not yet defined.');
       }
     };
     fetchData();
@@ -146,7 +144,6 @@ const ProfilePage = () => {
                           type="button"
                           className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
                           onClick={() => {
-                            console.log('delete the profile and redirect to login/register page');
                             handleDeleteProfile(profile._id);
                             router.push('/');
                             setOpen(false);

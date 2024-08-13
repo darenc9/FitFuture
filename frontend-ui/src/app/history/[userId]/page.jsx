@@ -36,7 +36,6 @@ const ViewHistoryPage = ( { params } ) => {
   const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]); // Default end date filter (show all)
 
   const reorderList = () => {
-    console.log('reverse the history array');
     setHistory(history.reverse());
   }
 
@@ -87,7 +86,6 @@ const ViewHistoryPage = ( { params } ) => {
   };
 
   const handlePanelClick = async (item) => {
-    console.log('clicked a history item...', item);
     // redirect to see details page
     router.push(`/history/details?id=${item._id}`);
   };

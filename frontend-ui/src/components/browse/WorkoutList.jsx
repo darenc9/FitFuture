@@ -68,9 +68,6 @@ const WorkoutList = ({ workouts, handlePanelClick }) => {
                         <h3 className="text-lg font-semibold">{workout.name}</h3>
                         <p className="text-gray-600">{workout.category}</p>
                     </div>
-                    {/* <div className="ml-auto">
-                        <p className="text-sm font-semibold">Time: {workout.time}</p>
-                    </div> */}
                     { profile ? 
                     (<button type='button' 
                     className='ml-auto rounded text-yellow-500'

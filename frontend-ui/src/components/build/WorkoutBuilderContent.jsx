@@ -46,9 +46,6 @@ const WorkoutBuilderContent = ({ setView }) => {
       exercises: exercisesDetails // Each exercise will include its id
     };
 
-    // Log the payload
-    console.log('Sending payload to backend:', payload);
-
     // Send the payload to the backend
     try {
       const authToken = await GetToken();
@@ -63,7 +60,6 @@ const WorkoutBuilderContent = ({ setView }) => {
 
       if (response.ok) {
         const responseData = await response.json();
-        console.log('Workout saved successfully:', responseData);
         setView(''); // Unset the view atom
         resetAtoms(); // Reset the atoms
       } else {
@@ -80,7 +76,6 @@ const WorkoutBuilderContent = ({ setView }) => {
   };
 
   const handlePanelClick = (item) => {
-    console.log(item);
     router.push(`/build/exerciseWorkout?from=build&id=${item.id}&exists=true`); // Navigate to the exercises page
   };
   return (

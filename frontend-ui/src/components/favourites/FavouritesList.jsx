@@ -56,11 +56,9 @@ export default function FavouritesList( {favWorkouts, favRoutines, showWorkouts,
     // either add or remove from the profile atom first
     if (profile?.favourites.routines.findIndex((rt) => rt._id == routine._id) !== -1) {
       // remove the routine from favs
-      console.debug('remove routine from favs');
       favs.routines = favs.routines.filter(rt => rt._id !== routine._id);
     } else {
       // add routine to favs
-      console.debug('add routine to favs');
       favs.routines.push(routine);
     }
     setChanged(!changed);

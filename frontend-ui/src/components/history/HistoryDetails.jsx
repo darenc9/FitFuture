@@ -31,7 +31,6 @@ const HistoryDetails = () => {
   useEffect(() => {
     const fetchData = async () => {
       const historyData = await fetchHistoryData(searchParams.get('id'));
-      console.log(`fetched history data is: `, historyData);
       setHistoryDetails(historyData);
       setLoading(false);
     };
