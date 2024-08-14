@@ -16,7 +16,9 @@
    
     1.6. [Deployment with Vercel](#deployment-with-vercel)
    
-2. [Usage Instructions](#usage-instructions)
+2. [Table of Deviations](#table-of-deviations)
+
+3. [Usage Instructions](#usage-instructions)
 
    2.1. [Account Setup](#account-setup)
    
@@ -97,6 +99,8 @@ NEXT_PUBLIC_OPENAI_KEY=
 ```
 
 Once your environment variables are set, your app will be live and ready to use.
+
+# Table of Deviations
 
 # Usage Instructions
 
