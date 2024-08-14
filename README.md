@@ -1,5 +1,102 @@
 # FitFuture
 
+# Table of Contents
+
+1. [Installation Guide](#installation-guide)
+   
+    1.1. [Prerequisites](#prerequisites)
+   
+    1.2. [Installation](#installation)
+   
+    1.3. [Environment Variables](#environment-variables)
+   
+    1.4. [Service Setup](#service-setup)
+   
+    1.5. [Locally running the app](#locally-running-the-app)
+   
+    1.6. [Deployment with Vercel](#deployment-with-vercel)
+   
+2. [Usage Instructions](#usage-instructions)
+
+   2.1. [Account Setup](#account-setup)
+   
+   2.2. [App Navigation](#app-navigation)
+
+# Installation Guide
+
+## Prerequisites
+- Node.js (v16.x or higher)
+- npm or yarn
+- Git
+- Vercel account (for deployment)
+- MongoDB Atlas account
+- Amazon Web Services (AWS) Account
+- OpenAI account
+- Humanloop Account
+
+## Installation
+1. Clone the repository
+```
+git clone https://github.com/darenc9/FitFuture.git
+cd FitFuture
+```
+2. Install dependencies
+   - Run `npm install` on both directories: `frontend-ui` and `backend-api`
+#### Environment Variables
+    - To run the project, you will need to set up a `.env` for both `frontend-ui` and the `backend-api`
+   - **backend-api .env:**
+```
+PORT=8080
+MONGO_URL=
+AWS_COGNITO_POOL_ID=
+AWS_COGNITO_CLIENT_ID=
+```
+
+   - **frontend-ui .env:**
+```
+NEXT_PUBLIC_API_URL= 
+AWS_COGNITO_POOL_ID=
+AWS_COGNITO_CLIENT_ID=
+OAUTH_SIGN_IN_REDIRECT_URL=
+OAUTH_SIGN_OUT_REDIRECT_URL=
+NEXT_PUBLIC_AWS_COGNITO_DOMAIN=
+NEXT_PUBLIC_HUMANLOOP_API_KEY=
+HUMANLOOP_API_KEY=
+NEXT_PUBLIC_OPENAI_KEY=
+```
+#### Service Setup
+- `Amazon Cognito`: Setup Amazon Cogntio by creating a User Pool and adding the values to your `.env`
+- `MongoDB`: Sign up for an account, and create a new cluster and database. Plug the MongoDB URI to your `.env`
+- `Vercel`: Sign up for a Vercel account, connect to your project (can use Github).
+- `Humanloop`: Create a Humanloop account, add your OpenAI API to your account. Add the `HUMANLOOP_API_KEY` to your `.env`
+- `OpenAI Playground`: Create an account and obtain your `OPENAI_API_KEY` and add it to the `.env`
+
+#### Locally running the app
+- Use `npm run start` in your `backend-api` directory
+- Use `npm run dev` in your `frontend-ui` directory
+
+#### Deployment with Vercel
+- Set up your environment variables on Vercel
+- There should be two projects: the frontend and the backend
+- `backend` environment variables:
+```
+    MONGO_URL=
+    AWS_COGNITO_POOL_ID=
+    AWS_COGNITO_CLIENT_ID=  
+```
+- `frontend` environment variables:
+```
+    NEXT_PUBLIC_API_URL= 
+    AWS_COGNITO_POOL_ID=
+    AWS_COGNITO_CLIENT_ID=
+    OAUTH_SIGN_IN_REDIRECT_URL=
+    OAUTH_SIGN_OUT_REDIRECT_URL=
+    NEXT_PUBLIC_AWS_COGNITO_DOMAIN=
+    NEXT_PUBLIC_HUMANLOOP_API_KEY=
+    HUMANLOOP_API_KEY=
+```
+
+Once your environment variables are set, your app will be live and ready to use.
 
 # Usage Instructions
 
