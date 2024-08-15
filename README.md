@@ -67,7 +67,7 @@ HUMANLOOP_API_KEY=
 NEXT_PUBLIC_OPENAI_KEY=
 ```
 #### Service Setup
-- `Amazon Cognito`: Setup Amazon Cogntio by creating a User Pool and adding the values to your `.env`
+- `Amazon Cognito`: Setup Amazon Cognito by creating a User Pool and adding the values to your `.env`
 - `MongoDB`: Sign up for an account, and create a new cluster and database. Plug the MongoDB URI to your `.env`
 - `Vercel`: Sign up for a Vercel account, connect to your project (can use Github).
 - `Humanloop`: Create a Humanloop account, add your OpenAI API to your account. Add the `HUMANLOOP_API_KEY` to your `.env`
@@ -102,12 +102,17 @@ Once your environment variables are set, your app will be live and ready to use.
 
 # Table of Deviations
 
+| Feature   | Notes   |
+| --------- | ------- |
+| Calorie Tracking | It was decided during the planning phase of this project that the calorie tracking feature would not be implemented due to time constraints.  The team determined that it would be more realistic to exclude the feature from the implementation of our app. |
+| Apple/Google Authentication | The team originally thought of using Apple or Google authentication services to allow users to sign up and login, but we chose to use Amazon Cognito Authentication for those purposes instead. The authentication feature is not missing, it is simply using a different service than originally planned. |
+
 # Usage Instructions
 
 ## Account Setup
 
 To use the FitFuture app you must first sign up and create an account:
-   1. navitage to `https://fit-future-ui.vercel.app/`
+   1. navigate to `https://fit-future-ui.vercel.app/`
    2. click on the create account tab and enter your details
    3. wait for MFA code to be sent to the email you signed up with
    4. upon logging in, complete your profile with your details
@@ -117,13 +122,13 @@ To use the FitFuture app you must first sign up and create an account:
 To navigate throughout the app, utilize the navbar at the top of the screen
 
 ### Home Page
-This is where you can view your favourted workouts and routines in addititon to signing out of your 
-account. Clicking on a favourted item will take you to a page which will provide more details on them.
+This is where you can view your favourited workouts and routines in addition to signing out of your 
+account. Clicking on a favourited item will take you to a page which will provide more details on them.
 In the case of a routine, it will display each of the workouts in the routine and in the case of a 
-workoutm it will display all exercises in the workout
+workout it will display all exercises in the workout
 
 ### Profile Page
-Navigating here will allow you to view your profile information, edit your profile in addittion
+Navigating here will allow you to view your profile information, edit your profile in addition
 to viewing your previously completed exercises. Upon navigation to this page you will be able to sort 
 your history by a date range and by newest or oldest. In addition, clicking on a history entry will 
 display all of the set and rep information for that completed exercise
@@ -137,9 +142,8 @@ with more details on it
 
 ### Progress Page
 Here you will be able to view your progress for your weight in addition to the progression of
-the weight you can do for your top three most done exercsies
-
+the weight you can do for your top three most done exercises
 
 ### Chatbot
 This chatbot will be accessible from any other page, and you can ask it for any help with workout 
-realted information and sugestions
+related information and suggestions
