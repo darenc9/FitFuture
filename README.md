@@ -1,5 +1,9 @@
 # FitFuture
 
+#### Quick Links
+Frontend: https://fit-future-ui.vercel.app/
+Backend API: https://fit-future.vercel.app/
+
 # Table of Contents
 
 1. [Installation Guide](#installation-guide)
